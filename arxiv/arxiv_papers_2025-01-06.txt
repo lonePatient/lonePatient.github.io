@@ -1,0 +1,1799 @@
+{% note blue no-icon %} ID-0-VITA-1.5: Towards GPT-4o Level Real-Time Vision and Speech Interaction {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01957
+**作者**: Chaoyou Fu,Haojia Lin,Xiong Wang,Yi-Fan Zhang,Yunhang Shen,Xiaoyu Liu,Yangze Li,Zuwei Long,Heting Gao,Ke Li,Xiawu Zheng,Rongrong Ji,Xing Sun,Caifeng Shan,Ran He
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Sound (cs.SD); Audio and Speech Processing (eess.AS)
+***备注**: Chaoyou Fu,Haojia Lin,Xiong Wang,Yi-Fan Zhang,Yunhang Shen,Xiaoyu Liu,Yangze Li,Zuwei Long,Heting Gao,Ke Li,Xiawu Zheng,Rongrong Ji,Xing Sun,Caifeng Shan,Ran He
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-1-Metadata Conditioning Accelerates Language Model Pre-training {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01956
+**作者**: Tianyu Gao,Alexander Wettig,Luxi He,Yihe Dong,Sadhika Malladi,Danqi Chen
+**类目**: Computation and Language (cs.CL)
+***备注**: Tianyu Gao,Alexander Wettig,Luxi He,Yihe Dong,Sadhika Malladi,Danqi Chen
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-2-MixGCN: Scalable GCN Training by Mixture of Parallelism and Mixture of Accelerators {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01951
+**作者**: Cheng Wan,Runkao Tao,Zheng Du,Yang Katie Zhao,Yingyan Celine Lin
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI)
+***备注**: Cheng Wan,Runkao Tao,Zheng Du,Yang Katie Zhao,Yingyan Celine Lin
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-3-MADGEN -- Mass-Spec attends to De Novo Molecular generation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01950
+**作者**: Yinkai Wang,Xiaohui Chen,Liping Liu,Soha Hassoun
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI)
+***备注**: Yinkai Wang,Xiaohui Chen,Liping Liu,Soha Hassoun
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-4-VideoLifter: Lifting Videos to 3D with Fast Hierarchical Stereo Alignment {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01949
+**作者**: Wenyan Cong,Kevin Wang,Jiahui Lei,Colton Stearns,Yuanhao Cai,Dilin Wang,Rakesh Ranjan,Matt Feiszli,Leonidas Guibas,Zhangyang Wang,Weiyao Wang,Zhiwen Fan
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Wenyan Cong,Kevin Wang,Jiahui Lei,Colton Stearns,Yuanhao Cai,Dilin Wang,Rakesh Ranjan,Matt Feiszli,Leonidas Guibas,Zhangyang Wang,Weiyao Wang,Zhiwen Fan
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-5-Cold-Start Recommendation towards the Era of Large Language Models (LLMs): A Comprehensive Survey and Roadmap {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01945
+**作者**: Weizhi Zhang,Yuanchen Bei,Liangwei Yang,Henry Peng Zou,Peilin Zhou,Aiwei Liu,Yinghui Li,Hao Chen,Jianling Wang,Yu Wang,Feiran Huang,Sheng Zhou,Jiajun Bu,Allen Lin,James Caverlee,Fakhri Karray,Irwin King,Philip S. Yu
+**类目**: Information Retrieval (cs.IR); Artificial Intelligence (cs.AI)
+***备注**: Weizhi Zhang,Yuanchen Bei,Liangwei Yang,Henry Peng Zou,Peilin Zhou,Aiwei Liu,Yinghui Li,Hao Chen,Jianling Wang,Yu Wang,Feiran Huang,Sheng Zhou,Jiajun Bu,Allen Lin,James Caverlee,Fakhri Karray,Irwin King,Philip S. Yu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-6-Improving Transducer-Based Spoken Language Understanding with Self-Conditioned CTC and Knowledge Transfer {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01936
+**作者**: Vishal Sunder,Eric Fosler-Lussier
+**类目**: Machine Learning (cs.LG)
+***备注**: Vishal Sunder,Eric Fosler-Lussier
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-7-Fusion DeepONet: A Data-Efficient Neural Operator for Geometry-Dependent Hypersonic Flows on Arbitrary Grids {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01934
+**作者**: Ahmad Peyvan,Varun Kumar
+**类目**: Machine Learning (cs.LG); Fluid Dynamics (physics.flu-dyn)
+***备注**: Ahmad Peyvan,Varun Kumar
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-8-Abstractive Text Summarization for Contemporary Sanskrit Prose: Issues and Challenges {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01933
+**作者**: Shagun Sinha
+**类目**: Computation and Language (cs.CL); Artificial Intelligence (cs.AI)
+***备注**: Shagun Sinha
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-9-Bridging Classification and Segmentation in Osteosarcoma Assessment via Foundation and Discrete Diffusion Models {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01932
+**作者**: Manh Duong Nguyen,Dac Thai Nguyen,Trung Viet Nguyen,Homi Yamada,Huy Hieu Pham,Phi Le Nguyen
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Manh Duong Nguyen,Dac Thai Nguyen,Trung Viet Nguyen,Homi Yamada,Huy Hieu Pham,Phi Le Nguyen
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-10-GoBERT: Gene Ontology Graph Informed BERT for Universal Gene Function Prediction {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01930
+**作者**: Yuwei Miao,Yuzhi Guo,Hehuan Ma,Jingquan Yan,Feng Jiang,Rui Liao,Junzhou Huang
+**类目**: Machine Learning (cs.LG)
+***备注**: Yuwei Miao,Yuzhi Guo,Hehuan Ma,Jingquan Yan,Feng Jiang,Rui Liao,Junzhou Huang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-11-Mitigating Hallucination for Large Vision Language Model by Inter-Modality Correlation Calibration Decoding {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01926
+**作者**: Jiaming Li,Jiacheng Zhang,Zequn Jie,Lin Ma,Guanbin Li
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Artificial Intelligence (cs.AI)
+***备注**: Jiaming Li,Jiacheng Zhang,Zequn Jie,Lin Ma,Guanbin Li
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-12-ransformer-Driven Inverse Problem Transform for Fast Blind Hyperspectral Image Dehazing {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01924
+**作者**: Po-Wei Tang,Chia-Hsiang Lin,Yangrui Liu
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Image and Video Processing (eess.IV)
+***备注**: Po-Wei Tang,Chia-Hsiang Lin,Yangrui Liu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-13-Structural and Statistical Audio Texture Knowledge Distillation (SSATKD) for Passive Sonar Classification {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01921
+**作者**: Jarin Ritu,Amirmohammad Mohammadi,Davelle Carreiro,Alexandra Van Dine,Joshua Peeples
+**类目**: ound (cs.SD); Audio and Speech Processing (eess.AS)
+***备注**: Jarin Ritu,Amirmohammad Mohammadi,Davelle Carreiro,Alexandra Van Dine,Joshua Peeples
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-14-Social Processes: Probabilistic Meta-learning for Adaptive Multiparty Interaction Forecasting {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01915
+**作者**: Augustinas Jučas,Chirag Raman
+**类目**: Machine Learning (cs.LG)
+***备注**: Augustinas Jučas,Chirag Raman
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-15-Mingling with the Good to Backdoor Federated Learning {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01913
+**作者**: Nuno Neves
+**类目**: Cryptography and Security (cs.CR); Artificial Intelligence (cs.AI); Distributed, Parallel, and Cluster Computing (cs.DC)
+***备注**: Nuno Neves
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-16-Detecting and Mitigating Adversarial Attacks on Deep Learning-Based MRI Reconstruction Without Any Retraining {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01908
+**作者**: Mahdi Saberi,Chi Zhang,Mehmet Akcakaya
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Machine Learning (cs.LG)
+***备注**: Mahdi Saberi,Chi Zhang,Mehmet Akcakaya
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-17-Alleviating Overfitting in Transformation-Interaction-Rational Symbolic Regression with Multi-Objective Optimization {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01905
+**作者**: Fabricio Olivetti de Franca
+**类目**: Machine Learning (cs.LG)
+***备注**: Fabricio Olivetti de Franca
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-18-Virgo: A Preliminary Exploration on Reproducing o1-like MLLM {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01904
+**作者**: Yifan Du,Zikang Liu,Yifan Li,Wayne Xin Zhao,Yuqi Huo,Bingning Wang,Weipeng Chen,Zheng Liu,Zhongyuan Wang,Ji-Rong Wen
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Artificial Intelligence (cs.AI)
+***备注**: Yifan Du,Zikang Liu,Yifan Li,Wayne Xin Zhao,Yuqi Huo,Bingning Wang,Weipeng Chen,Zheng Liu,Zhongyuan Wang,Ji-Rong Wen
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-19-aching Mining Software Repositories {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01903
+**作者**: Zadia Codabux,Fatemeh Fard,Roberto Verdecchia,Fabio Palomba,Dario Di Nucci,Gilberto Recupito
+**类目**: oftware Engineering (cs.SE)
+***备注**: Zadia Codabux,Fatemeh Fard,Roberto Verdecchia,Fabio Palomba,Dario Di Nucci,Gilberto Recupito
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-20-Sweeping Orders for Simplicial Complex Reconstruction {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01901
+**作者**: Tim Ophelders,Anna Schenfisch
+**类目**: Computational Geometry (cs.CG)
+***备注**: Tim Ophelders,Anna Schenfisch
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-21-ChatGPT's advice drives moral judgments with or without justification {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01897
+**作者**: Sebastian Kruegel,Andreas Ostermaier,Matthias Uhl
+**类目**: Human-Computer Interaction (cs.HC); Computers and Society (cs.CY)
+***备注**: Sebastian Kruegel,Andreas Ostermaier,Matthias Uhl
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-22-EnerVerse: Envisioning Embodied Future Space for Robotics Manipulation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01895
+**作者**: Siyuan Huang,Liliang Chen,Pengfei Zhou,Shengcong Chen,Zhengkai Jiang,Yue Hu,Peng Gao,Hongsheng Li,Maoqing Yao,Guanghui Ren
+**类目**: Robotics (cs.RO); Computer Vision and Pattern Recognition (cs.CV); Machine Learning (cs.LG)
+***备注**: Siyuan Huang,Liliang Chen,Pengfei Zhou,Shengcong Chen,Zhengkai Jiang,Yue Hu,Peng Gao,Hongsheng Li,Maoqing Yao,Guanghui Ren
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-23-QuArch: A Question-Answering Dataset for AI Agents in Computer Architecture {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01892
+**作者**: Shvetank Prakash,Andrew Cheng,Jason Yik,Arya Tschand,Radhika Ghosal,Ikechukwu Uchendu,Jessica Quaye,Jeffrey Ma,Shreyas Grampurohit,Sofia Giannuzzi,Arnav Balyan,Fin Amin,Aadya Pipersenia,Yash Choudhary,Ankita Nayak,Amir Yazdanbakhsh,Vijay Janapa Reddi
+**类目**: Hardware Architecture (cs.AR); Artificial Intelligence (cs.AI); Machine Learning (cs.LG)
+***备注**: Shvetank Prakash,Andrew Cheng,Jason Yik,Arya Tschand,Radhika Ghosal,Ikechukwu Uchendu,Jessica Quaye,Jeffrey Ma,Shreyas Grampurohit,Sofia Giannuzzi,Arnav Balyan,Fin Amin,Aadya Pipersenia,Yash Choudhary,Ankita Nayak,Amir Yazdanbakhsh,Vijay Janapa Reddi
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-24-Exploring Equality: An Investigation into Custom Loss Functions for Fairness Definitions {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01889
+**作者**: Gordon Lee,Simeon Sayer
+**类目**: Machine Learning (cs.LG); Computers and Society (cs.CY)
+***备注**: Gordon Lee,Simeon Sayer
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-25-Evaluating Scenario-based Decision-making for Interactive Autonomous Driving Using Rational Criteria: A Survey {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01886
+**作者**: Zhen Tian,Zhihao Lin,Dezong Zhao,Wenjing Zhao,David Flynn,Shuja Ansari,Chongfeng Wei
+**类目**: Robotics (cs.RO); Artificial Intelligence (cs.AI); Systems and Control (eess.SY)
+***备注**: Zhen Tian,Zhihao Lin,Dezong Zhao,Wenjing Zhao,David Flynn,Shuja Ansari,Chongfeng Wei
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-26-gram as a Battlefield: Kremlin-related Communications during the Russia-Ukraine Conflict {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01884
+**作者**: Apaar Bawa,Ugur Kursuncu,Dilshod Achilov,Valerie L. Shalin,Nitin Agarwal,Esra Akbas
+**类目**: ocial and Information Networks (cs.SI); Computers and Society (cs.CY); Human-Computer Interaction (cs.HC)
+***备注**: Apaar Bawa,Ugur Kursuncu,Dilshod Achilov,Valerie L. Shalin,Nitin Agarwal,Esra Akbas
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-27-Long Context vs. RAG for LLMs: An Evaluation and Revisits {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01880
+**作者**: Xinze Li,Yixin Cao,Yubo Ma,Aixin Sun
+**类目**: Computation and Language (cs.CL)
+***备注**: Xinze Li,Yixin Cao,Yubo Ma,Aixin Sun
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-28-ANTHROPOS-V: benchmarking the novel task of Crowd Volume Estimation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01877
+**作者**: Luca Collorone,Stefano D'Arrigo,Massimiliano Pappa,Guido Maria D'Amely di Melendugno,Giovanni Ficarra,Fabio Galasso
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Luca Collorone,Stefano D'Arrigo,Massimiliano Pappa,Guido Maria D'Amely di Melendugno,Giovanni Ficarra,Fabio Galasso
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-29-Accuracy Can Lie: On the Impact of Surrogate Model in Configuration Tuning {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01876
+**作者**: Pengzhou Chen,Jingzhi Gong,Tao Chen
+**类目**: oftware Engineering (cs.SE)
+***备注**: Pengzhou Chen,Jingzhi Gong,Tao Chen
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-30-DFF: Decision-Focused Fine-tuning for Smarter Predict-then-Optimize with Limited Data {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01874
+**作者**: Jiaqi Yang,Enming Liang,Zicheng Su,Zhichao Zou,Peng Zhen,Jiecheng Guo,Wanjing Ma,Kun An
+**类目**: Machine Learning (cs.LG)
+***备注**: Jiaqi Yang,Enming Liang,Zicheng Su,Zhichao Zou,Peng Zhen,Jiecheng Guo,Wanjing Ma,Kun An
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-31-Latent Mutants: A large-scale study on the Interplay between mutation testing and software evolution {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01873
+**作者**: Jeongju Sohn,Ezekiel Soremekun,Michail Papadakis
+**类目**: oftware Engineering (cs.SE)
+***备注**: Jeongju Sohn,Ezekiel Soremekun,Michail Papadakis
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-32-urning Logic Against Itself : Probing Model Defenses Through Contrastive Questions {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01872
+**作者**: Rachneet Sachdeva,Rima Hazra,Iryna Gurevych
+**类目**: Computation and Language (cs.CL)
+***备注**: Rachneet Sachdeva,Rima Hazra,Iryna Gurevych
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-33-owards Hard and Soft Shadow Removal via Dual-Branch Separation Network and Vision Transformer {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01864
+**作者**: Jiajia Liang
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Jiajia Liang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-34-CycleFlow: Leveraging Cycle Consistency in Flow Matching for Speaker Style Adaptation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01861
+**作者**: Ziqi Liang,Xulong Zhang,Chang Liu,Xiaoyang Qu,Weifeng Zhao,Jianzong Wang
+**类目**: ound (cs.SD); Audio and Speech Processing (eess.AS)
+***备注**: Ziqi Liang,Xulong Zhang,Chang Liu,Xiaoyang Qu,Weifeng Zhao,Jianzong Wang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-35-Deposition Rates in Thermal Laser Epitaxy: Simulation and Experiment {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01859
+**作者**: Thomas J. Smart,Bilen Emek Abali,Hans Boschker,Wolfgang Braun
+**类目**: Computational Engineering, Finance, and Science (cs.CE); Computational Physics (physics.comp-ph)
+***备注**: Thomas J. Smart,Bilen Emek Abali,Hans Boschker,Wolfgang Braun
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-36-UAV-DETR: Efficient End-to-End Object Detection for Unmanned Aerial Vehicle Imagery {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01855
+**作者**: Huaxiang Zhang,Kai Liu,Zhongxue Gan,Guo-Niu Zhu
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Huaxiang Zhang,Kai Liu,Zhongxue Gan,Guo-Niu Zhu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-37-LCFed: An Efficient Clustered Federated Learning Framework for Heterogeneous Data {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01850
+**作者**: Yuxin Zhang,Haoyu Chen,Zheng Lin,Zhe Chen,Jin Zhao
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI); Distributed, Parallel, and Cluster Computing (cs.DC)
+***备注**: Yuxin Zhang,Haoyu Chen,Zheng Lin,Zhe Chen,Jin Zhao
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-38-Multi-Agent Conversational Online Learning for Adaptive LLM Response Identification {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01849
+**作者**: Xiangxiang Dai,Yuejin Xie,Maoli Liu,Xuchuang Wang,Zhuohua Li,Huanyu Wang,John C.S. Lui
+**类目**: Human-Computer Interaction (cs.HC); Artificial Intelligence (cs.AI)
+***备注**: Xiangxiang Dai,Yuejin Xie,Maoli Liu,Xuchuang Wang,Zhuohua Li,Huanyu Wang,John C.S. Lui
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-39-Semantic Segmentation for Sequential Historical Maps by Learning from Only One Map {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01845
+**作者**: Yunshuang Yuan,Frank Thiemann,Monika Sester
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Yunshuang Yuan,Frank Thiemann,Monika Sester
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-40-Learning from Ambiguous Data with Hard Labels {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01844
+**作者**: Zeke Xie,Zheng He,Nan Lu,Lichen Bai,Bao Li,Shuo Yang,Mingming Sun,Ping Li
+**类目**: Machine Learning (cs.LG)
+***备注**: Zeke Xie,Zheng He,Nan Lu,Lichen Bai,Bao Li,Shuo Yang,Mingming Sun,Ping Li
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-41-Dedicated Inference Engine and Binary-Weight Neural Networks for Lightweight Instance Segmentation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01841
+**作者**: Tse-Wei Chen,Wei Tao,Dongyue Zhao,Kazuhiro Mima,Tadayuki Ito,Kinya Osa,Masami Kato
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Hardware Architecture (cs.AR)
+***备注**: Tse-Wei Chen,Wei Tao,Dongyue Zhao,Kazuhiro Mima,Tadayuki Ito,Kinya Osa,Masami Kato
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-42-Digital Twin-based SIM Communication and Flight Control for Advanced Air Mobility {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01837
+**作者**: Kai Xiong,Zhen Chen,Juefei Xie,Supeng Leng,Chau Yuen
+**类目**: Networking and Internet Architecture (cs.NI); Signal Processing (eess.SP)
+***备注**: Kai Xiong,Zhen Chen,Juefei Xie,Supeng Leng,Chau Yuen
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-43-Practical machine learning is learning on small samples {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01836
+**作者**: Marina Sapir
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI)
+***备注**: Marina Sapir
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-44-ASKCOS: an open source software suite for synthesis planning {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01835
+**作者**: Zhengkai Tu,Sourabh J. Choure,Mun Hong Fong,Jihye Roh,Itai Levin,Kevin Yu,Joonyoung F. Joung,Nathan Morgan,Shih-Cheng Li,Xiaoqi Sun,Huiqian Lin,Mark Murnin,Jordan P. Liles,Thomas J. Struble,Michael E. Fortunato,Mengjie Liu,William H. Green,Klavs F. Jensen,Connor W. Coley
+**类目**: Artificial Intelligence (cs.AI)
+***备注**: Zhengkai Tu,Sourabh J. Choure,Mun Hong Fong,Jihye Roh,Itai Levin,Kevin Yu,Joonyoung F. Joung,Nathan Morgan,Shih-Cheng Li,Xiaoqi Sun,Huiqian Lin,Mark Murnin,Jordan P. Liles,Thomas J. Struble,Michael E. Fortunato,Mengjie Liu,William H. Green,Klavs F. Jensen,Connor W. Coley
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-45-MoColl: Agent-Based Specific and General Model Collaboration for Image Captioning {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01834
+**作者**: Pu Yang,Bin Dong
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Artificial Intelligence (cs.AI)
+***备注**: Pu Yang,Bin Dong
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-46-me Series Language Model for Descriptive Caption Generation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01832
+**作者**: Mohamed Trabelsi,Aidan Boyd,Jin Cao,Huseyin Uzunalioglu
+**类目**: Computation and Language (cs.CL); Machine Learning (cs.LG)
+***备注**: Mohamed Trabelsi,Aidan Boyd,Jin Cao,Huseyin Uzunalioglu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-47-Online Fault Tolerance Strategy for Abrupt Reachability Constraint Changes {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01831
+**作者**: Henghua Shen,Qixin Wang
+**类目**: ystems and Control (eess.SY); Robotics (cs.RO)
+***备注**: Henghua Shen,Qixin Wang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-48-Auto-RT: Automatic Jailbreak Strategy Exploration for Red-Teaming Large Language Models {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01830
+**作者**: Yanjiang Liu,Shuhen Zhou,Yaojie Lu,Huijia Zhu,Weiqiang Wang,Hongyu Lin,Ben He,Xianpei Han,Le Sun
+**类目**: Cryptography and Security (cs.CR); Artificial Intelligence (cs.AI); Computation and Language (cs.CL)
+***备注**: Yanjiang Liu,Shuhen Zhou,Yaojie Lu,Huijia Zhu,Weiqiang Wang,Hongyu Lin,Ben He,Xianpei Han,Le Sun
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-49-Age-Based Device Selection and Transmit Power Optimization in Over-the-Air Federated Learning {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01828
+**作者**: Jingyuan Liu,Zheng Chang,Ying-Chang Liang
+**类目**: Networking and Internet Architecture (cs.NI); Machine Learning (cs.LG)
+***备注**: Jingyuan Liu,Zheng Chang,Ying-Chang Liang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-50-he Proof is in the Almond Cookies {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01827
+**作者**: Remi van Trijp,Katrien Beuls,Paul Van Eecke
+**类目**: Computation and Language (cs.CL); Artificial Intelligence (cs.AI)
+***备注**: Remi van Trijp,Katrien Beuls,Paul Van Eecke
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-51-SDPO: Segment-Level Direct Preference Optimization for Social Agents {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01821
+**作者**: Aobo Kong,Wentao Ma,Shiwan Zhao,Yongbin Li,Yuchuan Wu,Ke Wang,Xiaoqian Liu,Qicheng Li,Yong Qin,Fei Huang
+**类目**: Artificial Intelligence (cs.AI); Computation and Language (cs.CL)
+***备注**: Aobo Kong,Wentao Ma,Shiwan Zhao,Yongbin Li,Yuchuan Wu,Ke Wang,Xiaoqian Liu,Qicheng Li,Yong Qin,Fei Huang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-52-Programs Versus Finite Tree-Programs {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01820
+**作者**: Mikhail Moshkov
+**类目**: Logic in Computer Science (cs.LO)
+***备注**: Mikhail Moshkov
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-53-Leveraging Sustainable Systematic Literature Reviews {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01819
+**作者**: Vinicius dos Santos,Rick Kazman,Elisa Yumi Nakagawa
+**类目**: oftware Engineering (cs.SE)
+***备注**: Vinicius dos Santos,Rick Kazman,Elisa Yumi Nakagawa
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-54-Rerouting LLM Routers {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01818
+**作者**: Avital Shafran,Roei Schuster,Thomas Ristenpart,Vitaly Shmatikov
+**类目**: Cryptography and Security (cs.CR); Machine Learning (cs.LG)
+***备注**: Avital Shafran,Roei Schuster,Thomas Ristenpart,Vitaly Shmatikov
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-55-Distributed Framework Construction for Affine Formation Control {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01817
+**作者**: Huiming Li,Hao Chen,Xiangke Wang,Zhongkui Li,Lincheng Shen
+**类目**: ystems and Control (eess.SY)
+***备注**: Huiming Li,Hao Chen,Xiangke Wang,Zhongkui Li,Lincheng Shen
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-56-Uncertainty-Aware Label Refinement on Hypergraphs for Personalized Federated Facial Expression Recognition {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01816
+**作者**: Hu Ding,Yan Yan,Yang Lu,Jing-Hao Xue,Hanzi Wang
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Hu Ding,Yan Yan,Yang Lu,Jing-Hao Xue,Hanzi Wang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-57-Eliciting Understandable Architectonic Gestures for Robotic Furniture through Co-Design Improvisation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01813
+**作者**: Alex Binh Vinh Duc Nguyen,Jan Leusmann,Sven Mayer,Andrew Vande Moere
+**类目**: Human-Computer Interaction (cs.HC); Robotics (cs.RO)
+***备注**: Alex Binh Vinh Duc Nguyen,Jan Leusmann,Sven Mayer,Andrew Vande Moere
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-58-Algorithmic Problems for Computation Trees {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01812
+**作者**: Mikhail Moshkov
+**类目**: Logic in Computer Science (cs.LO)
+***备注**: Mikhail Moshkov
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-59-MoEE: Mixture of Emotion Experts for Audio-Driven Portrait Animation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01808
+**作者**: Huaize Liu,Wenzhang Sun,Donglin Di,Shibo Sun,Jiahui Yang,Changqing Zou,Hujun Bao
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Huaize Liu,Wenzhang Sun,Donglin Di,Shibo Sun,Jiahui Yang,Changqing Zou,Hujun Bao
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-60-RG-planner: Traversal Risk Graph-Based Path Planning in Unstructured Environments for Safe and Efficient Navigation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01806
+**作者**: Dongkyu Lee,I Made Aswin Nahrendra,Minho Oh,Byeongho Yu,Hyun Myung
+**类目**: Robotics (cs.RO); Systems and Control (eess.SY)
+***备注**: Dongkyu Lee,I Made Aswin Nahrendra,Minho Oh,Byeongho Yu,Hyun Myung
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-61-End-to-End Long Document Summarization using Gradient Caching {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01805
+**作者**: Rohit Saxena,Hao Tang,Frank Keller
+**类目**: Computation and Language (cs.CL); Artificial Intelligence (cs.AI)
+***备注**: Rohit Saxena,Hao Tang,Frank Keller
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-62-BERT4MIMO: A Foundation Model using BERT Architecture for Massive MIMO Channel State Information Prediction {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01802
+**作者**: Ferhat Ozgur Catak,Murat Kuzlu,Umit Cali
+**类目**: Information Theory (cs.IT); Artificial Intelligence (cs.AI); Signal Processing (eess.SP)
+***备注**: Ferhat Ozgur Catak,Murat Kuzlu,Umit Cali
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-63-John Ellipsoids via Lazy Updates {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01801
+**作者**: David P. Woodruff,Taisuke Yasuda
+**类目**: Data Structures and Algorithms (cs.DS); Machine Learning (cs.LG)
+***备注**: David P. Woodruff,Taisuke Yasuda
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-64-Grasping in Uncertain Environments: A Case Study For Industrial Robotic Recycling {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01799
+**作者**: Annalena Daniels,Sebastian Kerz,Salman Bari,Volker Gabler,Dirk Wollherr
+**类目**: Robotics (cs.RO); Systems and Control (eess.SY)
+***备注**: Annalena Daniels,Sebastian Kerz,Salman Bari,Volker Gabler,Dirk Wollherr
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-65-JoyGen: Audio-Driven 3D Depth-Aware Talking-Face Video Editing {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01798
+**作者**: Qili Wang,Dajiang Wu,Zihang Xu,Junshi Huang,Jun Lv
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Qili Wang,Dajiang Wu,Zihang Xu,Junshi Huang,Jun Lv
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-66-Reading Between the Lines: A dataset and a study on why some texts are tougher than others {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01796
+**作者**: Nouran Khallaf,Carlo Eugeni,Serge Sharoff
+**类目**: Computation and Language (cs.CL)
+***备注**: Nouran Khallaf,Carlo Eugeni,Serge Sharoff
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-67-Creating Artificial Students that Never Existed: Leveraging Large Language Models and CTGANs for Synthetic Data Generation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01793
+**作者**: Mohammad Khalil,Farhad Vadiee,Ronas Shakya,Qinyi Liu
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI)
+***备注**: Mohammad Khalil,Farhad Vadiee,Ronas Shakya,Qinyi Liu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-68-Efficient LLM Inference with Activation Checkpointing and Hybrid Caching {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01792
+**作者**: Sanghyeon Lee,Hongbeen Kim,Soojin Hwang,Guseul Heo,Minwoo Noh,Jaehyuk Huh
+**类目**: Distributed, Parallel, and Cluster Computing (cs.DC)
+***备注**: Sanghyeon Lee,Hongbeen Kim,Soojin Hwang,Guseul Heo,Minwoo Noh,Jaehyuk Huh
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-69-A Minimal Subset Approach for Efficient and Scalable Loop Closure {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01791
+**作者**: Nikolaos Stathoulopoulos,Christoforos Kanellakis,George Nikolakopoulos
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Robotics (cs.RO)
+***备注**: Nikolaos Stathoulopoulos,Christoforos Kanellakis,George Nikolakopoulos
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-70-Ingredients: Blending Custom Photos with Video Diffusion Transformers {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01790
+**作者**: Zhengcong Fei,Debang Li,Di Qiu,Changqian Yu,Mingyuan Fan
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Zhengcong Fei,Debang Li,Di Qiu,Changqian Yu,Mingyuan Fan
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-71-Universal Online Temporal Calibration for Optimization-based Visual-Inertial Navigation Systems {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01788
+**作者**: Yunfei Fan,Tianyu Zhao,Linan Guo,Chen Chen,Xin Wang,Fengyi Zhou
+**类目**: Robotics (cs.RO); Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Yunfei Fan,Tianyu Zhao,Linan Guo,Chen Chen,Xin Wang,Fengyi Zhou
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-72-Advancing privacy in learning analytics using differential privacy {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01786
+**作者**: Qinyi Liu,Ronas Shakya,Mohammad Khalil,Jelena Jovanovic
+**类目**: Cryptography and Security (cs.CR)
+***备注**: Qinyi Liu,Ronas Shakya,Mohammad Khalil,Jelena Jovanovic
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-73-Can Synthetic Data be Fair and Private? A Comparative Study of Synthetic Data Generation and Fairness Algorithms {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01785
+**作者**: Qinyi Liu,Oscar Deho,Farhad Vadiee,Mohammad Khalil,Srecko Joksimovic,George Siemens
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI); Computers and Society (cs.CY)
+***备注**: Qinyi Liu,Oscar Deho,Farhad Vadiee,Mohammad Khalil,Srecko Joksimovic,George Siemens
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-74-From Occasional to Steady: Habit Formation Insights From a Comprehensive Fitness Study {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01779
+**作者**: Ege Demirci,Efe Tuzun,Ahmet Furkan Un,Taner Giray Sonmez,Onur Varol
+**类目**: Computers and Society (cs.CY); Computational Engineering, Finance, and Science (cs.CE); Social and Information Networks (cs.SI)
+***备注**: Ege Demirci,Efe Tuzun,Ahmet Furkan Un,Taner Giray Sonmez,Onur Varol
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-75-Smooth Rate Limiter Model for Power System Stability Analysis and Control {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01776
+**作者**: Zaint A. Alexakis,Panos C. Papageorgiou,Antonio T. Alexandridis,Federico Milano,Georgios Tzounas
+**类目**: ystems and Control (eess.SY)
+***备注**: Zaint A. Alexakis,Panos C. Papageorgiou,Antonio T. Alexandridis,Federico Milano,Georgios Tzounas
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-76-A Unifying View of Linear Function Approximation in Off-Policy RL Through Matrix Splitting and Preconditioning {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01774
+**作者**: Zechen Wu,Amy Greenwald,Ronald Parr
+**类目**: Machine Learning (cs.LG)
+***备注**: Zechen Wu,Amy Greenwald,Ronald Parr
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-77-CPFormer: Learning Temporal Correlation with Implicit Pose Proxy for 3D Human Pose Estimation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01770
+**作者**: Jiajie Liu,Mengyuan Liu,Hong Liu,Wenhao Li
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Jiajie Liu,Mengyuan Liu,Hong Liu,Wenhao Li
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-78-LogicAD: Explainable Anomaly Detection via VLM-based Text Feature Extraction {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01767
+**作者**: Er Jin,Qihui Feng,Yongli Mou,Stefan Decker,Gerhard Lakemeyer,Oliver Simons,Johannes Stegmaier
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Er Jin,Qihui Feng,Yongli Mou,Stefan Decker,Gerhard Lakemeyer,Oliver Simons,Johannes Stegmaier
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-79-SaLoRA: Safety-Alignment Preserved Low-Rank Adaptation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01765
+**作者**: Mingjie Li,Wai Man Si,Michael Backes,Yang Zhang,Yisen Wang
+**类目**: Machine Learning (cs.LG)
+***备注**: Mingjie Li,Wai Man Si,Michael Backes,Yang Zhang,Yisen Wang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-80-Adverse Weather Conditions Augmentation of LiDAR Scenes with Latent Diffusion Models {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01761
+**作者**: Andrea Matteazzi,Pascal Colling,Michael Arnold,Dietmar Tutsch
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Andrea Matteazzi,Pascal Colling,Michael Arnold,Dietmar Tutsch
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-81-From Age Estimation to Age-Invariant Face Recognition: Generalized Age Feature Extraction Using Order-Enhanced Contrastive Learning {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01760
+**作者**: Haoyi Wang,Victor Sanchez,Chang-Tsun Li,Nathan Clarke
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Haoyi Wang,Victor Sanchez,Chang-Tsun Li,Nathan Clarke
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-82-MusicGen-Stem: Multi-stem music generation and edition through autoregressive modeling {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01757
+**作者**: Simon Rouard,Robin San Roman,Yossi Adi,Axel Roebel
+**类目**: ound (cs.SD); Audio and Speech Processing (eess.AS)
+***备注**: Simon Rouard,Robin San Roman,Yossi Adi,Axel Roebel
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-83-Automating Legal Concept Interpretation with LLMs: Retrieval, Generation, and Evaluation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01743
+**作者**: Kangcheng Luo,Quzhe Huang,Cong Jiang,Yansong Feng
+**类目**: Computation and Language (cs.CL); Artificial Intelligence (cs.AI)
+***备注**: Kangcheng Luo,Quzhe Huang,Cong Jiang,Yansong Feng
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-84-How Toxic Can You Get? Search-based Toxicity Testing for Large Language Models {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01741
+**作者**: Simone Corbo,Luca Bancale,Valeria De Gennaro,Livia Lestingi,Vincenzo Scotti,Matteo Camilli
+**类目**: oftware Engineering (cs.SE); Artificial Intelligence (cs.AI); Computation and Language (cs.CL)
+***备注**: Simone Corbo,Luca Bancale,Valeria De Gennaro,Livia Lestingi,Vincenzo Scotti,Matteo Camilli
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-85-Mapping Compliance: A Taxonomy for Political Content Analysis under the EU's Digital Electoral Framework {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01738
+**作者**: Marie-Therese Sekwenz,Rita Gsenger
+**类目**: Computers and Society (cs.CY)
+***备注**: Marie-Therese Sekwenz,Rita Gsenger
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-86-DSLR-CNN: Efficient CNN Acceleration using Digit-Serial Left-to-Right Arithmetic {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01737
+**作者**: Malik Zohaib Nisar,Muhammad Sohail Ibrahim,Saeid Gorgin,Muhammad Usman,Jeong-A Lee
+**类目**: Hardware Architecture (cs.AR)
+***备注**: Malik Zohaib Nisar,Muhammad Sohail Ibrahim,Saeid Gorgin,Muhammad Usman,Jeong-A Lee
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-87-Augmentation Matters: A Mix-Paste Method for X-Ray Prohibited Item Detection under Noisy Annotations {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01733
+**作者**: Ruikang Chen,Yan Yan,Jing-Hao Xue,Yang Lu,Hanzi Wang
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Artificial Intelligence (cs.AI)
+***备注**: Ruikang Chen,Yan Yan,Jing-Hao Xue,Yang Lu,Hanzi Wang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-88-Combined Hyper-Extensible Extremely-Secured Zero-Trust CIAM-PAM architecture {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01732
+**作者**: Shivom Aggarwal,Shourya Mehra,Safeer Sathar
+**类目**: Cryptography and Security (cs.CR); Artificial Intelligence (cs.AI); Networking and Internet Architecture (cs.NI)
+***备注**: Shivom Aggarwal,Shourya Mehra,Safeer Sathar
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-89-Molecular Mechanism Enabling Linearity and Symmetry in Neuromorphic Elements {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01729
+**作者**: Bidyabhusan Kundu,Sreetosh Goswami
+**类目**: Emerging Technologies (cs.ET); Materials Science (cond-mat.mtrl-sci)
+***备注**: Bidyabhusan Kundu,Sreetosh Goswami
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-90-Multi-modal classification of forest biodiversity potential from 2D orthophotos and 3D airborne laser scanning point clouds {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01728
+**作者**: Simon B. Jensen,Stefan Oehmcke,Andreas Møgelmose,Meysam Madadi,Christian Igel,Sergio Escalera,Thomas B. Moeslund
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Simon B. Jensen,Stefan Oehmcke,Andreas Møgelmose,Meysam Madadi,Christian Igel,Sergio Escalera,Thomas B. Moeslund
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-91-Proposing Hierarchical Goal-Conditioned Policy Planning in Multi-Goal Reinforcement Learning {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01727
+**作者**: Gavin B. Rens
+**类目**: Artificial Intelligence (cs.AI); Machine Learning (cs.LG)
+***备注**: Gavin B. Rens
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-92-Sensor Placement on a Cantilever Beam Using Observability Gramians {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01726
+**作者**: Natalie L. Brace,Nicholas B. Andrews,Jeremy Upsal,Kristi A. Morgansen
+**类目**: ystems and Control (eess.SY); Analysis of PDEs (math.AP); Optimization and Control (math.OC)
+***备注**: Natalie L. Brace,Nicholas B. Andrews,Jeremy Upsal,Kristi A. Morgansen
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-93-IGAF: Incremental Guided Attention Fusion for Depth Super-Resolution {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01723
+**作者**: Athanasios Tragakis,Chaitanya Kaul,Kevin J. Mitchell,Hang Dai,Roderick Murray-Smith,Daniele Faccio
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Athanasios Tragakis,Chaitanya Kaul,Kevin J. Mitchell,Hang Dai,Roderick Murray-Smith,Daniele Faccio
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-94-AR4D: Autoregressive 4D Generation from Monocular Videos {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01722
+**作者**: Hanxin Zhu,Tianyu He,Xiqian Yu,Junliang Guo,Zhibo Chen,Jiang Bian
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Hanxin Zhu,Tianyu He,Xiqian Yu,Junliang Guo,Zhibo Chen,Jiang Bian
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-95-Interpretable Face Anti-Spoofing: Enhancing Generalization with Multimodal Large Language Models {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01720
+**作者**: Guosheng Zhang,Keyao Wang,Haixiao Yue,Ajian Liu,Gang Zhang,Kun Yao,Errui Ding,Jingdong Wang
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Guosheng Zhang,Keyao Wang,Haixiao Yue,Ajian Liu,Gang Zhang,Kun Yao,Errui Ding,Jingdong Wang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-96-KeyNode-Driven Geometry Coding for Real-World Scanned Human Dynamic Mesh Compression {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01717
+**作者**: Huong Hoang,Truong Nguyen,Pamela Cosman
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Multimedia (cs.MM); Signal Processing (eess.SP)
+***备注**: Huong Hoang,Truong Nguyen,Pamela Cosman
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-97-Cloth-Splatting: 3D Cloth State Estimation from RGB Supervision {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01715
+**作者**: Alberta Longhini,Marcel Büsching,Bardienus P. Duisterhof,Jens Lundell,Jeffrey Ichnowski,Mårten Björkman,Danica Kragic
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Robotics (cs.RO)
+***备注**: Alberta Longhini,Marcel Büsching,Bardienus P. Duisterhof,Jens Lundell,Jeffrey Ichnowski,Mårten Björkman,Danica Kragic
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-98-LLMs  Legal Aid: Understanding Legal Needs Exhibited Through User Queries {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01711
+**作者**: Michal Kuk,Jakub Harasta
+**类目**: Human-Computer Interaction (cs.HC); Artificial Intelligence (cs.AI)
+***备注**: Michal Kuk,Jakub Harasta
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-99-Enhancing Large Vision Model in Street Scene Semantic Understanding through Leveraging Posterior Optimization Trajectory {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01710
+**作者**: Wei-Bin Kou,Qingfeng Lin,Ming Tang,Shuai Wang,Rongguang Ye,Guangxu Zhu,Yik-Chung Wu
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Machine Learning (cs.LG); Robotics (cs.RO)
+***备注**: Wei-Bin Kou,Qingfeng Lin,Ming Tang,Shuai Wang,Rongguang Ye,Guangxu Zhu,Yik-Chung Wu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-100-MoVE-KD: Knowledge Distillation for VLMs with Mixture of Visual Encoders {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01709
+**作者**: Jiajun Cao,Yuan Zhang,Tao Huang,Ming Lu,Qizhe Zhang,Ruichuan An,Ningning MA,Shanghang Zhang
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Artificial Intelligence (cs.AI)
+***备注**: Jiajun Cao,Yuan Zhang,Tao Huang,Ming Lu,Qizhe Zhang,Ruichuan An,Ningning MA,Shanghang Zhang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-101-$(\Theta, \Delta_\Theta, \mathbf{a})$-cyclic codes over $\mathbb{F}_q^l$ and their applications in the construction of quantum codes {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01708
+**作者**: Akanksha,Anuj Kumar Bhagat,Ritumoni Sarma
+**类目**: Information Theory (cs.IT)
+***备注**: Akanksha,Anuj Kumar Bhagat,Ritumoni Sarma
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-102-Catch Causal Signals from Edges for Label Imbalance in Graph Classification {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01707
+**作者**: Fengrui Zhang,Yujia Yin,Hongzong Li,Yifan Chen,Tianyi Qu
+**类目**: Machine Learning (cs.LG)
+***备注**: Fengrui Zhang,Yujia Yin,Hongzong Li,Yifan Chen,Tianyi Qu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-103-he Essence of Contextual Understanding in Theory of Mind: A Study on Question Answering with Story Characters {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01705
+**作者**: Chulun Zhou,Qiujing Wang,Mo Yu,Xiaoqian Yue,Rui Lu,Jiangnan Li,Yifan Zhou,Shunchi Zhang,Jie Zhou,Wai Lam
+**类目**: Computation and Language (cs.CL); Artificial Intelligence (cs.AI)
+***备注**: Chulun Zhou,Qiujing Wang,Mo Yu,Xiaoqian Yue,Rui Lu,Jiangnan Li,Yifan Zhou,Shunchi Zhang,Jie Zhou,Wai Lam
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-104-Optimal Fiducial Marker Placement for Satellite Proximity Operations Using Observability Gramians {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01704
+**作者**: Nicholas B. Andrews,Kristi A. Morgansen
+**类目**: ystems and Control (eess.SY); Computer Vision and Pattern Recognition (cs.CV); Robotics (cs.RO); Optimization and Control (math.OC)
+***备注**: Nicholas B. Andrews,Kristi A. Morgansen
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-105-AgentRefine: Enhancing Agent Generalization through Refinement Tuning {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01702
+**作者**: Dayuan Fu,Keqing He,Yejie Wang,Wentao Hong,Zhuoma Gongque,Weihao Zeng,Wei Wang,Jingang Wang,Xunliang Cai,Weiran Xu
+**类目**: Artificial Intelligence (cs.AI); Computation and Language (cs.CL); Robotics (cs.RO)
+***备注**: Dayuan Fu,Keqing He,Yejie Wang,Wentao Hong,Zhuoma Gongque,Weihao Zeng,Wei Wang,Jingang Wang,Xunliang Cai,Weiran Xu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-106-Aesthetic Matters in Music Perception for Image Stylization: A Emotion-driven Music-to-Visual Manipulation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01700
+**作者**: Junjie Xu,Xingjiao Wu,Tanren Yao,Zihao Zhang,Jiayang Bei,Wu Wen,Liang He
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Junjie Xu,Xingjiao Wu,Tanren Yao,Zihao Zhang,Jiayang Bei,Wu Wen,Liang He
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-107-Robust Self-Paced Hashing for Cross-Modal Retrieval with Noisy Labels {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01699
+**作者**: Ruitao Pu,Yuan Sun,Yang Qin,Zhenwen Ren,Xiaomin Song,Huiming Zheng,Dezhong Peng
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Multimedia (cs.MM)
+***备注**: Ruitao Pu,Yuan Sun,Yang Qin,Zhenwen Ren,Xiaomin Song,Huiming Zheng,Dezhong Peng
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-108-CrossView-GS: Cross-view Gaussian Splatting For Large-scale Scene Reconstruction {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01695
+**作者**: Chenhao Zhang,Yuanping Cao,Lei Zhang
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Chenhao Zhang,Yuanping Cao,Lei Zhang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-109-Comparative Study of Deep Learning Architectures for Textual Damage Level Classification {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01694
+**作者**: Aziida Nanyonga,Hassan Wasswa,Graham Wild
+**类目**: Machine Learning (cs.LG)
+***备注**: Aziida Nanyonga,Hassan Wasswa,Graham Wild
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-110-Denoising and Adaptive Online Vertical Federated Learning for Sequential Multi-Sensor Data in Industrial Internet of Things {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01693
+**作者**: Heqiang Wang,Xiaoxiong Zhong,Kang Liu,Fangming Liu,Weizhe Zhang
+**类目**: Machine Learning (cs.LG); Networking and Internet Architecture (cs.NI)
+***备注**: Heqiang Wang,Xiaoxiong Zhong,Kang Liu,Fangming Liu,Weizhe Zhang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-111-Recursive decoding of projective Reed-Muller codes {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01692
+**作者**: Rodrigo San-José
+**类目**: Information Theory (cs.IT)
+***备注**: Rodrigo San-José
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-112-VidFormer: A novel end-to-end framework fused by 3DCNN and Transformer for Video-based Remote Physiological Measurement {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01691
+**作者**: Jiachen Li,Shisheng Guo,Longzhen Tang,Cuolong Cui,Lingjiang Kong,Xiaobo Yang
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Artificial Intelligence (cs.AI)
+***备注**: Jiachen Li,Shisheng Guo,Longzhen Tang,Cuolong Cui,Lingjiang Kong,Xiaobo Yang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-113-Analyzing Aviation Safety Narratives with LDA, NMF and PLSA: A Case Study Using Socrata Datasets {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01690
+**作者**: Aziida Nanyonga,Graham Wild
+**类目**: Machine Learning (cs.LG)
+***备注**: Aziida Nanyonga,Graham Wild
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-114-Quantitative Gait Analysis from Single RGB Videos Using a Dual-Input Transformer-Based Network {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01689
+**作者**: Hiep Dinh,Son Le,My Than,Minh Ho,Nicolas Vuillerme,Hieu Pham
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Hiep Dinh,Son Le,My Than,Minh Ho,Nicolas Vuillerme,Hieu Pham
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-115-IAM: Enhancing RGB-D Instance Segmentation with New Benchmarks {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01685
+**作者**: Aecheon Jung,Soyun Choi,Junhong Min,Sungeun Hong
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Aecheon Jung,Soyun Choi,Junhong Min,Sungeun Hong
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-116-6Vision: Image-encoding-based IPv6 Target Generation in Few-seed Scenarios {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01683
+**作者**: W. Zhang,G. Song,L. He,J. Lin,S. Wu,Z. Wang,C. Li,J. Yang
+**类目**: Networking and Internet Architecture (cs.NI)
+***备注**: W. Zhang,G. Song,L. He,J. Lin,S. Wu,Z. Wang,C. Li,J. Yang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-117-Adaptive Few-shot Prompting for Machine Translation with Pre-trained Language Models {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01679
+**作者**: Lei Tang,Jinghui Qin,Wenxuan Ye,Hao Tan,Zhijing Yang
+**类目**: Computation and Language (cs.CL); Artificial Intelligence (cs.AI)
+***备注**: Lei Tang,Jinghui Qin,Wenxuan Ye,Hao Tan,Zhijing Yang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-118-PG-SAG: Parallel Gaussian Splatting for Fine-Grained Large-Scale Urban Buildings Reconstruction via Semantic-Aware Grouping {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01677
+**作者**: Tengfei Wang,Xin Wang,Yongmao Hou,Yiwei Xu,Wendi Zhang,Zongqian Zhan
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Tengfei Wang,Xin Wang,Yongmao Hou,Yiwei Xu,Wendi Zhang,Zongqian Zhan
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-119-A BDDC method for three-dimensional advection-diffusion problems with an adaptive coarse space {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01676
+**作者**: Jie Peng,Shi Shu,Junxian Wang,Liuqiang Zhong
+**类目**: Numerical Analysis (math.NA)
+***备注**: Jie Peng,Shi Shu,Junxian Wang,Liuqiang Zhong
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-120-Controlling your Attributes in Voice {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01674
+**作者**: Xuyuan Li,Zengqiang Shang.Li Wang,Pengyuan Zhang
+**类目**: ound (cs.SD); Audio and Speech Processing (eess.AS)
+***备注**: Xuyuan Li,Zengqiang Shang.Li Wang,Pengyuan Zhang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-121-Improved Feature Extraction Network for Neuro-Oriented Target Speaker Extraction {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01673
+**作者**: Cunhang Fan,Youdian Gao,Zexu Pan,Jingjing Zhang,Hongyu Zhang,Jie Zhang,Zhao Lv
+**类目**: ound (cs.SD); Audio and Speech Processing (eess.AS)
+***备注**: Cunhang Fan,Youdian Gao,Zexu Pan,Jingjing Zhang,Hongyu Zhang,Jie Zhang,Zhao Lv
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-122-Practical Secure Inference Algorithm for Fine-tuned Large Language Model Based on Fully Homomorphic Encryption {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01672
+**作者**: Zhang Ruoyan,Zheng Zhongxiang,Bao Wankang
+**类目**: Cryptography and Security (cs.CR)
+***备注**: Zhang Ruoyan,Zheng Zhongxiang,Bao Wankang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-123-Inversely Learning Transferable Rewards via Abstracted States {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01669
+**作者**: Yikang Gui,Prashant Doshi
+**类目**: Machine Learning (cs.LG); Robotics (cs.RO)
+***备注**: Yikang Gui,Prashant Doshi
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-124-CoT-based Synthesizer: Enhancing LLM Performance through Answer Synthesis {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01668
+**作者**: Bohan Zhang,Xiaokang Zhang,Jing Zhang,Jifan Yu,Sijia Luo,Jie Tang
+**类目**: Computation and Language (cs.CL)
+***备注**: Bohan Zhang,Xiaokang Zhang,Jing Zhang,Jifan Yu,Sijia Luo,Jie Tang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-125-FairSense: Long-Term Fairness Analysis of ML-Enabled Systems {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01665
+**作者**: Yining She,Sumon Biswas,Christian Kästner,Eunsuk Kang
+**类目**: Machine Learning (cs.LG); Computers and Society (cs.CY); Software Engineering (cs.SE)
+***备注**: Yining She,Sumon Biswas,Christian Kästner,Eunsuk Kang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-126-BARTPredict: Empowering IoT Security with LLM-Driven Cyber Threat Prediction {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01664
+**作者**: Alaeddine Diaf,Abdelaziz Amara Korba,Nour Elislem Karabadji,Yacine Ghamri-Doudane
+**类目**: Cryptography and Security (cs.CR); Artificial Intelligence (cs.AI)
+***备注**: Alaeddine Diaf,Abdelaziz Amara Korba,Nour Elislem Karabadji,Yacine Ghamri-Doudane
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-127-he (Exact) Price of Cardinality for Indivisible Goods: A Parametric Perspective {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01660
+**作者**: Alexander Lam,Bo Li,Ankang Sun
+**类目**: Computer Science and Game Theory (cs.GT)
+***备注**: Alexander Lam,Bo Li,Ankang Sun
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-128-EAUWSeg: Eliminating annotation uncertainty in weakly-supervised medical image segmentation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01658
+**作者**: Wang Lituan,Zhang Lei,Wang Yan,Wang Zhenbin,Zhang Zhenwei,Zhang Yi
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Artificial Intelligence (cs.AI)
+***备注**: Wang Lituan,Zhang Lei,Wang Yan,Wang Zhenbin,Zhang Zhenwei,Zhang Yi
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-129-Krylov iterative methods for linear least squares problems with linear equality constraints {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01655
+**作者**: Haibo Li
+**类目**: Numerical Analysis (math.NA)
+***备注**: Haibo Li
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-130-Look Back for More: Harnessing Historical Sequential Updates for Personalized Federated Adapter Tuning {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01653
+**作者**: Danni Peng,Yuan Wang,Huazhu Fu,Jinpeng Jiang,Yong Liu,Rick Siow Mong Goh,Qingsong Wei
+**类目**: Machine Learning (cs.LG); Distributed, Parallel, and Cluster Computing (cs.DC)
+***备注**: Danni Peng,Yuan Wang,Huazhu Fu,Jinpeng Jiang,Yong Liu,Rick Siow Mong Goh,Qingsong Wei
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-131-MIRAGE: Exploring How Large Language Models Perform in Complex Social Interactive Environments {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01652
+**作者**: Cai Yin,Gu Zhouhong,Du Zhaohan,Ye Zheyu,Cao Shaosheng,Xu Yiqian,Feng Hongwei,Chen Ping
+**类目**: Computation and Language (cs.CL)
+***备注**: Cai Yin,Gu Zhouhong,Du Zhaohan,Ye Zheyu,Cao Shaosheng,Xu Yiqian,Feng Hongwei,Chen Ping
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-132-Enhanced Error Bounds For The Masked Projection Techniques via Cosine-Sine Decomposition {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01651
+**作者**: Brij Nandan Tripathi,Hanumant Singh Shekhawat
+**类目**: Numerical Analysis (math.NA)
+***备注**: Brij Nandan Tripathi,Hanumant Singh Shekhawat
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-133-An efficient light-weighted signal reconstruction method consists of Fast Fourier Transform and Convolutional-based Autoencoder {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01650
+**作者**: Pu-Yun Kow,Pu-Zhao Kow
+**类目**: ound (cs.SD); Audio and Speech Processing (eess.AS)
+***备注**: Pu-Yun Kow,Pu-Zhao Kow
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-134-AVATAR: Adversarial Autoencoders with Autoregressive Refinement for Time Series Generation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01649
+**作者**: MohammadReza EskandariNasab,Shah Muhammad Hamdi,Soukaina Filali Boubrahimi
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI)
+***备注**: MohammadReza EskandariNasab,Shah Muhammad Hamdi,Soukaina Filali Boubrahimi
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-135-Dual Mutual Learning Network with Global-local Awareness for RGB-D Salient Object Detection {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01648
+**作者**: Kang Yi,Haoran Tang,Yumeng Li,Jing Xu,Jun Zhang
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Multimedia (cs.MM)
+***备注**: Kang Yi,Haoran Tang,Yumeng Li,Jing Xu,Jun Zhang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-136-HLV-1K: A Large-scale Hour-Long Video Benchmark for Time-Specific Long Video Understanding {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01645
+**作者**: Heqing Zou,Tianze Luo,Guiyang Xie,Victor(Xiao Jie)Zhang,Fengmao Lv,Guangcong Wang,Junyang Chen,Zhuochen Wang,Hansheng Zhang,Huaijian Zhang
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Artificial Intelligence (cs.AI)
+***备注**: Heqing Zou,Tianze Luo,Guiyang Xie,Victor(Xiao Jie)Zhang,Fengmao Lv,Guangcong Wang,Junyang Chen,Zhuochen Wang,Hansheng Zhang,Huaijian Zhang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-137-Multimodal Contrastive Representation Learning in Augmented Biomedical Knowledge Graphs {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01644
+**作者**: Tien Dang,Viet Thanh Duy Nguyen,Minh Tuan Le,Truong-Son Hy
+**类目**: Computation and Language (cs.CL); Machine Learning (cs.LG)
+***备注**: Tien Dang,Viet Thanh Duy Nguyen,Minh Tuan Le,Truong-Son Hy
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-138-CBIR-Sli: Interpretable Content-Based Image Retrieval with 2D Slice Embeddings {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01642
+**作者**: Shuhei Tomoshige,Hayato Muraki,Kenichi Oishi,Hitoshi Iyatomi
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Machine Learning (cs.LG); Image and Video Processing (eess.IV)
+***备注**: Shuhei Tomoshige,Hayato Muraki,Kenichi Oishi,Hitoshi Iyatomi
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-139-Uncertainty and Energy based Loss Guided Semi-Supervised Semantic Segmentation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01640
+**作者**: Rini Smita Thakur,Vinod K. Kurmi
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Rini Smita Thakur,Vinod K. Kurmi
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-140-Artificial Intelligent Implications on Health Data Privacy and Confidentiality {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01639
+**作者**: Ahmad Momani
+**类目**: Computers and Society (cs.CY); Artificial Intelligence (cs.AI)
+***备注**: Ahmad Momani
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-141-A non-ergodic framework for understanding emergent capabilities in Large Language Models {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01638
+**作者**: Javier Marin
+**类目**: Computation and Language (cs.CL); Artificial Intelligence (cs.AI); Machine Learning (cs.LG)
+***备注**: Javier Marin
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-142-Whisphone: Whispering Input Earbuds {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01636
+**作者**: Masaaki Fukumoto
+**类目**: Human-Computer Interaction (cs.HC); Sound (cs.SD); Audio and Speech Processing (eess.AS)
+***备注**: Masaaki Fukumoto
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-143-ACE: Anti-Editing Concept Erasure in Text-to-Image Models {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01633
+**作者**: Zihao Wang,Yuxiang Wei,Fan Li,Renjing Pei,Hang Xu,Wangmeng Zuo
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Zihao Wang,Yuxiang Wei,Fan Li,Renjing Pei,Hang Xu,Wangmeng Zuo
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-144-Integrated Communication and Bayesian Estimation of Fixed Channel States {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01632
+**作者**: Daewon Seo
+**类目**: Information Theory (cs.IT)
+***备注**: Daewon Seo
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-145-Revisiting Data Analysis with Pre-trained Foundation Models {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01631
+**作者**: Chen Liang,Donghua Yang,Zheng Liang,Zhiyu Liang,Tianle Zhang,Boyu Xiao,Yuqing Yang,Wenqi Wang,Hongzhi Wang
+**类目**: Databases (cs.DB)
+***备注**: Chen Liang,Donghua Yang,Zheng Liang,Zhiyu Liang,Tianle Zhang,Boyu Xiao,Yuqing Yang,Wenqi Wang,Hongzhi Wang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-146-A Probabilistic Model for Node Classification in Directed Graphs {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01630
+**作者**: Diego Huerta,Gerardo Arizmendi
+**类目**: Machine Learning (cs.LG); Social and Information Networks (cs.SI)
+***备注**: Diego Huerta,Gerardo Arizmendi
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-147-Crossing Language Borders: A Pipeline for Indonesian Manhwa Translation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01629
+**作者**: Nithyasri Narasimhan,Sagarika Singh
+**类目**: Machine Learning (cs.LG); Computation and Language (cs.CL); Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Nithyasri Narasimhan,Sagarika Singh
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-148-Data Parallel Visualization and Rendering on the RAMSES Supercomputer with ANARI {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01628
+**作者**: Stefan Zellmann
+**类目**: Graphics (cs.GR)
+***备注**: Stefan Zellmann
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-149-ICPC: In-context Prompt Compression with Faster Inference {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01625
+**作者**: Ziyang Yu,Yuyu Liu
+**类目**: Computation and Language (cs.CL); Artificial Intelligence (cs.AI)
+***备注**: Ziyang Yu,Yuyu Liu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-150-A hyperreduced reduced basis element method for reduced-order modeling of component-based nonlinear systems {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01621
+**作者**: Mehran Ebrahimi,Masayuki Yano
+**类目**: Numerical Analysis (math.NA); Computational Physics (physics.comp-ph)
+***备注**: Mehran Ebrahimi,Masayuki Yano
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-151-Adaptive Meta-learning-based Adversarial Training for Robust Automatic Modulation Classification {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01620
+**作者**: Amirmohammad Bamdad,Ali Owfi,Fatemeh Afghah
+**类目**: Machine Learning (cs.LG); Cryptography and Security (cs.CR)
+***备注**: Amirmohammad Bamdad,Ali Owfi,Fatemeh Afghah
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-152-Merging Context Clustering with Visual State Space Models for Medical Image Segmentation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01618
+**作者**: Yun Zhu,Dong Zhang,Yi Lin,Yifei Feng,Jinhui Tang
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Artificial Intelligence (cs.AI)
+***备注**: Yun Zhu,Dong Zhang,Yi Lin,Yifei Feng,Jinhui Tang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-153-Equity Impacts of Public Transit Network Redesign with Shared Autonomous Mobility Services {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01615
+**作者**: Max T.M. Ng,Meredith Raymer,Hani S. Mahmassani,Omer Verbas,Taner Cokyasar
+**类目**: ystems and Control (eess.SY); Optimization and Control (math.OC)
+***备注**: Max T.M. Ng,Meredith Raymer,Hani S. Mahmassani,Omer Verbas,Taner Cokyasar
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-154-Evaluation of Rail Decarbonization Alternatives: Framework and Application {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01614
+**作者**: Adrian Hernandez,Max TM Ng,Nazib Siddique,Pablo L. Durango-Cohen,Amgad Elgowainy,Hani S. Mahmassani,Michael Wang,Yan Zhou
+**类目**: ystems and Control (eess.SY); Optimization and Control (math.OC)
+***备注**: Adrian Hernandez,Max TM Ng,Nazib Siddique,Pablo L. Durango-Cohen,Amgad Elgowainy,Hani S. Mahmassani,Michael Wang,Yan Zhou
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-155-Google is all you need: Semi-Supervised Transfer Learning Strategy For Light Multimodal Multi-Task Classification Model {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01611
+**作者**: Haixu Liu,Penghao Jiang,Zerui Tao
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Artificial Intelligence (cs.AI)
+***备注**: Haixu Liu,Penghao Jiang,Zerui Tao
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-156-Online Meta-Learning Channel Autoencoder for Dynamic End-to-end Physical Layer Optimization {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01608
+**作者**: Ali Owfi,Jonathan Ashdown,Kurt Turck
+**类目**: Machine Learning (cs.LG); Signal Processing (eess.SP)
+***备注**: Ali Owfi,Jonathan Ashdown,Kurt Turck
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-157-st Input Validation for Vision-based DL Systems: An Active Learning Approach {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01606
+**作者**: Delaram Ghobari,Mohammad Hossein Amini,Dai Quoc Tran,Seunghee Park,Shiva Nejati,Mehrdad Sabetzadeh
+**类目**: oftware Engineering (cs.SE)
+***备注**: Delaram Ghobari,Mohammad Hossein Amini,Dai Quoc Tran,Seunghee Park,Shiva Nejati,Mehrdad Sabetzadeh
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-158-Disentangling Hierarchical Features for Anomalous Sound Detection Under Domain Shift {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01604
+**作者**: Jian Guan,Jiantong Tian,Qiaoxi Zhu,Feiyang Xiao,Hejing Zhang,Xubo Liu
+**类目**: ound (cs.SD); Audio and Speech Processing (eess.AS)
+***备注**: Jian Guan,Jiantong Tian,Qiaoxi Zhu,Feiyang Xiao,Hejing Zhang,Xubo Liu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-159-Few-shot Implicit Function Generation via Equivariance {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01601
+**作者**: Suizhi Huang,Xingyi Yang,Hongtao Lu,Xinchao Wang
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Artificial Intelligence (cs.AI)
+***备注**: Suizhi Huang,Xingyi Yang,Hongtao Lu,Xinchao Wang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-160-Prism: Mining Task-aware Domains in Non-i.i.d. IMU Data for Flexible User Perception {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01598
+**作者**: Yunzhe Li,Facheng Hu,Hongzi Zhu,Quan Liu,Xiaoke Zhao,Jiangang Shen,Shan Chang,Minyi Guo
+**类目**: Artificial Intelligence (cs.AI); Human-Computer Interaction (cs.HC)
+***备注**: Yunzhe Li,Facheng Hu,Hongzi Zhu,Quan Liu,Xiaoke Zhao,Jiangang Shen,Shan Chang,Minyi Guo
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-161-Adaptive Homophily Clustering: A Structure Homophily Graph Learning with Adaptive Filter for Hyperspectral Image {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01595
+**作者**: Yao Ding,Weijie Kang,Aitao Yang,Zhili Zhang,Junyang Zhao,Jie Feng,Danfeng Hong,Qinhe Zheng
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Yao Ding,Weijie Kang,Aitao Yang,Zhili Zhang,Junyang Zhao,Jie Feng,Danfeng Hong,Qinhe Zheng
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-162-PSYCHE: A Multi-faceted Patient Simulation Framework for Evaluation of Psychiatric Assessment Conversational Agents {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01594
+**作者**: Jingoo Lee,Kyungho Lim,Young-Chul Jung,Byung-Hoon Kim
+**类目**: Computation and Language (cs.CL); Artificial Intelligence (cs.AI); Machine Learning (cs.LG)
+***备注**: Jingoo Lee,Kyungho Lim,Young-Chul Jung,Byung-Hoon Kim
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-163-BLAST: A Stealthy Backdoor Leverage Attack against Cooperative Multi-Agent Deep Reinforcement Learning based Systems {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01593
+**作者**: Yinbo Yu,Saihao Yan,Xueyu Yin,Jing Fang,Jiajia Liu
+**类目**: Artificial Intelligence (cs.AI); Cryptography and Security (cs.CR); Machine Learning (cs.LG)
+***备注**: Yinbo Yu,Saihao Yan,Xueyu Yin,Jing Fang,Jiajia Liu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-164-Multivariate Time Series Anomaly Detection using DiffGAN Model {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01591
+**作者**: Guangqiang Wu,Fu Zhang
+**类目**: Machine Learning (cs.LG); Statistics Theory (math.ST)
+***备注**: Guangqiang Wu,Fu Zhang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-165-D$^3$-Human: Dynamic Disentangled Digital Human from Monocular Video {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01589
+**作者**: Honghu Chen,Bo Peng,Yunfan Tao,Juyong Zhang
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Graphics (cs.GR)
+***备注**: Honghu Chen,Bo Peng,Yunfan Tao,Juyong Zhang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-166-(WhyPHI) Fine-Tuning PHI-3 for Multiple-Choice Question Answering: Methodology, Results, and Challenges {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01588
+**作者**: Mohamed Hisham Abdellatif
+**类目**: Computation and Language (cs.CL); Artificial Intelligence (cs.AI)
+***备注**: Mohamed Hisham Abdellatif
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-167-VGPT-PINN: Viscosity-enhanced Generative Pre-Trained Physics Informed Neural Networks for parameterized nonlinear conservation laws {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01587
+**作者**: Yajie Ji,Yanlai Chen,Zhenli Xu
+**类目**: Numerical Analysis (math.NA)
+***备注**: Yajie Ji,Yanlai Chen,Zhenli Xu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-168-GRAMC: General-purpose and reconfigurable analog matrix computing architecture {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01586
+**作者**: Lunshuai Pan,Shiqing Wang,Pushen Zuo,Zhong Sun
+**类目**: Hardware Architecture (cs.AR); Emerging Technologies (cs.ET); Systems and Control (eess.SY)
+***备注**: Lunshuai Pan,Shiqing Wang,Pushen Zuo,Zhong Sun
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-169-Stackelberg Game Based Performance Optimization in Digital Twin Assisted Federated Learning over NOMA Networks {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01584
+**作者**: Bibo Wu,Fang Fang,Xianbin Wang
+**类目**: Machine Learning (cs.LG); Cryptography and Security (cs.CR); Computer Science and Game Theory (cs.GT); Networking and Internet Architecture (cs.NI)
+***备注**: Bibo Wu,Fang Fang,Xianbin Wang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-170-Interruption Handling for Conversational Robots {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01568
+**作者**: Shiye Cao,Jiwon Moon,Amama Mahmood,Victor Nikhil Antony,Ziang Xiao,Anqi Liu,Chien-Ming Huang
+**类目**: Human-Computer Interaction (cs.HC); Robotics (cs.RO)
+***备注**: Shiye Cao,Jiwon Moon,Amama Mahmood,Victor Nikhil Antony,Ziang Xiao,Anqi Liu,Chien-Ming Huang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-171-Semialgebraic Neural Networks: From roots to representations {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01564
+**作者**: S. David Mis,Matti Lassas,Maarten V. de Hoop
+**类目**: Machine Learning (cs.LG); Neural and Evolutionary Computing (cs.NE); Numerical Analysis (math.NA)
+***备注**: S. David Mis,Matti Lassas,Maarten V. de Hoop
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-172-K-ARC: Adaptive Robot Coordination for Multi-Robot Kinodynamic Planning {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01559
+**作者**: Mike Qin,Irving Solis,James Motes,Marco Morales,Nancy M. Amato
+**类目**: Robotics (cs.RO); Multiagent Systems (cs.MA)
+***备注**: Mike Qin,Irving Solis,James Motes,Marco Morales,Nancy M. Amato
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-173-Predicting the Performance of Black-box LLMs through Self-Queries {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01558
+**作者**: Dylan Sam,Marc Finzi,J. Zico Kolter
+**类目**: Machine Learning (cs.LG); Computation and Language (cs.CL)
+***备注**: Dylan Sam,Marc Finzi,J. Zico Kolter
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-174-Click-Calib: A Robust Extrinsic Calibration Method for Surround-View Systems {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01557
+**作者**: Lihao Wang
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Lihao Wang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-175-Extended Information Geometry: Large Deviation Theory, Statistical Thermodynamics, and Empirical Counting Frequencies {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01556
+**作者**: Viswa Virinchi Muppirala,Hong Qian
+**类目**: Information Theory (cs.IT)
+***备注**: Viswa Virinchi Muppirala,Hong Qian
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-176-ask-Driven Fixation Network: An Efficient Architecture with Fixation Selection {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01548
+**作者**: Shuguang Wang,Yuanjing Wang
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Shuguang Wang,Yuanjing Wang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-177-Enhancing User Engagement in Large-Scale Social Annotation Platforms: Community-Based Design Interventions and Implications for Large Language Models (LLMs) {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01545
+**作者**: Jumana Almahmoud,Marc Facciotti,Michele Igo,Kamali Sripathi,David Karger
+**类目**: Human-Computer Interaction (cs.HC)
+***备注**: Jumana Almahmoud,Marc Facciotti,Michele Igo,Kamali Sripathi,David Karger
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-178-Many of Your DPOs are Secretly One: Attempting Unification Through Mutual Information {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01544
+**作者**: Rasul Tutnov,Antoine Grosnit,Haitham Bou-Ammar
+**类目**: Machine Learning (cs.LG); Computation and Language (cs.CL); Machine Learning (stat.ML)
+***备注**: Rasul Tutnov,Antoine Grosnit,Haitham Bou-Ammar
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-179-BoxingGym: Benchmarking Progress in Automated Experimental Design and Model Discovery {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01540
+**作者**: Kanishk Gandhi,Michael Y. Li,Lyle Goodyear,Louise Li,Aditi Bhaskar,Mohammed Zaman,Noah D. Goodman
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI)
+***备注**: Kanishk Gandhi,Michael Y. Li,Lyle Goodyear,Louise Li,Aditi Bhaskar,Mohammed Zaman,Noah D. Goodman
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-180-In Search of a Lost Metric: Human Empowerment as a Pillar of Socially Conscious Navigation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01539
+**作者**: Vasanth Reddy Baddam,Behdad Chalaki,Vaishnav Tadiparthi,Hossein Nourkhiz Mahjoub,Ehsan Moradi-Pari,Hoda Eldardiry,Almuatazbellah Boker
+**类目**: Robotics (cs.RO); Artificial Intelligence (cs.AI); Human-Computer Interaction (cs.HC)
+***备注**: Vasanth Reddy Baddam,Behdad Chalaki,Vaishnav Tadiparthi,Hossein Nourkhiz Mahjoub,Ehsan Moradi-Pari,Hoda Eldardiry,Almuatazbellah Boker
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-181-Enriched $C^1$ finite elements for crack problems in simplified strain gradient elasticity {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01536
+**作者**: Yury Solyaev,Vasiliy Dobryanskiy
+**类目**: Numerical Analysis (math.NA); Classical Physics (physics.class-ph)
+***备注**: Yury Solyaev,Vasiliy Dobryanskiy
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-182-A Metasemantic-Metapragmatic Framework for Taxonomizing Multimodal Communicative Alignment {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01535
+**作者**: Eugene Yu Ji
+**类目**: Human-Computer Interaction (cs.HC); Artificial Intelligence (cs.AI); Computation and Language (cs.CL); Computers and Society (cs.CY)
+***备注**: Eugene Yu Ji
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-183-ransaction Level Hierarchy Guided and Functional Coverage Driven Deductive Formal Verification {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01534
+**作者**: Tobias Strauch
+**类目**: Hardware Architecture (cs.AR)
+***备注**: Tobias Strauch
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-184-A Global Games-Inspired Approach to Multi-Robot Task Allocation for Heterogeneous Teams {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01531
+**作者**: Logan Beaver
+**类目**: Robotics (cs.RO); Multiagent Systems (cs.MA); Systems and Control (eess.SY)
+***备注**: Logan Beaver
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-185-SAFER: Sharpness Aware layer-selective Finetuning for Enhanced Robustness in vision transformers {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01529
+**作者**: Bhavna Gopal,Huanrui Yang,Mark Horton,Yiran Chen
+**类目**: Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Bhavna Gopal,Huanrui Yang,Mark Horton,Yiran Chen
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-186-ransfer Neyman-Pearson Algorithm for Outlier Detection {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01525
+**作者**: Mohammadreza M. Kalan,Eitan J. Neugut,Samory Kpotufe
+**类目**: Machine Learning (cs.LG); Machine Learning (stat.ML)
+***备注**: Mohammadreza M. Kalan,Eitan J. Neugut,Samory Kpotufe
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-187-High order interpolation of magnetic fields with vector potential reconstruction for particle simulations {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01523
+**作者**: Oleksii Beznosov,Jesus Bonilla,Xianzhu Tang,Golo Wimmer
+**类目**: Numerical Analysis (math.NA); Plasma Physics (physics.plasm-ph)
+***备注**: Oleksii Beznosov,Jesus Bonilla,Xianzhu Tang,Golo Wimmer
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-188-Securing Wi-Fi 6 Connection Establishment Against Relay and Spoofing Threats {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01517
+**作者**: Naureen Hoque,Hanif Rahbari
+**类目**: Cryptography and Security (cs.CR); Networking and Internet Architecture (cs.NI)
+***备注**: Naureen Hoque,Hanif Rahbari
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-189-Improving Robustness Estimates in Natural Language Explainable AI though Synonymity Weighted Similarity Measures {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01516
+**作者**: Christopher Burger
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI); Computation and Language (cs.CL)
+***备注**: Christopher Burger
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-190-DiagrammaticLearning: A Graphical Language for Compositional Training Regimes {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01515
+**作者**: Mason Lary,Richard Samuelson,Alexander Wilentz,Alina Zare,Matthew Klawonn,James P. Fairbanks
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI); Programming Languages (cs.PL); Category Theory (math.CT)
+***备注**: Mason Lary,Richard Samuelson,Alexander Wilentz,Alina Zare,Matthew Klawonn,James P. Fairbanks
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-191-A Primal-Dual Perspective on Program Verification Algorithms (Extended Version) {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01512
+**作者**: Takeshi Tsukada,Hiroshi Unno,Oded Padon,Sharon Shoham
+**类目**: Programming Languages (cs.PL); Logic in Computer Science (cs.LO)
+***备注**: Takeshi Tsukada,Hiroshi Unno,Oded Padon,Sharon Shoham
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-192-reeLUT: An Efficient Alternative to Deep Neural Networks for Inference Acceleration Using Gradient Boosted Decision Trees {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01511
+**作者**: Alireza Khataei,Kia Bazargan
+**类目**: Machine Learning (cs.LG); Hardware Architecture (cs.AR)
+***备注**: Alireza Khataei,Kia Bazargan
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-193-Explainable Brain Age Gap Prediction in Neurodegenerative Conditions using coVariance Neural Networks {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01510
+**作者**: Saurabh Sihag,Gonzalo Mateos,Alejandro Ribeiro
+**类目**: Machine Learning (cs.LG); Signal Processing (eess.SP); Quantitative Methods (q-bio.QM)
+***备注**: Saurabh Sihag,Gonzalo Mateos,Alejandro Ribeiro
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-194-AI-Enabled Operations at Fermi Complex: Multivariate Time Series Prediction for Outage Prediction and Diagnosis {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01509
+**作者**: Milan Jain,Burcu O. Mutlu,Caleb Stam,Jan Strube,Brian A. Schupbach,Jason M. St. John,William A. Pellico
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI); Emerging Technologies (cs.ET); Signal Processing (eess.SP)
+***备注**: Milan Jain,Burcu O. Mutlu,Caleb Stam,Jan Strube,Brian A. Schupbach,Jason M. St. John,William A. Pellico
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-195-Block components of generalized quaternion group codes {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01502
+**作者**: Nadja Willenborg
+**类目**: Information Theory (cs.IT); Combinatorics (math.CO)
+***备注**: Nadja Willenborg
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-196-Drift2Matrix: Kernel-Induced Self Representation for Concept Drift Adaptation in Co-evolving Time Series {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01480
+**作者**: Kunpeng Xu,Lifei Chen,Shengrui Wang
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI)
+***备注**: Kunpeng Xu,Lifei Chen,Shengrui Wang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-197-Enhancing Reasoning through Process Supervision with Monte Carlo Tree Search {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01478
+**作者**: Shuangtao Li,Shuaihao Dong,Kexin Luan,Xinhan Di,Chaofan Ding
+**类目**: Artificial Intelligence (cs.AI); Computation and Language (cs.CL); Machine Learning (cs.LG)
+***备注**: Shuangtao Li,Shuaihao Dong,Kexin Luan,Xinhan Di,Chaofan Ding
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-198-Unraveling Indirect In-Context Learning Using Influence Functions {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01473
+**作者**: Hadi Askari,Shivanshu Gupta,Terry Tong,Fei Wang,Anshuman Chhabra,Muhao Chen
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI)
+***备注**: Hadi Askari,Shivanshu Gupta,Terry Tong,Fei Wang,Anshuman Chhabra,Muhao Chen
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-199-Augmented Contrastive Clustering with Uncertainty-Aware Prototyping for Time Series Test Time Adaptation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01472
+**作者**: Peiliang Gong,Mohamed Ragab,Min Wu,Zhenghua Chen,Yongyi Su,Xiaoli Li,Daoqiang Zhang
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI)
+***备注**: Peiliang Gong,Mohamed Ragab,Min Wu,Zhenghua Chen,Yongyi Su,Xiaoli Li,Daoqiang Zhang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-200-Assessing HRV and HR Dynamics with Wearables During Socially Anxious Situations: Insights from a Controlled Study in a Low-Middle-Income Country {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01471
+**作者**: Nilesh Kumar Sahu,Snehil Gupta,Haroon R. Lone
+**类目**: Human-Computer Interaction (cs.HC)
+***备注**: Nilesh Kumar Sahu,Snehil Gupta,Haroon R. Lone
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-201-Balance-aware Sequence Sampling Makes Multi-modal Learning Better {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01470
+**作者**: Zhi-Hao Guan
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI)
+***备注**: Zhi-Hao Guan
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-202-Goal Recognition using Actor-Critic Optimization {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01463
+**作者**: Ben Nageris,Felipe Meneguzzi,Reuth Mirsky
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI); Multiagent Systems (cs.MA)
+***备注**: Ben Nageris,Felipe Meneguzzi,Reuth Mirsky
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-203-Pan-infection Foundation Framework Enables Multiple Pathogen Prediction {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01462
+**作者**: Lingrui Zhang,Haonan Wu,Nana Jin,Chenqing Zheng,Jize Xie,Qitai Cai,Jun Wang,Qin Cao,Xubin Zheng,Jiankun Wang,Lixin Cheng
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI); Genomics (q-bio.GN)
+***备注**: Lingrui Zhang,Haonan Wu,Nana Jin,Chenqing Zheng,Jize Xie,Qitai Cai,Jun Wang,Qin Cao,Xubin Zheng,Jiankun Wang,Lixin Cheng
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-204-GAN-TAT: A Novel Framework Using Protein Interaction Networks in Druggable Gene Identification {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01458
+**作者**: George Yuanji Wang,Srisharan Murugesan,Aditya Prince Rohatgi
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI); Quantitative Methods (q-bio.QM)
+***备注**: George Yuanji Wang,Srisharan Murugesan,Aditya Prince Rohatgi
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-205-Reinforcing Thinking through Reasoning-Enhanced Reward Models {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01457
+**作者**: Diji Yang,Linda Zeng,Kezhen Chen,Yi Zhang
+**类目**: Machine Learning (cs.LG); Artificial Intelligence (cs.AI); Computation and Language (cs.CL)
+***备注**: Diji Yang,Linda Zeng,Kezhen Chen,Yi Zhang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-206-Geometry Matters: Benchmarking Scientific ML Approaches for Flow Prediction around Complex Geometries {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01453
+**作者**: Ali Rabeh,Ethan Herron,Aditya Balu,Soumik Sarkar,Chinmay Hegde,Adarsh Krishnamurthy,Baskar Ganapathysubramanian
+**类目**: Machine Learning (cs.LG); Fluid Dynamics (physics.flu-dyn)
+***备注**: Ali Rabeh,Ethan Herron,Aditya Balu,Soumik Sarkar,Chinmay Hegde,Adarsh Krishnamurthy,Baskar Ganapathysubramanian
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-207-Human-AI Teaming Using Large Language Models: Boosting Brain-Computer Interfacing (BCI) and Brain Research {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01451
+**作者**: Maryna Kapitonova,Tonio Ball
+**类目**: Human-Computer Interaction (cs.HC); Artificial Intelligence (cs.AI)
+***备注**: Maryna Kapitonova,Tonio Ball
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-208-LS-GAN: Human Motion Synthesis with Latent-space GANs {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01449
+**作者**: Avinash Amballa,Gayathri Akkinapalli,Vinitra Muralikrishnan
+**类目**: Computer Vision and Pattern Recognition (cs.CV); Artificial Intelligence (cs.AI)
+***备注**: Avinash Amballa,Gayathri Akkinapalli,Vinitra Muralikrishnan
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-209-Optimal error bounds on an exponential wave integrator Fourier spectral method for fractional nonlinear Schr\"{o}dinger equations with low regularity potential and nonlinearity {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01445
+**作者**: Junqing Jia,Xiaoyun Jiang
+**类目**: Numerical Analysis (math.NA)
+***备注**: Junqing Jia,Xiaoyun Jiang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-210-Feedback Design and Implementation for Integrated Posture Manipulation and Thrust Vectoring {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01443
+**作者**: Aniket Shashikant Dhole
+**类目**: Robotics (cs.RO)
+***备注**: Aniket Shashikant Dhole
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-211-Explanatory Debiasing: Involving Domain Experts in the Data Generation Process to Mitigate Representation Bias in AI Systems {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01441
+**作者**: Aditya Bhattacharya,Simone Stumpf,Robin De Croon,Katrien Verbert
+**类目**: Human-Computer Interaction (cs.HC); Artificial Intelligence (cs.AI)
+***备注**: Aditya Bhattacharya,Simone Stumpf,Robin De Croon,Katrien Verbert
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-212-Probabilistic Mission Design in Neuro-Symbolic Systems {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01439
+**作者**: Simon Kohaut,Benedict Flade,Daniel Ochs,Devendra Singh Dhami,Julian Eggert,Kristian Kersting
+**类目**: Artificial Intelligence (cs.AI); Robotics (cs.RO)
+***备注**: Simon Kohaut,Benedict Flade,Daniel Ochs,Devendra Singh Dhami,Julian Eggert,Kristian Kersting
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-213-oi uu hieu suat toc do dong co Servo DC su dung bo dieu khien PID ket hop mang no-ron {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01438
+**作者**: Le Tieu Nien,Pham Van Cuong,Nguyen Phuc Anh,Vu Ngoc Son
+**类目**: Robotics (cs.RO)
+***备注**: Le Tieu Nien,Pham Van Cuong,Nguyen Phuc Anh,Vu Ngoc Son
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-214-Fundamental Risks in the Current Deployment of General-Purpose AI Models: What Have We (Not) Learnt From Cybersecurity? {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01435
+**作者**: Mario Fritz
+**类目**: Cryptography and Security (cs.CR); Artificial Intelligence (cs.AI)
+***备注**: Mario Fritz
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-215-Mathematical Definition and Systematization of Puzzle Rules {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01433
+**作者**: Itsuki Maeda,Yasuhiro Inoue
+**类目**: Artificial Intelligence (cs.AI); History and Overview (math.HO)
+***备注**: Itsuki Maeda,Yasuhiro Inoue
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-216-Survey on safe robot control via learning {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01432
+**作者**: Bassel El Mabsout
+**类目**: Robotics (cs.RO); Artificial Intelligence (cs.AI)
+***备注**: Bassel El Mabsout
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-217-CSI Compression using Channel Charting {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01431
+**作者**: Baptiste Chatelier(IETR, INSA Rennes, MERCE-France),Vincent Corlay(MERCE-France),Matthieu Crussière(INSA Rennes, IETR),Luc Le Magoarou(INSA Rennes, IETR)
+**类目**: Information Theory (cs.IT); Machine Learning (cs.LG); Signal Processing (eess.SP)
+***备注**: Baptiste Chatelier(IETR, INSA Rennes, MERCE-France),Vincent Corlay(MERCE-France),Matthieu Crussière(INSA Rennes, IETR),Luc Le Magoarou(INSA Rennes, IETR)
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-218-ERA: A Simulation Environment for Terrain Excavation Robot Autonomy {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01430
+**作者**: Christo Aluckal,Roopesh Vinodh Kumar Lal,Sean Courtney,Yash Turkar,Yashom Dighe,Young-Jin Kim,Jake Gemerek,Karthik Dantu
+**类目**: Robotics (cs.RO)
+***备注**: Christo Aluckal,Roopesh Vinodh Kumar Lal,Sean Courtney,Yash Turkar,Yashom Dighe,Young-Jin Kim,Jake Gemerek,Karthik Dantu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-219-Item Association Factorization Mixed Markov Chains for Sequential Recommendation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01429
+**作者**: DongYu Du,Yue Chan
+**类目**: Information Retrieval (cs.IR)
+***备注**: DongYu Du,Yue Chan
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-220-Compressed sensing for inverse problems II: applications to deconvolution, source recovery, and MRI {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01929
+**作者**: Giovanni S. Alberti,Alessandro Felisi,Matteo Santacesaria,S. Ivan Trapasso
+**类目**: Functional Analysis (math.FA); Information Theory (cs.IT); Optimization and Control (math.OC)
+***备注**: Giovanni S. Alberti,Alessandro Felisi,Matteo Santacesaria,S. Ivan Trapasso
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-221-Exoplanet Detection via Differentiable Rendering {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01912
+**作者**: Brandon Y. Feng,Rodrigo Ferrer-Chávez,Aviad Levis,Jason J. Wang,Katherine L. Bouman,William T. Freeman
+**类目**: Earth and Planetary Astrophysics (astro-ph.EP); Instrumentation and Methods for Astrophysics (astro-ph.IM); Computer Vision and Pattern Recognition (cs.CV); Image and Video Processing (eess.IV)
+***备注**: Brandon Y. Feng,Rodrigo Ferrer-Chávez,Aviad Levis,Jason J. Wang,Katherine L. Bouman,William T. Freeman
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-222-Monads and limits in bicategories of circuits {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01882
+**作者**: Fosco Loregian
+**类目**: Category Theory (math.CT); Formal Languages and Automata Theory (cs.FL)
+***备注**: Fosco Loregian
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-223-Signal Recovery Using a Spiked Mixture Model {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01840
+**作者**: Paul-Louis Delacour,Sander Wahls,Jeffrey M. Spraggins,Lukasz Migas,Raf Van de Plas
+**类目**: Machine Learning (stat.ML); Machine Learning (cs.LG)
+***备注**: Paul-Louis Delacour,Sander Wahls,Jeffrey M. Spraggins,Lukasz Migas,Raf Van de Plas
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-224-Unified Native Spaces in Kernel Methods {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01825
+**作者**: Xavier Emery,Emilio Porcu,Moreno Bevilacqua
+**类目**: Machine Learning (stat.ML); Machine Learning (cs.LG)
+***备注**: Xavier Emery,Emilio Porcu,Moreno Bevilacqua
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-225-QuantumBind-RBFE: Accurate Relative Binding Free Energy Calculations Using Neural Network Potentials {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01811
+**作者**: Francesc Sabanés Zariquiey,Stephen E. Farr,Stefan Doerr,Gianni De Fabritiis
+**类目**: Chemical Physics (physics.chem-ph); Machine Learning (cs.LG); Computational Physics (physics.comp-ph)
+***备注**: Francesc Sabanés Zariquiey,Stephen E. Farr,Stefan Doerr,Gianni De Fabritiis
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-226-Compressed Domain Prior-Guided Video Super-Resolution for Cloud Gaming Content {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01773
+**作者**: Qizhe Wang,Qian Yin,Zhimeng Huang,Weijia Jiang,Yi Su,Siwei Ma,Jiaqi Zhang
+**类目**: Image and Video Processing (eess.IV); Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Qizhe Wang,Qian Yin,Zhimeng Huang,Weijia Jiang,Yi Su,Siwei Ma,Jiaqi Zhang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-227-Quantifying A Firm's AI Engagement: Constructing Objective, Data-Driven, AI Stock Indices Using 10-K Filings {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01763
+**作者**: Lennart Ante,Aman Saggu
+**类目**: General Finance (q-fin.GN); Artificial Intelligence (cs.AI); Econometrics (econ.EM); Portfolio Management (q-fin.PM); Risk Management (q-fin.RM)
+***备注**: Lennart Ante,Aman Saggu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-228-Laparoscopic Scene Analysis for Intraoperative Visualisation of Gamma Probe Signals in Minimally Invasive Cancer Surgery {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01752
+**作者**: Baoru Huang
+**类目**: Image and Video Processing (eess.IV); Computer Vision and Pattern Recognition (cs.CV); Medical Physics (physics.med-ph)
+***备注**: Baoru Huang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-229-Subject Specific Deep Learning Model for Motor Imagery Direction Decoding {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01725
+**作者**: Praveen K. Parashiva,Sagila Gangadaran,A. P. Vinod
+**类目**: ignal Processing (eess.SP); Neural and Evolutionary Computing (cs.NE)
+***备注**: Praveen K. Parashiva,Sagila Gangadaran,A. P. Vinod
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-230-Uncovering the Iceberg in the Sea: Fundamentals of Pulse Shaping and Modulation Design for Random ISAC Signals {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01721
+**作者**: Fan Liu,Yifeng Xiong,Shihang Lu,Shuangyang Li,Weijie Yuan,Christos Masouros,Shi Jin,Giuseppe Caire
+**类目**: ignal Processing (eess.SP); Information Theory (cs.IT)
+***备注**: Fan Liu,Yifeng Xiong,Shihang Lu,Shuangyang Li,Weijie Yuan,Christos Masouros,Shi Jin,Giuseppe Caire
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-231-Beyond Non-Degeneracy: Revisiting Certainty Equivalent Heuristic for Online Linear Programming {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01716
+**作者**: Yilun Chen,Wenjia Wang
+**类目**: Optimization and Control (math.OC); Data Structures and Algorithms (cs.DS); Machine Learning (cs.LG); Probability (math.PR)
+***备注**: Yilun Chen,Wenjia Wang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-232-Bounds on treewidth via excluding disjoint unions of cycles {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01703
+**作者**: Meike Hatzel,Chun-Hung Liu,Bruce Reed,Sebastian Wiederrecht
+**类目**: Combinatorics (math.CO); Discrete Mathematics (cs.DM)
+***备注**: Meike Hatzel,Chun-Hung Liu,Bruce Reed,Sebastian Wiederrecht
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-233-Guaranteed Nonconvex Low-Rank Tensor Estimation via Scaled Gradient Descent {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01696
+**作者**: Tong Wu
+**类目**: Machine Learning (stat.ML); Information Theory (cs.IT); Machine Learning (cs.LG)
+***备注**: Tong Wu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-234-SNeRV: Spectra-preserving Neural Representation for Video {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01681
+**作者**: Jina Kim,Jihoo Lee,Je-Won Kang
+**类目**: Image and Video Processing (eess.IV); Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Jina Kim,Jihoo Lee,Je-Won Kang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-235-Unsupervised learning for anticipating critical transitions {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01579
+**作者**: Shirin Panahi,Ling-Wei Kong,Bryan Glaz,Mulugeta Haile,Ying-Cheng Lai
+**类目**: Chaotic Dynamics (nlin.CD); Machine Learning (cs.LG)
+***备注**: Shirin Panahi,Ling-Wei Kong,Bryan Glaz,Mulugeta Haile,Ying-Cheng Lai
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-236-Constructing and explaining machine learning models for chemistry: example of the exploration and design of boron-based Lewis acids {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01576
+**作者**: Juliette Fenogli,Laurence Grimaud,Rodolphe Vuilleumier(CPCV, Département de chimie, École Normale Supérieure, PSL University, Sorbonne Université, CNRS, Paris, France)
+**类目**: Chemical Physics (physics.chem-ph); Artificial Intelligence (cs.AI)
+***备注**: Juliette Fenogli,Laurence Grimaud,Rodolphe Vuilleumier(CPCV, Département de chimie, École Normale Supérieure, PSL University, Sorbonne Université, CNRS, Paris, France)
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-237-Indoor Position and Attitude Tracking with SO(3) Manifold {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01555
+**作者**: Hammam Salem,Mohanad Ahmed,Mohammed AlSharif,Ali Muqaibel,Tareq Al-Naffouri
+**类目**: ignal Processing (eess.SP); Robotics (cs.RO)
+***备注**: Hammam Salem,Mohanad Ahmed,Mohammed AlSharif,Ali Muqaibel,Tareq Al-Naffouri
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-238-Reading to Listen at the Cocktail Party: Multi-Modal Speech Separation {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01518
+**作者**: Akam Rahimi,Triantafyllos Afouras,Andrew Zisserman
+**类目**: Audio and Speech Processing (eess.AS); Sound (cs.SD); Signal Processing (eess.SP)
+***备注**: Akam Rahimi,Triantafyllos Afouras,Andrew Zisserman
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-239-Garbage in Garbage out: Impacts of data quality on criminal network intervention {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01508
+**作者**: Wang Ngai Yeung,Riccardo Di Clemente,Renaud Lambiotte
+**类目**: Physics and Society (physics.soc-ph); Social and Information Networks (cs.SI)
+***备注**: Wang Ngai Yeung,Riccardo Di Clemente,Renaud Lambiotte
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-240-ransfer Learning Analysis of Variational Quantum Circuits {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01507
+**作者**: Huan-Hsin Tseng,Hsin-Yi Lin,Samuel Yen-Chi Chen,Shinjae Yoo
+**类目**: Quantum Physics (quant-ph); Artificial Intelligence (cs.AI); Machine Learning (cs.LG)
+***备注**: Huan-Hsin Tseng,Hsin-Yi Lin,Samuel Yen-Chi Chen,Shinjae Yoo
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-241-ORACLE: A Real-Time, Hierarchical, Deep-Learning Photometric Classifier for the LSST {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01496
+**作者**: Ved G. Shah,Alex Gagliano,Konstantin Malanchev,Gautham Narayan, TheLSST Dark Energy Science Collaboration
+**类目**: Instrumentation and Methods for Astrophysics (astro-ph.IM); High Energy Astrophysical Phenomena (astro-ph.HE); Artificial Intelligence (cs.AI); Machine Learning (cs.LG)
+***备注**: Ved G. Shah,Alex Gagliano,Konstantin Malanchev,Gautham Narayan, TheLSST Dark Energy Science Collaboration
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-242-Sequencing Silicates in the IRS Debris Disk Catalog I: Methodology for Unsupervised Clustering {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01484
+**作者**: Cicero X. Lu,Tushar Mittal,Christine H. Chen,Alexis Y. Li,Kadin Worthen,B. A. Sargent,Carey M. Lisse,G. C. Sloan,Dean C. Hines,Dan M. Watson,Isabel Rebollido,Bin B. Ren,Joel D. Green
+**类目**: Earth and Planetary Astrophysics (astro-ph.EP); Instrumentation and Methods for Astrophysics (astro-ph.IM); Machine Learning (cs.LG)
+***备注**: Cicero X. Lu,Tushar Mittal,Christine H. Chen,Alexis Y. Li,Kadin Worthen,B. A. Sargent,Carey M. Lisse,G. C. Sloan,Dean C. Hines,Dan M. Watson,Isabel Rebollido,Bin B. Ren,Joel D. Green
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-243-Embedding Similarity Guided License Plate Super Resolution {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01483
+**作者**: Abderrezzaq Sendjasni,Mohamed-Chaker Larabi
+**类目**: Image and Video Processing (eess.IV); Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Abderrezzaq Sendjasni,Mohamed-Chaker Larabi
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-244-An unsupervised method for MRI recovery: Deep image prior with structured sparsity {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01482
+**作者**: Muhammad Ahmad Sultan,Chong Chen,Yingmin Liu,Katarzyna Gil,Karolina Zareba,Rizwan Ahmad
+**类目**: Image and Video Processing (eess.IV); Computer Vision and Pattern Recognition (cs.CV); Machine Learning (cs.LG); Signal Processing (eess.SP)
+***备注**: Muhammad Ahmad Sultan,Chong Chen,Yingmin Liu,Katarzyna Gil,Karolina Zareba,Rizwan Ahmad
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-245-Unleashing Correlation and Continuity for Hyperspectral Reconstruction from RGB Images {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01481
+**作者**: Fuxiang Feng,Runmin Cong,Shoushui Wei,Yipeng Zhang,Jun Li,Sam Kwong,Wei Zhang
+**类目**: Image and Video Processing (eess.IV); Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Fuxiang Feng,Runmin Cong,Shoushui Wei,Yipeng Zhang,Jun Li,Sam Kwong,Wei Zhang
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-246-A Survey of Deep Learning Methods in Protein Bioinformatics and its Impact on Protein Design {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01477
+**作者**: Weihang Dai
+**类目**: Biomolecules (q-bio.BM); Artificial Intelligence (cs.AI)
+***备注**: Weihang Dai
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-247-Order-one explicit approximations of random periodic solutions of semi-linear SDEs with multiplicative noise {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01474
+**作者**: Yujia Guo,Xiaojie Wang,Yue Wu
+**类目**: Probability (math.PR); Numerical Analysis (math.NA)
+***备注**: Yujia Guo,Xiaojie Wang,Yue Wu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-248-ch Report: Divide and Conquer 3D Real-Time Reconstruction for Improved IGS {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01465
+**作者**: Yicheng Zhu
+**类目**: Image and Video Processing (eess.IV); Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Yicheng Zhu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-249-Estimation of 3T MR images from 1.5T images regularized with Physics based Constraint {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01464
+**作者**: Prabhjot Kaur,Atul Singh Minhas,Chirag Kamal Ahuja,Anil Kumar Sao
+**类目**: Image and Video Processing (eess.IV); Computer Vision and Pattern Recognition (cs.CV); Machine Learning (cs.LG); Medical Physics (physics.med-ph)
+***备注**: Prabhjot Kaur,Atul Singh Minhas,Chirag Kamal Ahuja,Anil Kumar Sao
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-250-GDSR: Global-Detail Integration through Dual-Branch Network with Wavelet Losses for Remote Sensing Image Super-Resolution {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01460
+**作者**: Qiwei Zhu,Kai Li,Guojing Zhang,Xiaoying Wang,Jianqiang Huang,Xilai Li
+**类目**: Image and Video Processing (eess.IV); Computer Vision and Pattern Recognition (cs.CV); Machine Learning (cs.LG)
+***备注**: Qiwei Zhu,Kai Li,Guojing Zhang,Xiaoying Wang,Jianqiang Huang,Xilai Li
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-251-SS-CTML: Self-Supervised Cross-Task Mutual Learning for CT Image Reconstruction {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01456
+**作者**: Gaofeng Chen,Yaoduo Zhang,Li Huang,Pengfei Wang,Wenyu Zhang,Dong Zeng,Jianhua Ma,Ji He
+**类目**: Image and Video Processing (eess.IV); Computer Vision and Pattern Recognition (cs.CV); Machine Learning (cs.LG)
+***备注**: Gaofeng Chen,Yaoduo Zhang,Li Huang,Pengfei Wang,Wenyu Zhang,Dong Zeng,Jianhua Ma,Ji He
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-252-A Fourfold Pathogen Reference Ontology Suite {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01454
+**作者**: Shane Babcock,Carter Benson,Giacomo De Colle,Sydney Cohen,Alexander D. Diehl,Ram A.N.R. Challa,Anthony Huffman,Yongqun He,John Beverley
+**类目**: Other Quantitative Biology (q-bio.OT); Artificial Intelligence (cs.AI); Logic in Computer Science (cs.LO)
+***备注**: Shane Babcock,Carter Benson,Giacomo De Colle,Sydney Cohen,Alexander D. Diehl,Ram A.N.R. Challa,Anthony Huffman,Yongqun He,John Beverley
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-253-Real-Time Computational Visual Aberration Correcting Display Through High-Contrast Inverse Blurring {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01450
+**作者**: Akhilesh Balaji,Dhruv Ramu
+**类目**: Image and Video Processing (eess.IV); Computer Vision and Pattern Recognition (cs.CV)
+***备注**: Akhilesh Balaji,Dhruv Ramu
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-254-Analyzing Country-Level Vaccination Rates and Determinants of Practical Capacity to Administer COVID-19 Vaccines {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01447
+**作者**: Sharika J. Hegde,Max T.M. Ng,Marcos Rios,Hani S. Mahmassani,Ying Chen,Karen Smilowitz
+**类目**: General Economics (econ.GN); Machine Learning (cs.LG); Econometrics (econ.EM); Applications (stat.AP)
+***备注**: Sharika J. Hegde,Max T.M. Ng,Marcos Rios,Hani S. Mahmassani,Ying Chen,Karen Smilowitz
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-255-Innovative Approaches to Teaching Quantum Computer Programming and Quantum Software Engineering {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01446
+**作者**: Majid Haghparast,Enrique Moguel,Jose Garcia-Alonso,Tommi Mikkonen,Juan Manuel Murillo
+**类目**: Physics Education (physics.ed-ph); Software Engineering (cs.SE); Quantum Physics (quant-ph)
+***备注**: Majid Haghparast,Enrique Moguel,Jose Garcia-Alonso,Tommi Mikkonen,Juan Manuel Murillo
+{% hideToggle 点击查看摘要 %}
+
+{% note blue no-icon %} ID-256-On the reconstruction limits of complex networks {% endnote %}
+**链接**: https://arxiv.org/abs/2501.01437
+**作者**: Charles Murphy,Simon Lizotte,François Thibault,Vincent Thibeault,Patrick Desrosiers,Antoine Allard
+**类目**: Applications (stat.AP); Information Theory (cs.IT); Data Analysis, Statistics and Probability (physics.data-an)
+***备注**: Charles Murphy,Simon Lizotte,François Thibault,Vincent Thibeault,Patrick Desrosiers,Antoine Allard
+{% hideToggle 点击查看摘要 %}
+
