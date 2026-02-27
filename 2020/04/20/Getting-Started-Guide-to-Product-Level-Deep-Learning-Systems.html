@@ -1,0 +1,773 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>产品级深度学习系统入门指南 | 闲记算法</title><meta name="keywords" content="深度学习,产品"><meta name="author" content="Weitang Liu"><meta name="copyright" content="Weitang Liu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="部署产品级的深度学习模型充满挑战，其难度远远超过训练一个性能不俗的模型。为了部署一个产品级的深度学习系统，还需要设计和开发以下几个部分（见下图）：  本文可以作为一篇工程指南去构建一个产品级的深度学习系统，并且该系统可以部署在真实的生产环境中。 本文借鉴了如下文章： Full Stack Deep Learning Bootcamp (by Pieter Abbeel at UC Berkeley">
+<meta property="og:type" content="article">
+<meta property="og:title" content="产品级深度学习系统入门指南">
+<meta property="og:url" content="http://lonepatient.top/2020/04/20/Getting-Started-Guide-to-Product-Level-Deep-Learning-Systems.html">
+<meta property="og:site_name" content="闲记算法">
+<meta property="og:description" content="部署产品级的深度学习模型充满挑战，其难度远远超过训练一个性能不俗的模型。为了部署一个产品级的深度学习系统，还需要设计和开发以下几个部分（见下图）：  本文可以作为一篇工程指南去构建一个产品级的深度学习系统，并且该系统可以部署在真实的生产环境中。 本文借鉴了如下文章： Full Stack Deep Learning Bootcamp (by Pieter Abbeel at UC Berkeley">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20221031180534.png">
+<meta property="article:published_time" content="2020-04-20T23:20:08.000Z">
+<meta property="article:modified_time" content="2026-02-27T07:52:12.658Z">
+<meta property="article:author" content="Weitang Liu">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="产品">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20221031180534.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lonepatient.top/2020/04/20/Getting-Started-Guide-to-Product-Level-Deep-Learning-Systems"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//s4.cnzz.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" data-pjax="data-pjax" src="https://s4.cnzz.com/z_stat.php?id=1273275888&amp;web_id=1273275888"></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-02-27 07:52:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/backgroud.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><script src="https://at.alicdn.com/t/c/font_3570527_dthoqrrv2tv.css"></script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JwRQtLKZggvJH4sJ",ck:"JwRQtLKZggvJH4sJ"})</script><link rel="stylesheet" href="/css/universe.css"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536467946304280" crossorigin="anonymous"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20221031180534.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">闲记算法</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">产品级深度学习系统入门指南<a class="post-edit-link" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts/Getting-Started-Guide-to-Product-Level-Deep-Learning-Systems.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-04-20T23:20:08.000Z" title="发表于 2020-04-20 23:20:08">2020-04-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-27T07:52:12.658Z" title="更新于 2026-02-27 07:52:12">2026-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%A1%8C%E4%B8%9A%E5%88%86%E4%BA%AB/">行业分享</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%A1%8C%E4%B8%9A%E5%88%86%E4%BA%AB/%E7%B3%BB%E7%BB%9F/">系统</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2020/04/20/Getting-Started-Guide-to-Product-Level-Deep-Learning-Systems.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>部署产品级的深度学习模型充满挑战，其难度远远超过训练一个性能不俗的模型。为了部署一个产品级的深度学习系统，还需要设计和开发以下几个部分（见下图）：</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20221031180534.png" alt=""></p>
+<p>本文可以作为一篇工程指南去构建一个产品级的深度学习系统，并且该系统可以部署在真实的生产环境中。<br>
+本文借鉴了如下文章：<br>
+<a target="_blank" rel="noopener" href="https://fullstackdeeplearning.com">Full Stack Deep Learning Bootcamp</a> (by <a target="_blank" rel="noopener" href="https://people.eecs.berkeley.edu/~pabbeel/">Pieter Abbeel</a> at UC Berkeley, <a target="_blank" rel="noopener" href="http://josh-tobin.com/">Josh Tobin</a> at OpenAI, and <a target="_blank" rel="noopener" href="https://sergeykarayev.com/">Sergey Karayev</a> at Turnitin), <a target="_blank" rel="noopener" href="https://conferences.oreilly.com/tensorflow/tf-ca/public/schedule/detail/79327">TFX workshop</a> by <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/robert-crowe/">Robert Crowe</a>, and <a target="_blank" rel="noopener" href="https://pipeline.ai/">Pipeline.ai</a>’s <a target="_blank" rel="noopener" href="https://www.meetup.com/Advanced-KubeFlow/">Advanced KubeFlow Meetup</a> by <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/cfregly/">Chris Fregly</a>.</p>
+<h2 id="Machine-Learning-Projects-机器学习项目">Machine Learning Projects 机器学习项目</h2>
+<blockquote>
+<p>[译者注]原作者在文中既使用了Mechine Learning(机器学习)，又使用了Deep Learning(深度学习，大部分工具可以两者都适用)</p>
+</blockquote>
+<p>有趣的真相 :flushed: fact: <strong>85%的AI项目会失败</strong>. <sup><a href="#fsdl">1</a></sup> 潜在的原因如下：</p>
+<ul>
+<li>技术上不可行，或者无法广泛应用</li>
+<li>没能转化为产品</li>
+<li>不清晰的成功标准或指标</li>
+<li>糟糕的团队管理</li>
+</ul>
+<h3 id="1-ML-Projects-lifecycle-机器学习项目的生命周期">1. ML Projects lifecycle 机器学习项目的生命周期</h3>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20221031180728.png" alt=""></p>
+<ul>
+<li>了解你所在领域的技术现状的重要性:
+<ul>
+<li>可以知道什么是可能可以实现的</li>
+<li>可以知道下一步尝试的方向</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-Mental-Model-for-ML-project-机器学习项目的心智模型">2. Mental Model for ML project 机器学习项目的心智模型</h3>
+<p>当对机器学习项目的重要性和紧急性排序时，需要考虑两个重要的因素：</p>
+<ul>
+<li>高收益:
+<ul>
+<li>工作流中的复杂部分</li>
+<li>快速进行”廉价预测“（小的数据量，标签，计算量情况下，得到小模型进行简单的预测，能给工作开个好头）</li>
+<li>将复杂的手动处理过程进行自动化很有用</li>
+</ul>
+</li>
+<li>低成本:
+<ul>
+<li>成本主要由以下几部分决定:
+<ul>
+<li>获得有效的数据</li>
+<li>高性能需求：成本随着精确度要求超线性增长</li>
+<li>问题的难度:
+<ul>
+<li>一些高难度的问题包括：非监督学习，增强学习，某些类别的监督学习</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20221031180941.png" alt=""></p>
+<h2 id="Full-stack-pipeline-全栈流水线">Full stack pipeline 全栈流水线</h2>
+<p>下图高度概括了产品级深度学习系统相关的各个不同的组成模块：</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20221031181101.png" alt=""></p>
+<p>接下来，我们将会讲解每一个模块，以及从实践者出发推荐的适合该模块的工具集和框架。</p>
+<h3 id="1-Data-Management-数据管理">1. Data Management 数据管理</h3>
+<h4 id="1-1-Data-Sources-数据来源">1.1 Data Sources 数据来源</h4>
+<ul>
+<li>监督深度学习需要大量的打标签数据</li>
+<li>对自己的数据打标签是很昂贵的！</li>
+<li>下面是一些可供选择的数据来源：
+<ul>
+<li>开源数据（适合入门，但不适合进阶）</li>
+<li>数据增强（对于机器视觉是必选，对于NLP可选）</li>
+<li>合成数据（入门首选，尤其是NLP领域）</li>
+</ul>
+</li>
+</ul>
+<h4 id="1-2-Data-Labeling-数据标记">1.2  Data Labeling 数据标记</h4>
+<ul>
+<li>要求：独立的软件栈（标签平台），临时工，以及质量控制</li>
+<li>人工打标签:
+<ul>
+<li>众包：便宜，可扩展，可靠性较差，需要质量控制</li>
+<li>招聘数据标记人员：质量较好，昂贵，扩展很慢</li>
+<li>数据标记服务公司:
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.figure-eight.com/">FigureEight</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>标记平台:
+<ul>
+<li><a target="_blank" rel="noopener" href="https://diffgram.com/">Diffgram</a>: 训练数据软件（机器视觉）</li>
+<li><a target="_blank" rel="noopener" href="https://prodi.gy/">Prodigy</a>: 基于主动学习active learning实现（由Spacy的开发者编写），针对文字和图片构成的标记注释工具</li>
+<li><a target="_blank" rel="noopener" href="https://thehive.ai/">HIVE</a>: 针对机器视觉的AI服务平台</li>
+<li><a target="_blank" rel="noopener" href="https://supervise.ly/">Supervisely</a>: 功能全面的机器视觉平台</li>
+<li><a target="_blank" rel="noopener" href="https://labelbox.com/">Labelbox</a>: 针对机器视觉</li>
+<li><a target="_blank" rel="noopener" href="https://scale.com/">Scale</a> AI数据平台（针对机器学习和自然语言处理）</li>
+</ul>
+</li>
+</ul>
+<h4 id="1-3-Data-Storage-数据存储">1.3. Data Storage 数据存储</h4>
+<ul>
+<li>可供选择的数据存储方案有：
+<ul>
+<li><strong>对象存储</strong>: 存储二进制数据（图片，声音文件，压缩的文本）
+<ul>
+<li><a target="_blank" rel="noopener" href="https://aws.amazon.com/s3/">Amazon S3</a></li>
+<li><a target="_blank" rel="noopener" href="https://ceph.io/">Ceph</a> Object Store</li>
+</ul>
+</li>
+<li><strong>数据库</strong>: 存储元数据（文件路径，标签，用户行为等）.
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.postgresql.org/">Postgres</a> Postgresql对于大多数应用来说是正确的选择，它有着一流的SQL语言支持，以及对非结构化JSON格式的最佳支持。</li>
+</ul>
+</li>
+<li><strong>数据湖</strong>: 用以聚合无法从数据库获得的特征（比如日志数据）
+<ul>
+<li><a target="_blank" rel="noopener" href="https://aws.amazon.com/redshift/">Amazon Redshift</a></li>
+</ul>
+</li>
+<li><strong>特征存储</strong>: 存储，访问，以及分享机器学习的特征<br>
+（特征提取的计算成本很高，并且几乎无法扩展，因此能够在不同模型和团队之间复用特征是提高效能的关键）。
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/gojek/feast">FEAST</a> (Google cloud, 开源)</li>
+<li><a target="_blank" rel="noopener" href="https://eng.uber.com/michelangelo/">Michelangelo Palette</a> (Uber)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>建议: 在训练阶段，复制数据到本地文件系统或者<strong>NFS</strong>。 <sup><a href="#fsdl">1</a></sup></li>
+</ul>
+<h4 id="1-4-Data-Versioning-数据版本管理">1.4. Data Versioning 数据版本管理</h4>
+<ul>
+<li>对于已部署的机器学习模型，“必须”有其对应的训练数据版本：<br>
+<strong>已部署的机器学习模型，由数据和代码共同组成</strong>. <sup><a href="#fsdl">1</a></sup>  没有数据版本的管理，就意味着没有模型版本的管理。</li>
+<li>数据版本管理平台:
+<ul>
+<li><a target="_blank" rel="noopener" href="https://dvc.org/">DVC</a>: 针对机器学习项目的开源版本管理系统</li>
+<li><a target="_blank" rel="noopener" href="https://www.pachyderm.com/">Pachyderm</a>: 针对数据的版本管理</li>
+<li><a target="_blank" rel="noopener" href="https://www.liquidata.co/">Dolt</a>: 针对SQL数据库的版本管理</li>
+</ul>
+</li>
+</ul>
+<h4 id="1-5-Data-Processing-数据处理工作流">1.5. Data Processing 数据处理工作流</h4>
+<ul>
+<li>对于模型的训练数据可能来自于不同的数据源，包括：存储在数据库的数据, 包括 <em>存储在数据库的数据</em>, <em>日志数据</em>, 和<em>其他分类模型的输出</em>.</li>
+<li>在任务和任务之间有依赖，一个任务的开启需要另外一个任务的完结。比如，在一个新的日志数据上训练任务，必须在某个预处理流程之后进行。</li>
+<li>Makefiles用来完成此工作比较流缺乏伸缩性，在这个场景下，工作流管理工具十分重要。</li>
+<li><strong>工作流编排:</strong>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/spotify/luigi">Luigi</a> by Spotify</li>
+<li><a target="_blank" rel="noopener" href="https://airflow.apache.org/">Airflow</a> 来自Airbnb，动态的，可扩展的，优雅的，具有伸缩性（最广泛应用的特性）的工作流管理工具。
+<ul>
+<li>DAG workflow</li>
+<li>鲁棒的按条件执行：当失败时进行重试</li>
+<li>pusher支持tensorflow serving镜像</li>
+<li>可以在单一的python文件中实现完整的工作流</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20221031181352.png" alt=""></p>
+<h3 id="2-Development-Training-and-Evaluation-开发，训练，模型评估">2. Development, Training, and Evaluation 开发，训练，模型评估</h3>
+<h4 id="2-1-Software-engineering-软件工程">2.1. Software engineering 软件工程</h4>
+<ul>
+<li>编程语言大赢家：Python</li>
+<li>编辑器:
+<ul>
+<li>Vim</li>
+<li>Emacs</li>
+<li><a target="_blank" rel="noopener" href="https://code.visualstudio.com/">VS Code</a> (作者推荐): 内建 git staging 和diff, Lint code, 可通过ssh远程打开项目</li>
+<li>Notebooks: 项目开启阶段最完美的选择，但是很难扩展（令人高兴的是：Netflix的notebook体系是一个例外，它完全基于nteract实现 <a target="_blank" rel="noopener" href="https://nteract.io/">nteract</a> suites).
+<ul>
+<li><a target="_blank" rel="noopener" href="https://nteract.io/">nteract</a>: 针对Jupyter的下一代基于React的UI</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/nteract/papermill">Papermill</a>: 基于<a target="_blank" rel="noopener" href="https://nteract.io/">nteract</a>库构建的，针对<em>调参</em>，<em>评估</em>和<em>分析</em>的&quot;Jupyter&quot;</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/nteract/commuter">Commuter</a>: 另外一个<a target="_blank" rel="noopener" href="https://nteract.io/">nteract</a>项目，可以提供只读展示（比如来自S3的文件）</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://streamlit.io/">Streamlit</a>: 基于applets的交互式数据科学工具</li>
+</ul>
+</li>
+<li>电脑建议 <sup><a href="#fsdl">1</a></sup>:
+<ul>
+<li>针对<em>个人开发者</em>或者<em>创业公司</em>
+<ul>
+<li>模型开发：一台4块图灵架构GPU的PC（目前图灵架构的GPU有RTX2080Ti(本文主要指这款),Tesla T4（企业数据中心使用，搭载在服务器）,Quodro RTX5/6/8000（多用于图形渲染工作站））</li>
+<li>训练/评估：使用同样的4卡GPU的PC, 当运行很多任务时，也可以使用共享计算资源或者使用云服务。</li>
+</ul>
+</li>
+<li>对于<em>大公司:</em>
+<ul>
+<li>开发：为每位机器学习科学及购买一台4卡图灵架构的PC，或者给他们上V100的机器。</li>
+<li>训练/评估：使用云服务，有充分的资源供应和故障处理</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>使用云服务：
+<ul>
+<li>GCP: 可以选择将任何实例运行在GPU上，并且有TPU资源</li>
+<li>AWS:</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-2-Resource-Management-资源管理">2.2. Resource Management 资源管理</h4>
+<ul>
+<li>给程序分配任意的计算资源</li>
+<li>如果选择计算资源管理，有如下选项:
+<ul>
+<li>传统的集群任务调度策略 ( e.g. <a target="_blank" rel="noopener" href="https://slurm.schedmd.com/">Slurm</a> workload manager )</li>
+<li>Docker + Kubernetes</li>
+<li>Kubeflow</li>
+<li><a target="_blank" rel="noopener" href="https://polyaxon.com/">Polyaxon</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="2-3-DL-Frameworks-深度学习框架">2.3. DL Frameworks 深度学习框架</h4>
+<ul>
+<li>除非有着充分的理由，否则建议使用Tensorflow/Keras或者Pytorch. <sup><a href="#fsdl">1</a></sup></li>
+<li>下图基于*“易开发性”<em>和</em>“产品表现”*两个维度，展示了不同的深度学习框架对比图。</li>
+</ul>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20221031181947.png" alt=""></p>
+<h4 id="2-4-Experiment-management-实验管理">2.4. Experiment management 实验管理</h4>
+<ul>
+<li>开发，训练，以及评估策略：
+<ul>
+<li>以<strong>简单</strong>的方法快速开始
+<ul>
+<li>以小批量数据训练一个小的模型，如果有效果，扩展到更大的数据和模型，以及进行超参数调优。</li>
+</ul>
+</li>
+<li>实验管理工具：</li>
+<li><a target="_blank" rel="noopener" href="https://www.tensorflow.org/tensorboard">Tensorboard</a>
+<ul>
+<li>提供可视化以及机器学习实验相关的工具</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://losswise.com/">Losswise</a> (可以对机器学习进行监控)</li>
+<li><a target="_blank" rel="noopener" href="https://www.comet.ml/">Comet</a>: 可以追踪代码，实验，以及机器学习项目的结果</li>
+<li><a target="_blank" rel="noopener" href="https://www.wandb.com/">Weights &amp; Biases</a>: 记录和可视化你与同事协同研究中的所有细节</li>
+<li><a target="_blank" rel="noopener" href="https://www.mlflow.org/docs/latest/tracking.html#tracking">MLFlow Tracking</a>: 记录参数，代码版本，指标，输出文件，以及结果的可视化
+<ul>
+<li>在python中用一行代码进行自动化的实验追踪</li>
+<li>实验之间的比对</li>
+<li>超参调优</li>
+<li>支持K8S</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-5-Hyperparameter-Tuning-超参调优">2.5. Hyperparameter Tuning 超参调优</h4>
+<ul>
+<li>策略
+<ul>
+<li>网格搜索</li>
+<li>随机搜索</li>
+<li>贝叶斯优化</li>
+<li>HyperBand (以及ASHA，Asynchronous Successive Halving Algorithm 异步减半算法)</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>[译者注]Hyperband算法对 Jamieson &amp; Talwlkar(2015)提出的SuccessiveHalving算法做了扩展。SuccessiveHalving算法：假设有nn组超参数组合，然后对这nn组超参数均匀地分配预算并进行验证评估，根据验证结果淘汰一半表现差的超参数组，然后重复迭代上述过程直到找到最终的一个最优超参数组合。</p>
+</blockquote>
+<pre><code>* Population-based Training（兼顾并行调优和串行调优）
+</code></pre>
+<ul>
+<li>Platforms:<br>
+超参调优平台
+<ul>
+<li><a target="_blank" rel="noopener" href="http://tune.io/">RayTune</a>: RayTune是一个Python库，能够在任何规模下进行超参调优（主要专注深度学习和增强学习）。支持几乎任何机器学习框架，包括PyTorch, XGBoost, MXNet, 和Keras等.</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/kubeflow/katib">Katib</a>: 针对超参调优和神经网络架构搜索的K8S原生系统, 受这篇论文启发   [Google vizier](<a target="_blank" rel="noopener" href="https://static.googleusercontent.com/media/">https://static.googleusercontent.com/media/</a> <a target="_blank" rel="noopener" href="http://research.google.com/ja//pubs/archive/">research.google.com/ja//pubs/archive/</a>  bcb15507f4b52991a0783013df4222240e942381.pdf)，并且支持多种机器学习框架（比如Tensorflow, MXNet,和PyTorch）</li>
+<li><a target="_blank" rel="noopener" href="https://maxpumperla.com/hyperas/">Hyperas</a>: 基于hyperopt的简单封装, 针对keras的，通过模板参数填写来定义超参范围，并进行调优。</li>
+<li><a target="_blank" rel="noopener" href="https://sigopt.com/">SIGOPT</a>: 可扩展的，企业级的优化平台</li>
+<li><a target="_blank" rel="noopener" href="https://docs.wandb.com/library/sweeps">Sweeps</a> from [Weights &amp; Biases] (<a target="_blank" rel="noopener" href="https://www.wandb.com/">https://www.wandb.com/</a>): 参数不需要开发人员显式地指定，一开始只有大概的范围，然后通过机器学习模型来学习而确定。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/keras-team/keras-tuner">Keras Tuner</a>: 针对keras的超参调优工具，适合于基于Tensorflow2.0的tf.keras</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-6-Distributed-Training-分布式训练">2.6. Distributed Training 分布式训练</h4>
+<ul>
+<li>
+<p>数据并行：当迭代时间很长时，使用这种方案（tensorflow和PyTorch都支持）</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://ray.readthedocs.io/en/latest/distributed_training.html">Ray Distributed Training</a></li>
+</ul>
+</li>
+<li>
+<p>模型并行：当模型不适合于单个GPU时，使用这个方案</p>
+</li>
+<li>
+<p>其他方案：</p>
+<ul>
+<li>Horovod</li>
+</ul>
+<blockquote>
+<p>[译者注]由于 TensorFlow 集群太不友好，业内也一直在尝试新的集群方案。<br>
+2017 年 Facebook 发布了《Accurate, large minibatch SGD: Training ImageNet in 1 hour 》验证了大数据并行的高效性，同年百度发表了《Bringing HPC techniques to deep learning 》，验证了全新的梯度同步和权值更新算法的可行性。受这两篇论文的启发，Uber 开发了 Horovod 集群方案。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="3-Troubleshooting-TBD-排错-待完成">3. Troubleshooting [TBD]排错[待完成]</h3>
+<h3 id="4-Testing-and-Deployment-测试和部署">4. Testing and Deployment 测试和部署</h3>
+<h4 id="4-1-Testing-and-CI-CD-测试以及CI-CD">4.1. Testing and CI/CD 测试以及CI/CD</h4>
+<p>比起传统的软件，机器学习产品软件需要更多样的测试工具：</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20221031182116.png" alt=""></p>
+<ul>
+<li>单元测试和集成测试
+<ul>
+<li>测试类型
+<ul>
+<li>训练系统测试：测试训练流水线</li>
+<li>验证测试：在验证数据集上测试预测系统</li>
+<li>功能测试：在不那么重要的场景里使用预测系统</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>持续集成：当有代码更新时就自动推送到仓库里并进行测试</li>
+<li>针对持续集成的SaaS服务
+<ul>
+<li><a target="_blank" rel="noopener" href="https://argoproj.github.io/">Argo</a>: 开源的K8S原生工作流引擎，用于编排并行的作业（包括工作流，时间，CI和CD）</li>
+<li><a target="_blank" rel="noopener" href="https://circleci.com/">CircleCI</a>: 支持多种编程语言，自定义环境，灵活的资源分配，instacart, Lyft, 和StackShare在使用</li>
+<li><a target="_blank" rel="noopener" href="https://travis-ci.org/">Travis CI</a></li>
+<li><a target="_blank" rel="noopener" href="https://buildkite.com/">Buildkite</a>: 能够更快和更稳定地不熟，开源的代理能运行在几乎任何架构的服务器上，能自由地使用你自己的工具和服务。</li>
+<li>Jenkins: 老牌的构建系统</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-2-Web-Depolyment-Web部署">4.2. Web Depolyment Web部署</h4>
+<ul>
+<li>
+<p>由<strong>预测系统</strong>和<strong>服务系统</strong>组成</p>
+<ul>
+<li>预测系统：程序输入数据，产生预测的结果</li>
+<li>服务系统（Web服务）：
+<ul>
+<li>在一定规模下提供预测</li>
+<li>使用REST API提供预测服务</li>
+<li>调用预测系统进行实际的计算</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>服务的类型：</p>
+<ul>
+<li>
+<ol>
+<li>部署在虚拟机上，通过增加节点扩容</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>以容器形式部署，通过编排扩容</li>
+</ol>
+<ul>
+<li>容器技术
+<ul>
+<li>Docker</li>
+</ul>
+</li>
+<li>容器编排
+<ul>
+<li>K8S（当前最流行）</li>
+<li>MESOS</li>
+<li>Marathon</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<ol start="3">
+<li>部署代码为 “serverless function”</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>通过<strong>模型服务</strong>方案来实现</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>模型服务：</p>
+<ul>
+<li>特质针对机器学习模型的web服务部署</li>
+<li>批量请求通过GPU来做计算</li>
+<li>框架：
+<ul>
+<li>Tensorflow serving</li>
+<li>MXNet Model server</li>
+<li>Clipper (Berkeley)</li>
+<li>SaaS solutions<br>
+SaaS的解决方案
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.seldon.io/">Seldon</a>: 可以基于K8S对任何框架提供“模型服务”和扩容</li>
+<li><a target="_blank" rel="noopener" href="https://algorithmia.com/">Algorithmia</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>计算资源选择：CPU还是GPU?</p>
+<ul>
+<li>CPU推理：
+<ul>
+<li>如果满足要求，最好使用CPU进行推理</li>
+<li>通过增加服务器，或者微服务模式来进行扩容</li>
+</ul>
+</li>
+<li>GPU推理
+<ul>
+<li>TF serving or Clipper</li>
+<li>在批量进行推理的场景中很有用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>(Bonus) 部署Jupyter Notebooks：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/kubeflow/fairing">Kubeflow Fairing</a> 一个混合部署的工具包，可以让你部署你的<em>Jupyter Notebooks</em>代码</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-5-Service-Mesh-and-Traffic-Routing-服务网格和流量路由">4.5 Service Mesh and Traffic Routing 服务网格和流量路由</h4>
+<ul>
+<li>从单机程序过渡到分布式微服务架构具有较大的挑战</li>
+<li>A <strong>Service mesh</strong> （由微服务和网格组成）减少了此类部署的复杂性，并降低了团队的工作量。
+<ul>
+<li><a target="_blank" rel="noopener" href="https://istio.io/">Istio</a>: 一种服务网格，通过负载均衡，服务间认证，监控来创建服务的网络，业务本身的代码只需要做很少的改动，或者不需要改动。</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-6-Monitoring-监控：">4.6. Monitoring 监控：</h4>
+<ul>
+<li>监控的目的：
+<ul>
+<li>停机，错误，漂移时发出告警</li>
+<li>捕获服务以及数据回归</li>
+</ul>
+</li>
+<li>可选择云供应商方案</li>
+<li><a target="_blank" rel="noopener" href="https://kiali.io/">Kiali</a>: 能够可视化管理Istio，能够回答以下问题：微服务之间如何连接，它们性能如何？</li>
+</ul>
+<h4 id="Are-we-done">Are we done?</h4>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20221031182139.png" alt=""></p>
+<h4 id="4-7-Deploying-on-Embedded-and-Mobile-Devices-部署在嵌入式和移动设备上">4.7. Deploying on Embedded and Mobile Devices 部署在嵌入式和移动设备上</h4>
+<ul>
+<li>
+<p>主要的挑战：内存占用和算力限制</p>
+</li>
+<li>
+<p>解决方案:</p>
+<ul>
+<li>模型量化</li>
+</ul>
+<blockquote>
+<p>[译者注]Quantization模型量化即以较低的推理精度损失将连续取值（或者大量可能的离散取值）的浮点型模型权重或流经模型的张量数据定点近似（通常为int8）为有限多个（或较少的）离散值的过程，它是以更少位数的数据类型用于近似表示32位有限范围浮点型数据的过程，而模型的输入输出依然是浮点型，从而达到减少模型尺寸大小、减少模型内存消耗及加快模型推理速度等目标。</p>
+</blockquote>
+<ul>
+<li>减少模型的尺寸
+<ul>
+<li>MobileNets</li>
+</ul>
+</li>
+<li>知识蒸馏</li>
+</ul>
+<blockquote>
+<p>[译者注]Knowledge Distillation知识蒸馏（KD）是想将复杂模型（teacher）中的dark knowledge迁移到简单模型（student）中去，一般来说，teacher具有强大的能力和表现，而student则更为紧凑。通过知识蒸馏，希望student能尽可能逼近亦或是超过teacher，从而用更少的复杂度来获得类似的预测效果。Hinton在Distilling the Knowledge in a Neural Network中首次提出了知识蒸馏的概念，通过引入teacher的软目标（soft targets）以诱导学生网络的训练。<br>
+···</p>
+</blockquote>
+<pre><code>* DistillBERT (for NLP)
+</code></pre>
+</li>
+<li>
+<p>针对嵌入式和移动设备的框架：</p>
+<ul>
+<li>Tensorflow Lite</li>
+<li>PyTorch Mobile</li>
+<li>Core ML</li>
+<li>ML Kit</li>
+<li>FRITZ</li>
+<li>OpenVINO</li>
+</ul>
+</li>
+<li>
+<p>模型转换：</p>
+<ul>
+<li>Open Neural Network Exchange (ONNX): 针对深度学习模型的开源格式化技术</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-8-All-in-one-solutions-一站式解决方案">4.8. All-in-one solutions 一站式解决方案</h4>
+<ul>
+<li>Tensorflow Extended (TFX)</li>
+<li>Michelangelo (Uber)</li>
+<li>Google Cloud AI Platform</li>
+<li>Amazon SageMaker</li>
+<li>Neptune</li>
+<li>FLOYD</li>
+<li>Paperspace</li>
+<li>Determined AI</li>
+<li>Domino data lab</li>
+</ul>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20221031182153.png" alt=""></p>
+<h1>Tensorflow Extended (TFX) [TBD][待补充]</h1>
+<blockquote>
+<p>[译者注]tfx是构建在tf基础之上的一个包含了机器学习整个生命周期的完整系统，这个系统不只包含了tf所提供的模型训练等机器学习相关功能，还提供了如数据校验和验证、模型热启动、线上服务、模型发布等重要功能</p>
+</blockquote>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20221031182206.png" alt=""></p>
+<h1>Airflow and KubeFlow ML Pipelines [TBD][待补充]</h1>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20221031182219.png" alt=""></p>
+<h2 id="Other-useful-links-其他有用的链接：">Other useful links 其他有用的链接：</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.slideshare.net/xamat/lessons-learned-from-building-practical-deep-learning-systems">Lessons learned from building practical deep learning systems</a></li>
+<li><a target="_blank" rel="noopener" href="https://ai.google/research/pubs/pub43146">Machine Learning: The High Interest Credit Card of Technical Debt</a></li>
+</ul>
+<h2 id="Contributing"><a target="_blank" rel="noopener" href="https://github.com/alirezadir/Production-Level-Deep-Learning/blob/master/CONTRIBUTING.md">Contributing</a></h2>
+<h2 id="References">References:</h2>
+<p><a name="fsdl">[1]</a>: <a target="_blank" rel="noopener" href="https://fullstackdeeplearning.com/">Full Stack Deep Learning Bootcamp</a>, Nov 2019.</p>
+<p><a name="pipe">[2]</a>: <a target="_blank" rel="noopener" href="https://www.meetup.com/Advanced-KubeFlow/">Advanced KubeFlow Workshop</a> by <a target="_blank" rel="noopener" href="https://pipeline.ai/">Pipeline.ai</a>, 2019.</p>
+<p><a name="pipe">[3]</a>: <a target="_blank" rel="noopener" href="https://cdn.oreillystatic.com/en/assets/1/event/298/TFX_%20Production%20ML%20pipelines%20with%20TensorFlow%20Presentation.pdf">TFX: Real World Machine Learning in Production</a></p>
+<blockquote>
+<p>原作者：Alireza Dirafzoon<br>
+翻译自：<a target="_blank" rel="noopener" href="https://github.com/alirezadir/Production-Level-Deep-Learning/blob/master/README.md">https://github.com/alirezadir/Production-Level-Deep-Learning/blob/master/README.md</a></p>
+<p>译者：Liu Yun<br>
+链接：<a target="_blank" rel="noopener" href="https://github.com/liuyun1217/Production-Level-Deep-Learning">https://github.com/liuyun1217/Production-Level-Deep-Learning</a></p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Weitang Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lonepatient.top/2020/04/20/Getting-Started-Guide-to-Product-Level-Deep-Learning-Systems.html">http://lonepatient.top/2020/04/20/Getting-Started-Guide-to-Product-Level-Deep-Learning-Systems.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lonepatient.top" target="_blank">闲记算法</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><a class="post-meta__tags" href="/tags/%E4%BA%A7%E5%93%81/">产品</a></div><div class="post_share"><div class="social-share" data-image="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20221031180534.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/07/05/name_entity_identification_in_industry.html"><img class="prev-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/20210206205846.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">聊聊工业界中如何求解NER问题</div></div></a></div><div class="next-post pull-right"><a href="/2020/04/20/geo_nlp_in_gaode.html"><img class="next-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224225041.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">地理文本处理技术在高德的演进</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/03/02/8-bit_Matrix_Multiplication_transformers_Hugging_Face_Transformers.html" title="用于大型Transformer的8-bit矩阵乘法介绍"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230324140620.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-02</div><div class="title">用于大型Transformer的8-bit矩阵乘法介绍</div></div></a></div><div><a href="/2019/04/30/A-Recipe-for-Training-Neural-Networks.html" title="训练神经网络不得不看的33个技巧"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-04-30</div><div class="title">训练神经网络不得不看的33个技巧</div></div></a></div><div><a href="/2023/05/16/ALBEF.html" title="Align before Fuse：Vision and Language Representation Learning with Momentum Distillation"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20231013155249.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-16</div><div class="title">Align before Fuse：Vision and Language Representation Learning with Momentum Distillation</div></div></a></div><div><a href="/2023/04/18/A_Survey_of_Large_Language_Models.html" title="A Survey of Large Language Models"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230419195449.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-18</div><div class="title">A Survey of Large Language Models</div></div></a></div><div><a href="/2018/03/20/Application_of_deep_learning_in_knowledge_graph_construction.html" title="深度学习在知识图谱构建中的应用"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-03-20</div><div class="title">深度学习在知识图谱构建中的应用</div></div></a></div><div><a href="/2023/06/16/BLIP.html" title="BLIP：Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20231017163401.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-06-16</div><div class="title">BLIP：Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Weitang Liu</div><div class="author-info__description">一个致力于记录技术的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lonePatient"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/lonePatient" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liuweitangmath@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/277974397" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有任何问题可通过留言板或者微信公众号给我留言，谢谢！<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201201102.jpg"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Machine-Learning-Projects-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%A1%B9%E7%9B%AE"><span class="toc-number">1.</span> <span class="toc-text">Machine Learning Projects 机器学习项目</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-ML-Projects-lifecycle-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">1.1.</span> <span class="toc-text">1. ML Projects lifecycle 机器学习项目的生命周期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Mental-Model-for-ML-project-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%A1%B9%E7%9B%AE%E7%9A%84%E5%BF%83%E6%99%BA%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.</span> <span class="toc-text">2. Mental Model for ML project 机器学习项目的心智模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Full-stack-pipeline-%E5%85%A8%E6%A0%88%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="toc-number">2.</span> <span class="toc-text">Full stack pipeline 全栈流水线</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Data-Management-%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86"><span class="toc-number">2.1.</span> <span class="toc-text">1. Data Management 数据管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-Data-Sources-%E6%95%B0%E6%8D%AE%E6%9D%A5%E6%BA%90"><span class="toc-number">2.1.1.</span> <span class="toc-text">1.1 Data Sources 数据来源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-Data-Labeling-%E6%95%B0%E6%8D%AE%E6%A0%87%E8%AE%B0"><span class="toc-number">2.1.2.</span> <span class="toc-text">1.2  Data Labeling 数据标记</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-Data-Storage-%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8"><span class="toc-number">2.1.3.</span> <span class="toc-text">1.3. Data Storage 数据存储</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-Data-Versioning-%E6%95%B0%E6%8D%AE%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86"><span class="toc-number">2.1.4.</span> <span class="toc-text">1.4. Data Versioning 数据版本管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-Data-Processing-%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="toc-number">2.1.5.</span> <span class="toc-text">1.5. Data Processing 数据处理工作流</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Development-Training-and-Evaluation-%E5%BC%80%E5%8F%91%EF%BC%8C%E8%AE%AD%E7%BB%83%EF%BC%8C%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0"><span class="toc-number">2.2.</span> <span class="toc-text">2. Development, Training, and Evaluation 开发，训练，模型评估</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-Software-engineering-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.1. Software engineering 软件工程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-Resource-Management-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2. Resource Management 资源管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-DL-Frameworks-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6"><span class="toc-number">2.2.3.</span> <span class="toc-text">2.3. DL Frameworks 深度学习框架</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-Experiment-management-%E5%AE%9E%E9%AA%8C%E7%AE%A1%E7%90%86"><span class="toc-number">2.2.4.</span> <span class="toc-text">2.4. Experiment management 实验管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-Hyperparameter-Tuning-%E8%B6%85%E5%8F%82%E8%B0%83%E4%BC%98"><span class="toc-number">2.2.5.</span> <span class="toc-text">2.5. Hyperparameter Tuning 超参调优</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-6-Distributed-Training-%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83"><span class="toc-number">2.2.6.</span> <span class="toc-text">2.6. Distributed Training 分布式训练</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Troubleshooting-TBD-%E6%8E%92%E9%94%99-%E5%BE%85%E5%AE%8C%E6%88%90"><span class="toc-number">2.3.</span> <span class="toc-text">3. Troubleshooting [TBD]排错[待完成]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Testing-and-Deployment-%E6%B5%8B%E8%AF%95%E5%92%8C%E9%83%A8%E7%BD%B2"><span class="toc-number">2.4.</span> <span class="toc-text">4. Testing and Deployment 测试和部署</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-Testing-and-CI-CD-%E6%B5%8B%E8%AF%95%E4%BB%A5%E5%8F%8ACI-CD"><span class="toc-number">2.4.1.</span> <span class="toc-text">4.1. Testing and CI&#x2F;CD 测试以及CI&#x2F;CD</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-Web-Depolyment-Web%E9%83%A8%E7%BD%B2"><span class="toc-number">2.4.2.</span> <span class="toc-text">4.2. Web Depolyment Web部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-5-Service-Mesh-and-Traffic-Routing-%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC%E5%92%8C%E6%B5%81%E9%87%8F%E8%B7%AF%E7%94%B1"><span class="toc-number">2.4.3.</span> <span class="toc-text">4.5 Service Mesh and Traffic Routing 服务网格和流量路由</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-6-Monitoring-%E7%9B%91%E6%8E%A7%EF%BC%9A"><span class="toc-number">2.4.4.</span> <span class="toc-text">4.6. Monitoring 监控：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Are-we-done"><span class="toc-number">2.4.5.</span> <span class="toc-text">Are we done?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-7-Deploying-on-Embedded-and-Mobile-Devices-%E9%83%A8%E7%BD%B2%E5%9C%A8%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A7%BB%E5%8A%A8%E8%AE%BE%E5%A4%87%E4%B8%8A"><span class="toc-number">2.4.6.</span> <span class="toc-text">4.7. Deploying on Embedded and Mobile Devices 部署在嵌入式和移动设备上</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-8-All-in-one-solutions-%E4%B8%80%E7%AB%99%E5%BC%8F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">2.4.7.</span> <span class="toc-text">4.8. All-in-one solutions 一站式解决方案</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number"></span> <span class="toc-text">Tensorflow Extended (TFX) [TBD][待补充]</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number"></span> <span class="toc-text">Airflow and KubeFlow ML Pipelines [TBD][待补充]</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Other-useful-links-%E5%85%B6%E4%BB%96%E6%9C%89%E7%94%A8%E7%9A%84%E9%93%BE%E6%8E%A5%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">Other useful links 其他有用的链接：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Contributing"><span class="toc-number">2.</span> <span class="toc-text">Contributing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#References"><span class="toc-number">3.</span> <span class="toc-text">References:</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-27"/></a><div class="content"><a class="title" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27">Arxiv今日论文 | 2026-02-27</a><time datetime="2026-02-27T12:30:00.000Z" title="发表于 2026-02-27 12:30:00">2026-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-26"/></a><div class="content"><a class="title" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26">Arxiv今日论文 | 2026-02-26</a><time datetime="2026-02-26T12:30:00.000Z" title="发表于 2026-02-26 12:30:00">2026-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-25"/></a><div class="content"><a class="title" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25">Arxiv今日论文 | 2026-02-25</a><time datetime="2026-02-25T12:30:00.000Z" title="发表于 2026-02-25 12:30:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225222513891.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板">大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板</a><time datetime="2026-02-25T12:00:00.000Z" title="发表于 2026-02-25 12:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225123005910.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mid-training：构建预训练与后训练之间的分布式桥梁"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁">mid-training：构建预训练与后训练之间的分布式桥梁</a><time datetime="2026-02-25T00:00:00.000Z" title="发表于 2026-02-25 00:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-24"/></a><div class="content"><a class="title" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24">Arxiv今日论文 | 2026-02-24</a><time datetime="2026-02-24T12:30:00.000Z" title="发表于 2026-02-24 12:30:00">2026-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-23"/></a><div class="content"><a class="title" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23">Arxiv今日论文 | 2026-02-23</a><time datetime="2026-02-23T12:30:00.000Z" title="发表于 2026-02-23 12:30:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260223165943195.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用&quot;深度思考率&quot;精准度量LLM推理质量"/></a><div class="content"><a class="title" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量">用&quot;深度思考率&quot;精准度量LLM推理质量</a><time datetime="2026-02-23T12:00:00.000Z" title="发表于 2026-02-23 12:00:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-20"/></a><div class="content"><a class="title" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20">Arxiv今日论文 | 2026-02-20</a><time datetime="2026-02-20T12:30:00.000Z" title="发表于 2026-02-20 12:30:00">2026-02-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201606857.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前沿大模型训练方法：深度解析与实践指南"/></a><div class="content"><a class="title" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南">前沿大模型训练方法：深度解析与实践指南</a><time datetime="2026-02-20T10:30:00.000Z" title="发表于 2026-02-20 10:30:00">2026-02-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Weitang Liu</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.lonepatient.top/',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.lonepatient.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo@1.4.11/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (99)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/计算机视觉/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 计算机视觉 (16)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/知识图谱/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 知识图谱 (13)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">👩‍💻 深度学习 (139)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item" style="visibility: hidden"></div><a class="magnet_link_more"  href="http://lonepatient.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-18</span><a class="blog-slider__title" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">通向AGI之路：大型语言模型（LLM）技术精要</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/07/12/gaiic_2022_ner_top10.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220712181905.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-07-12</span><a class="blog-slider__title" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">GAIIC2022商品标题识别二等奖获奖解决思路</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230807190424.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-01-20</span><a class="blog-slider__title" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">2025-03|高质量中文预训练模型集合</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

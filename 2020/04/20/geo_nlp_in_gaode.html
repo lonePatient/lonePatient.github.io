@@ -1,0 +1,477 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>地理文本处理技术在高德的演进 | 闲记算法</title><meta name="keywords" content="NLP,地理,高德"><meta name="author" content="Weitang Liu"><meta name="copyright" content="Weitang Liu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="地图App的功能可以简单概括为定位，搜索，导航三部分，分别解决在哪里，去哪里，和怎么去的问题。高德地图的搜索场景下，输入的是，地理相关的检索query，用户位置，App图面等信息，输出的是，用户想要的POI。如何能够更加精准地找到用户想要的POI，提高满意度，是评价搜索效果的最关键指标。 一个搜索引擎通常可以拆分成query分析、召回、排序三个部分，query分析主要是尝试理解query表达的含义">
+<meta property="og:type" content="article">
+<meta property="og:title" content="地理文本处理技术在高德的演进">
+<meta property="og:url" content="http://lonepatient.top/2020/04/20/geo_nlp_in_gaode.html">
+<meta property="og:site_name" content="闲记算法">
+<meta property="og:description" content="地图App的功能可以简单概括为定位，搜索，导航三部分，分别解决在哪里，去哪里，和怎么去的问题。高德地图的搜索场景下，输入的是，地理相关的检索query，用户位置，App图面等信息，输出的是，用户想要的POI。如何能够更加精准地找到用户想要的POI，提高满意度，是评价搜索效果的最关键指标。 一个搜索引擎通常可以拆分成query分析、召回、排序三个部分，query分析主要是尝试理解query表达的含义">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224225041.png">
+<meta property="article:published_time" content="2020-04-20T23:20:08.000Z">
+<meta property="article:modified_time" content="2026-02-27T07:52:12.937Z">
+<meta property="article:author" content="Weitang Liu">
+<meta property="article:tag" content="NLP">
+<meta property="article:tag" content="地理">
+<meta property="article:tag" content="高德">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224225041.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lonepatient.top/2020/04/20/geo_nlp_in_gaode"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//s4.cnzz.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" data-pjax="data-pjax" src="https://s4.cnzz.com/z_stat.php?id=1273275888&amp;web_id=1273275888"></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-02-27 07:52:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/backgroud.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><script src="https://at.alicdn.com/t/c/font_3570527_dthoqrrv2tv.css"></script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JwRQtLKZggvJH4sJ",ck:"JwRQtLKZggvJH4sJ"})</script><link rel="stylesheet" href="/css/universe.css"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536467946304280" crossorigin="anonymous"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224225041.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">闲记算法</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">地理文本处理技术在高德的演进<a class="post-edit-link" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts/geo_nlp_in_gaode.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-04-20T23:20:08.000Z" title="发表于 2020-04-20 23:20:08">2020-04-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-27T07:52:12.937Z" title="更新于 2026-02-27 07:52:12">2026-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/">自然语言处理</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/%E8%A1%8C%E4%B8%9A%E5%BA%94%E7%94%A8/">行业应用</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">7.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>22分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2020/04/20/geo_nlp_in_gaode.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>地图App的功能可以简单概括为定位，搜索，导航三部分，分别解决在哪里，去哪里，和怎么去的问题。高德地图的搜索场景下，输入的是，地理相关的检索query，用户位置，App图面等信息，输出的是，用户想要的POI。如何能够更加精准地找到用户想要的POI，提高满意度，是评价搜索效果的最关键指标。</p>
+<p>一个搜索引擎通常可以拆分成query分析、召回、排序三个部分，query分析主要是尝试理解query表达的含义，为召回和排序给予指导。</p>
+<p>地图搜索的query分析不仅包括通用搜索下的分词，成分分析，同义词，纠错等通用NLP技术，还包括城市分析，wherewhat分析，路径规划分析等特定的意图理解方式。</p>
+<p>常见的一些地图场景下的query意图表达如下：</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224225041.png" alt=""></p>
+<p>query分析是搜索引擎中策略密集的场景，通常会应用NLP领域的各种技术。地图场景下的query分析，只需要处理地理相关的文本，多样性不如网页搜索，看起来会简单一些。但是，地理文本通常比较短，并且用户大部分的需求是唯一少量结果，要求精准度非常高，如何能够做好地图场景下的文本分析，并提升搜索结果的质量，是充满挑战的。</p>
+<h2 id="整体技术架构">整体技术架构</h2>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224225406.png" alt=""></p>
+<p>类似于通用检索的架构，地图的检索架构包括query分析，召回，排序三个主要部分。先验的，用户的输入信息可以理解为多种意图的表达，同时下发请求尝试获取检索结果。后验的，拿到每种意图的检索结果时，进行综合判断，选择效果最好的那个。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224225618.png" alt=""></p>
+<p>具体的意图理解可分为基础query分析和应用query分析两部分，基础query分析主要是使用一些通用的NLP技术对query进行理解，包括分析，成分分析，省略，同义词，纠错等。应用query分析主要是针对地图场景里的特定问题，包括分析用户目标城市，是否是where+what表达，是否是从A到B的路径规划需求表达等。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224225700.png" alt=""></p>
+<p>在地里文本处理上整体的技术演进经历了规则为主，到逐步引入机器学习，到机器学习全面应用的过程。由于搜索模块是一个高并发的线上服务，对于深度模型的引入有比较苛刻的条件，但随着性能问题逐渐被解决，我们从各个子方向逐步引入深度学习的技术，进行新一轮的效果提升。</p>
+<p>NLP领域技术在最近几年取得了日新月异的发展，bert，XLNet等模型相继霸榜，我们逐步统一化各个query分析子任务，使用统一的向量表示对进行用户需求进行表达，同时进行seq2seq的多任务学习，在效果进一步提升的基础上，也能够保证系统不会过于臃肿。</p>
+<p>本文就高德地图搜索的地理文本处理，介绍相关的技术在过去几年的演进。我们将选取一些点分上下两篇进行介绍，上篇主要介绍搜索引擎中一些通用的query分析技术，包括纠错，改写和省略。下篇着重介绍地图场景中特有query分析技术，包括城市分析，wherewhat分析，路径规划。</p>
+<h2 id="query分析技术演进">query分析技术演进</h2>
+<h3 id="纠错">纠错</h3>
+<p>在搜索引擎中，用户输入的检索词（query）经常会出现拼写错误。如果直接对错误的query进行检索，往往不会得到用户想要的结果。因此不管是通用搜索引擎还是垂直搜索引擎，都会对用户的query进行纠错，最大概率获得用户想搜的query。</p>
+<p>在目前的地图搜索中，约有6%-10%的用户请求会输入错误，所以query纠错在地图搜索中是一个很重要的模块，能够极大的提升用户搜索体验。</p>
+<p>在搜索引擎中，低频和中长尾问题往往比较难解决，也是纠错模块面临的主要问题。另外，地图搜索和通用搜索，存在一个明显的差异，地图搜索query结构化比较突出，query中的片段往往包含一定的位置信息，如何利用好query中的结构化信息，更好地识别用户意图，是地图纠错独有的挑战。</p>
+<p><strong>常见错误分类</strong></p>
+<ol>
+<li>
+<p>拼音相同或者相近，例如: 盘桥物流园-潘桥物流园</p>
+</li>
+<li>
+<p>字形相近，例如: 河北冒黎-河北昌黎</p>
+</li>
+<li>
+<p>多字或者漏字，例如: 泉州州顶街-泉州顶街</p>
+</li>
+</ol>
+<p><strong>纠错现状</strong></p>
+<p>原始纠错模块包括多种召回方式，如：</p>
+<p><strong>拼音纠错</strong>：主要解决短query的拼音纠错问题，拼音完全相同或者模糊音作为纠错候选。<br>
+<strong>拼写纠错</strong>：也叫形近字纠错，通过遍历替换形近字，用query热度过滤，加入候选。<br>
+<strong>组合纠错</strong>：通过翻译模型进行纠错替换，资源主要是通过query对齐挖掘的各种替换资源。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224225920.png" alt=""></p>
+<p>组合纠错翻译模型计算公式：</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224225945.png" alt=""></p>
+<p>其中p(f)是语言模型，p(f|e)是替换模型。</p>
+<p>问题1：召回方式存在缺陷。目前query纠错模块主要召回策略包括拼音召回、形近字召回，以及替换资源召回。对于低频case，解决能力有限。</p>
+<p>问题2：排序方式不合理。纠错按照召回方式分为几个独立的模块，分别完成相应的召回和排序，不合理。</p>
+<h3 id="技术改造">技术改造</h3>
+<p><strong>改造1：基于空间关系的实体纠错</strong></p>
+<p>原始的纠错主要是基于用户session挖掘片段替换资源，所以对于低频问题解决能力有限。但是长尾问题往往集中在低频，所以低频问题是当前的痛点。</p>
+<p>地图搜索与通用搜索引擎有个很大的区别在于，地图搜索query比较结构化，例如北京市朝阳区阜荣街10号首开广场。我们可以对query进行结构化切分（也就是地图中成分分析的工作），得到这样一种带有类别的结构化描述，北京市【城市】朝阳区【区县】阜荣街【道路】10号【门址后缀】首开广场【通用实体】。</p>
+<p>同时，我们拥有权威的地理知识数据，利用权威化的地理实体库进行前缀树+后缀树的索引建库，提取疑似纠错的部分在索引库中进行拉链召回，同时利用实体库中的逻辑隶属关系对纠错结果进行过滤。实践表明，这种方式对低频的区划或者实体的错误有着明显的作用。</p>
+<p><strong>基于字根的字形相似度计算</strong></p>
+<p>上文提到的排序策略里面通过字形的编辑距离作为排序的重要特征，这里我们开发了一个基于字根的字形相似度计算策略，对于编辑距离的计算更为细化和准确。汉字信息有汉字的字根拆分词表和汉字的笔画数。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224230057.png" alt=""></p>
+<p>将一个汉字拆分成多个字根，寻找两个字的公共字根，根据公共字根笔画数来计算连个字的相似度。</p>
+<p><strong>改造2：排序策略重构</strong></p>
+<p>原始的策略召回和排序策略耦合，导致不同的召回链路，存在顾此失彼的情况。为了能够充分发挥各种召回方式的优势，急需要对召回和排序进行解耦并进行全局排序优化。为此我们增加了排序模块，将流程分为召回和排序两阶段。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224230139.png" alt=""></p>
+<p>** 模型选择**</p>
+<p>对于这个排序问题，这里我们参考业界的实践，使用了基于pair-wise的gbrank进行模型训练。</p>
+<p>** 样本建设**</p>
+<p>通过线上输出结合人工review的方式构造样本。</p>
+<p>** 特征建设**</p>
+<ol>
+<li>语义特征。如统计语言模型。</li>
+<li>热度特征。pv，点击等。</li>
+<li>基础特征。编辑距离，切词和成分特征，累积分布特征等。</li>
+</ol>
+<p>这里解决了纠错模块两个痛点问题，一个是在地图场景下的大部分低频纠错问题。另一个是重构了模块流程，将召回和排序解耦，充分发挥各个召回链路的作用，召回方式更新后只需要重训排序模型即可，使得模块更加合理，为后面的深度模型升级打下良好的基础。后面在这个框架下，我们通过深度模型进行seq2seq的纠错召回，取得了进一步的收益。</p>
+<h3 id="改写">改写</h3>
+<p>纠错作为query变换的一种方式的召回策略存在诸多限制，对于一些非典型的query变换表达，存在策略的空白。比如query=永城市新农合办，目标POI是永城市新农合服务大厅。用户的低频query，往往得不到较好搜索效果，但其实用户描述的语义与主poi的高频query是相似的。</p>
+<p>这里我们提出一种query改写的思路，可以将低频query改写成语义相似的高频query，以更好地满足用户需求多样性的表达。</p>
+<p>这是一个从无到有的实现。用户表达的query是多样的，使用规则表达显然是难以穷尽的，直观的思路是通过向量的方式召回，但是向量召回的方式很可能出现泛化过多，不适应地图场景的检索的问题，这些都是要在实践过程中需要考虑的问题。</p>
+<p><strong>方案</strong></p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224230256.png" alt=""></p>
+<p>整体看，方案包括召回，排序，过滤，三个阶段。</p>
+<p><strong>召回阶段</strong></p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224230400.png" alt=""></p>
+<p>我们调研了句子向量表示的几种方法，选择了算法简单，效果和性能可以和CNN，RNN媲美的SIF（Smooth Inverse Frequency）。向量召回可以使用开源的Faiss向量搜索引擎，这里我们使用了阿里内部的性能更好的的向量检索引擎。</p>
+<p><strong>样本构建</strong><br>
+原query与高频query候选集合，计算语义相似度，选取语义相似度的TOPK，人工标注的训练样本。</p>
+<p><strong>特征建设</strong></p>
+<ol>
+<li>基础文本特征</li>
+<li>编辑距离</li>
+<li>组合特征</li>
+</ol>
+<p><strong>模型选择</strong></p>
+<p>使用xgboost进行分数回归</p>
+<p><strong>过滤阶段</strong></p>
+<p>通过向量召回的query过度泛化非常严重，为了能够在地图场景下进行应用，增加了对齐模型。使用了两种统计对齐模型giza和fastalign，实验证明二者效果几乎一致，但fastalign在性能上好于giza，所以选择fastalign。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224230517.png" alt=""></p>
+<p>通过对齐概率和非对齐概率，对召回的结果进行进一步过滤，得到精度比较高的结果。</p>
+<p>query改写填补了原始query分析模块中一些低频表达无法满足的空白，区别于同义词或者纠错的显式query变换表达，句子的向量表示是相似query的一种隐式的表达，有其相应的优势。</p>
+<p>向量表示和召回也是深度学习模型逐步开始应用的尝试。同义词，改写，纠错，作为地图中query变换主要的三种方式，以往在地图模块里比较分散，各司其职，也会有互相重叠的部分。在后续的迭代升级中，我们引入了统一的query变换模型进行改造，在取得收益的同时，也摆脱掉了过去很多规则以及模型耦合造成的历史包袱。</p>
+<h3 id="省略">省略</h3>
+<p>在地图搜索场景里，有很多query包含无效词，如果用全部query尝试去召回很可能不能召回有效结果。如厦门市搜&quot;湖里区县后高新技术园新捷创运营中心11楼1101室 县后brt站&quot;。这就需要一种检索意图，在不明显转义下，使用核心term进行召回目标poi候选集合，当搜索结果无果或者召回较差时起到补充召回的作用。</p>
+<p>在省略判断的过程中存在先验后验平衡的问题。省略意图是一个先验的判断，但是期望的结果是能够进行POI有效召回，和POI的召回字段的现状密切相关。如何能够在策略设计的过程中保持先验的一致性，同时能够在后验POI中拿到相对好的效果，是做好省略模块比较困难的地方。</p>
+<p>原始的省略模块主要是基于规则进行的，规则依赖的主要特征是上游的成分分析特征。由于基于规则拟合，模型效果存在比较大的优化空间。另外，由于强依赖成分分析，模型的鲁棒性并不好。</p>
+<p><strong>技术改造</strong></p>
+<p>省略模块的改造主要完成了规则到crf模型的升级，其中也离线应用了深度学习模型辅助样本生成。</p>
+<p><strong>模型选择</strong></p>
+<p>识别出来query哪些部分是核心哪些部分是可以省略的，是一个序列标注问题。在浅层模型的选型中，显而易见地，我们使用了crf模型。</p>
+<p><strong>特征建设</strong></p>
+<p>term特征。使用了赋权特征，词性，先验词典特征等。<br>
+成分特征。仍然使用成分分析的特征。<br>
+统计特征。统计片段的左右边界熵，城市分布熵等，通过分箱进行离散化。</p>
+<p><strong>样本建设</strong></p>
+<p>项目一期我们使用了使用线上策略粗标，外包细标的方式，构造了万级的样本供crf模型训练。</p>
+<p>但是省略query的多样性很高，使用万级的样本是不够的，在线上模型无法快速应用深度模型的情况下，我们使用了boostraping的方式，借助深度模型的泛化能力，离线构造了大量样本。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224230602.png" alt=""></p>
+<p>使用了这种方式，样本从万级很容易扩充到百万级，我们仍然使用crf模型进行训练和线上应用。</p>
+<p>在省略模块，我们完成了规则到机器学习的升级，引入了成分以外的其他特征，提升了模型的鲁棒性。同时并且利用离线深度学习的方式进行样本构造的循环，提升了样本的多样性，使得模型能够更加接近crf的天花板。</p>
+<p>在后续深度模型的建模中，我们逐步摆脱了对成分分析特征的依赖，对query到命中poi核心直接进行建模，构建大量样本，取得了进一步的收益。</p>
+<h2 id="query分析技术演进-2">query分析技术演进</h2>
+<h3 id="城市分析">城市分析</h3>
+<p>在高德地图的检索场景下，从基础的地图数据索引、到在线召回、最终产品展示，均以市级别行政单位为基础粒度。一次完整的检索需求除了用户输入的query外，还会包含用户的图面城市以及用户位置城市两个城市信息。</p>
+<p>通常，大多数的搜索意图都是在图面或者用户位置城市下，但是仍存在部分检索意图需要在其他城市中进行，准确的识别出用户请求的目标城市，是满足用户需求的第一步，也是极其重要的一步。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224230856.png" alt=""></p>
+<p>在query分析策略流程中，部分策略会在城市分析的多个结果下并发执行，所以在架构上，城市分析的结果需要做到少而精。同时用户位置城市，图面城市，异地城市三个城市的信息存在明显差异性，不论是先验输出置信度，还是用后验特征做选择，都存在特征不可比的问题。</p>
+<p>在后验意图决策中，多个城市都有相关结果时，单一特征存在说服力不足的问题，如何结合先验置信度和后验的POI特征等多维度进行刻画，都是我们要考虑的问题。</p>
+<p>原始的城市分析模块已经采用先验城市分析和后验城市选择的总体流程</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224230934.png" alt=""></p>
+<p>但是原始的策略比较简陋，存在以下问题：</p>
+<ul>
+<li>问题1：先验和后验两部分均基于规则，效果不好并且可维护性差；</li>
+<li>问题2：特征体系存在缺陷。原始的城市分析仅使用query级的特征，包括点击，session改写，query和城市共现等，对于低频query处理得不好。</li>
+</ul>
+<p><strong>技术改造</strong></p>
+<p><strong>改造1：城市分析</strong></p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224231038.png" alt=""></p>
+<p><strong>方案</strong></p>
+<p>城市分析是一个轻召回重选择的问题，我们将城市分析设计为召回+选择的两阶段任务。</p>
+<p>召回阶段，我们主要从query和phrase两种粒度挖掘特征资源，而后进行候选城市归并。</p>
+<p>排序阶段，需要对候选城市进行判断，识别是否应为目标城市，用gbdt进行二分类拟合。</p>
+<p><strong>样本构建</strong></p>
+<p>样本方面，我们选择从搜索日志中随机抽取，简单清洗后，进行人工标注。构造样本时存在本异地分样本分布不均的问题，本地需求远远多于异地，这里需要剔除本地和异地相关的特征，避免模型学偏。</p>
+<p><strong>特征体系</strong></p>
+<p>主要特征包括：</p>
+<ul>
+<li>query级特征：如用户在特定query&amp;city下的点击；</li>
+<li>phrase级特征：类比于query级的特征，在更细粒度下进行统计；</li>
+<li>组合特征：为了克服单一特征表征能力不足的问题，这里我们进行了一些人工特征组合。</li>
+</ul>
+<p><strong>改造2：城市选择</strong></p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224231139.png" alt=""></p>
+<p><strong>方案</strong></p>
+<p>城市选择在整体的意图决策中处于下游，多种意图先在城市内部PK，然后城市互相PK。城市选择问题可以理解为多个城市间的排序问题，这里我们使用ltr进行城市选择的建模。</p>
+<p><strong>样本构建</strong></p>
+<p>使用随机query的多个城市意图结果作为样本，每次检索只有1个展示城市，因而每次只需要从候选城市中选择目标作为正样本，其他候选城市均作为负样本，与目标城市构成pair对。</p>
+<p><strong>特征构建</strong></p>
+<p>主要特征包括：</p>
+<ul>
+<li>先验特征。如城市分析部分输出的置信度；</li>
+<li>文本特征。一些基础的文本相关性特征；</li>
+<li>点击特征。如不同意图城市中的点击强度；</li>
+<li>意图特征。一些特征可能影响用户的城市倾向，如用户位置与首位POI距离。</li>
+</ul>
+<p>相比原始的城市分析和城市选择，两个模块全部实现机器学习化，在恶劣badcase显著降低的同时，可维护性大幅提高。在后续的建模中，我们将城市分析作为一个上层应用任务，通过多任务的方式接入到query分析的统一模型中来，降低了特征间的耦合，同时实现进一步的效果提升。</p>
+<h3 id="wherewhat分析">wherewhat分析</h3>
+<p>地图场景下的query经常包含多个空间语义片段的描述，只有正确识别query中的核心部分做what用于召回，同时用空间描述部分做where进行限定，才能够得到用户想要的POI。如query=北京市海淀区五道口肯德基，what=肯德基，是泛需求。query=南京市雨花台区板桥街道新亭大街与新湖大道交界口湾景，what=湾景，是精确需求。这种在A附近找B或者在A范围内找B的需求我们把它称作wherewhat需求，简称ww。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224231234.png" alt=""></p>
+<p>wherewhat意图分析主要包括先验和后验两个部分。先验要做wherewhat切分，是一个序列标注问题，标注出query中的哪些部分是where哪些部分是what，同时给出where的空间位置。后验要做意图选择，选择是否展示wherewhat意图的结果，可以转化成分类或者排序问题。</p>
+<p>wherewhat体系的主要难点在ww切分上，不仅要应对其他query分析模块都要面对的低频和中长尾问题，同时还要应对ww意图理解独特的问题。像语义模糊，比如北京欢乐谷公交站，涌边村牌坊这样的query该切还是不该切，结果差异很大。像语序变换，如query=嘉年华西草田，善兴寺小寨，逆序的表达如果不能正确识别，效果可能很差。</p>
+<p><strong>现状与问题</strong></p>
+<p><strong>现状</strong></p>
+<p>切分：wherewhat模块在成分分析模块下游，主要依靠了成分分析的特征。对于一些比较规整的query，通过成分分析组合的pattern来解决，对于一些中长尾的query，通过再接入一个crf模型进行ww标注。</p>
+<p>选择：基于人工规则进行意图的判断和选择。</p>
+<ul>
+<li>问题1：切分模型简陋。基于crf的切分模型使用特征单一，对成分特征依赖严重，处于黑盒状态无法分析；</li>
+<li>问题2：后验意图判断，规则堆砌，不好维护；</li>
+<li>问题3：逆序问题表现不好。由于query的语料大部分是正序的，模型在小比例的逆序query上表现不好。</li>
+</ul>
+<p><strong>技术改造</strong></p>
+<p><strong>crf问题分析工具</strong></p>
+<p>为了能够分析原始crf切分模型的问题，我们基于crf++源码开发了一个crf模型的分析工具，能够将基于维特比算法的预测过程交互式的展示出来，将模型的黑盒分析变成白盒，分析出了一系列问题。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224231341.png" alt=""></p>
+<p>同时，crf问题分析工具也应用在了其他query分析模块。</p>
+<ul>
+<li>改造1：特征建设和模型优化</li>
+</ul>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224231409.png" alt=""></p>
+<p>原始的模型依赖成分分析比较严重，由于成分分析特征本身存在准确率的问题，我们从用户的query中总结了一些更加可靠的统计特征。</p>
+<p><strong>前缀置信度</strong></p>
+<p>描述了片段做前缀的占比。比如望京凯德茂，望京阜通，也有望京单独搜，如果望京在前缀中出现的占比很高，那说明这个片段做where的能力比较强。</p>
+<p><strong>后缀熵</strong></p>
+<p>描述了后缀的离散程度，如望京凯德茂，望京美食，望京首开，后缀很乱，也可以说明片段做where的能力。</p>
+<p><strong>what置信度</strong></p>
+<p>片段单独搜占比，比如西门经常是在片段结尾出现，但是单独搜比较少，那片段做what的能力比较弱。</p>
+<p>以特征值域做横轴，where和what，label作为纵轴，就得到了特征-label曲线。从这几个特征的特征-label曲线来看，在某些区间下区分度还是很好的。由于crf模型只接受离散特征，特征-label的曲线也指导了特征离散化的阈值选择。对于低频query，我们通过低频query中的高频片段的统计信息，也可以使我们的模型在低频问题上表现更好。</p>
+<ul>
+<li>改造2：后验意图选择升级</li>
+</ul>
+<p>将原始的堆砌的规则升级到gbdt机器学习模型，引入了先验特征，在拿到一定收益的同时也使得整个体系更加合理。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224231500.png" alt=""></p>
+<ul>
+<li>改造3：鲁棒性优化</li>
+</ul>
+<p>将ww中逆序的问题抽象出来，可以归纳为query分析中的鲁棒性问题。随着策略优化进入深水区，存在策略提升用户不可感知，攻击case容易把系统打穿的问题。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224231519.png" alt=""></p>
+<p>如上图，用户变换query中where和what的顺序，效果可能变差。变换下检索城市，对于同一个知名景点，跳转逻辑不一致。用户区划输错，纠错不能识别，效果变很差。这种模块对非预期的query变换，或者更通用地叫做，对上下游的特征扰动的承载能力，我们可以把它叫做模块的鲁棒性。</p>
+<p>这里我们设计了对于通用鲁棒性问题解决的思路</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224231538.png" alt=""></p>
+<p>在不引入复杂模型的前提下，通过构建ensemble的浅层模型来优化特定问题，降低了问题解决的成本。</p>
+<p>对于ww逆序这个特定问题进行了特征复用用本复用，并且模型对外统一</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224231553.png" alt=""></p>
+<p>效果上，新的模型在原始测试集效果持平，人工构造攻击case集合准召明显提升，目标case集合具有可观的解决比例，验证了鲁棒性优化的思路是有效的。</p>
+<p>这里基本完成了对于ww体系的一个完整的升级，体系中的痛点基本都得到了解决。优化了切分模型，流程更加合理。意图决策上完成了规则到机器学习模型的升级。在优化或者引入浅层机器学习模型的同时尽可能发挥浅层模型的潜力，为从浅层模型升级为深度模型打下基础。</p>
+<p>在后续的建模中我们使用字粒度lstm+crf模型代替现有的crf模型，彻底摆脱了对成分分析特征的依赖，同时通过融合知识信息到lstm+crf模型，进一步提升效果。</p>
+<h3 id="路径规划">路径规划</h3>
+<p>在高德地图的搜索场景中，一类用户搜索意图为路径规划意图。例如，当用户在高德地图App的搜索框中输入“从回龙观到来广营”，点击搜索按钮后，搜索服务能识别出用户的搜索意图为路径规划，并识别出用户描述的起点为“回龙观”，终点为“来广营”，进而检索到对应的POI点给下游服务做出路线的规划。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224231618.png" alt=""></p>
+<p>从用户输入中识别路径规划意图，并提取出对应的起终点，这是一个典型的NLP任务。早期的路径规划模块使用的是模板匹配的方式，这种方式开发成本低，能解决大部分常见的路径规划问题，如上面这种“从A 到B”类的问题。</p>
+<p>但随着业务的不断发展，模块需要解决的问题越来越复杂，比如“坐地铁从西直门到大兴狼垡坐到哪里下车”，“广东到安徽经过哪几个城市”，“去往青岛的公交车有吗” 等等各种非“从A到B”模式的问题。由于模板匹配方式没有泛化能力，只能通过不断增加模板来解决，使得模块越来越沉重难以维护。</p>
+<p><strong>优化</strong></p>
+<p>由于线上所有的搜索query都会经过路径规划模块，若是让模型去处理所有的query，那么模型不仅要解决意图识别问题（召回类问题），又要解决槽位提取问题（准确类问题），对于模型来说是很难同时将这两个任务学好的。因此，我们采取了以下三段式：</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224231641.png" alt=""></p>
+<p>模型前使用关键字匹配策略进行简单意图识别，过滤掉大部分非路径规划query；模型处理疑似路径规划的query，进行槽位提取；模型后再对模型结果进行进一步检验。</p>
+<p><strong>样本和特征</strong></p>
+<p>机器学习的样本一般来源于人工标注，但人工标注耗时长成本高。因此我们采取的是自动标注样本方式。通过富集路径规划模式，如“从A怎么乘公交到B”，再用清洗后的随机query按照实际起终点的长度分布进行起终点替换，生成大量标注样本。</p>
+<p>特征方面，我们使用了成分分析特征及含有关键字的POI词典特征。它们主要在如“从这里到58到家”这类起终点 中含有关键字的query上起着区分关键字的作用。</p>
+<p><strong>模型训练</strong></p>
+<p>crf算法是业界常用的为序列标注任务建立概率图模型的算法。我们选取的也是crf算法。</p>
+<p><strong>效果评估</strong></p>
+<p>在验证集准确率召回率，以及随机query效果评比上，指标都有了明显的提升。</p>
+<p>对于路径规划这样一个定向的NLP任务，使用crf模型完成了从规则到机器学习模型的升级。作为一个应用层任务，路径规划也很容易被迁移到seq2seq的多任务学习模型中来。</p>
+<h2 id="展望">展望</h2>
+<p>过去两年随着机器学习的全面应用，以及基于合理性进行的多次效果迭代，目前的地理文本处理的效果优化已经进入深水区。我们认为将来的优化重点在攻和防两方面。</p>
+<p>攻主要针对低频和中长尾问题。在中高频问题已经基本解决的前提下，如何能够利用深度学习的技术进行地理文本处理seq2seq的统一建模，在低频和中长尾问题上进行进一步优化，获得新一轮的效果提升，是我们目前需要思考的问题。另外，如何更好地融合知识信息到模型中来，让模型能够具有接近人的先验判断能力，也是我们亟待提升的能力。</p>
+<p>防主要针对系统的鲁棒性。如用户的非典型表达，变换query等定向的问题，如何能够通过定向优化解决这些策略的死角，提高系统的容错能力，也是我们目前需要考虑的问题。</p>
+<p>地图搜索虽然是个垂类搜索，但是麻雀虽小五脏俱全，并且有地图场景下很多有特色的的难点。未来我们需要继续使用业界先进的技术，并且结合地理文本的特点进行优化，理解将更加智能化。</p>
+<h2 id="参考">参考</h2>
+<ol>
+<li>原文地址  <a target="_blank" rel="noopener" href="https://www.cnblogs.com/amap_tech/p/11971674.html">https://www.cnblogs.com/amap_tech/p/11971674.html</a></li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Weitang Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lonepatient.top/2020/04/20/geo_nlp_in_gaode.html">http://lonepatient.top/2020/04/20/geo_nlp_in_gaode.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lonepatient.top" target="_blank">闲记算法</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/NLP/">NLP</a><a class="post-meta__tags" href="/tags/%E5%9C%B0%E7%90%86/">地理</a><a class="post-meta__tags" href="/tags/%E9%AB%98%E5%BE%B7/">高德</a></div><div class="post_share"><div class="social-share" data-image="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210224225041.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/04/20/Getting-Started-Guide-to-Product-Level-Deep-Learning-Systems.html"><img class="prev-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20221031180534.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">产品级深度学习系统入门指南</div></div></a></div><div class="next-post pull-right"><a href="/2020/04/04/Some%20thoughts%20about%20building%20a%20technical%20team.html"><img class="next-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220701000042.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">(转)组建技术团队的一些思考</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2019/09/28/2019_daguan_info_extract_competition.html" title="2019达观杯信息提取第九名方案"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/092819170162_0sk2ppt_1.Jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-09-28</div><div class="title">2019达观杯信息提取第九名方案</div></div></a></div><div><a href="/2023/03/02/8-bit_Matrix_Multiplication_transformers_Hugging_Face_Transformers.html" title="用于大型Transformer的8-bit矩阵乘法介绍"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230324140620.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-02</div><div class="title">用于大型Transformer的8-bit矩阵乘法介绍</div></div></a></div><div><a href="/2023/05/16/ALBEF.html" title="Align before Fuse：Vision and Language Representation Learning with Momentum Distillation"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20231013155249.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-16</div><div class="title">Align before Fuse：Vision and Language Representation Learning with Momentum Distillation</div></div></a></div><div><a href="/2019/10/20/ALBERT.html" title="ALBERT-A Lite BERT For Self-Supervised Learning Of Language Representations"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/20200726122519.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-10-20</div><div class="title">ALBERT-A Lite BERT For Self-Supervised Learning Of Language Representations</div></div></a></div><div><a href="/2023/04/18/A_Survey_of_Large_Language_Models.html" title="A Survey of Large Language Models"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230419195449.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-18</div><div class="title">A Survey of Large Language Models</div></div></a></div><div><a href="/2021/05/29/An-Analysis-of-Simple-Data-Augmentation-for-Named-Entity-Recognition.html" title="An Analysis of Simple Data Augmentation for Named Entity Recognition"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/2021-05-29%2014.18.23.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-29</div><div class="title">An Analysis of Simple Data Augmentation for Named Entity Recognition</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Weitang Liu</div><div class="author-info__description">一个致力于记录技术的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lonePatient"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/lonePatient" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liuweitangmath@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/277974397" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有任何问题可通过留言板或者微信公众号给我留言，谢谢！<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201201102.jpg"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B4%E4%BD%93%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">整体技术架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#query%E5%88%86%E6%9E%90%E6%8A%80%E6%9C%AF%E6%BC%94%E8%BF%9B"><span class="toc-number">2.</span> <span class="toc-text">query分析技术演进</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%A0%E9%94%99"><span class="toc-number">2.1.</span> <span class="toc-text">纠错</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E6%94%B9%E9%80%A0"><span class="toc-number">2.2.</span> <span class="toc-text">技术改造</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%B9%E5%86%99"><span class="toc-number">2.3.</span> <span class="toc-text">改写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9C%81%E7%95%A5"><span class="toc-number">2.4.</span> <span class="toc-text">省略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#query%E5%88%86%E6%9E%90%E6%8A%80%E6%9C%AF%E6%BC%94%E8%BF%9B-2"><span class="toc-number">3.</span> <span class="toc-text">query分析技术演进</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%8E%E5%B8%82%E5%88%86%E6%9E%90"><span class="toc-number">3.1.</span> <span class="toc-text">城市分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wherewhat%E5%88%86%E6%9E%90"><span class="toc-number">3.2.</span> <span class="toc-text">wherewhat分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92"><span class="toc-number">3.3.</span> <span class="toc-text">路径规划</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%95%E6%9C%9B"><span class="toc-number">4.</span> <span class="toc-text">展望</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-27"/></a><div class="content"><a class="title" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27">Arxiv今日论文 | 2026-02-27</a><time datetime="2026-02-27T12:30:00.000Z" title="发表于 2026-02-27 12:30:00">2026-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-26"/></a><div class="content"><a class="title" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26">Arxiv今日论文 | 2026-02-26</a><time datetime="2026-02-26T12:30:00.000Z" title="发表于 2026-02-26 12:30:00">2026-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-25"/></a><div class="content"><a class="title" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25">Arxiv今日论文 | 2026-02-25</a><time datetime="2026-02-25T12:30:00.000Z" title="发表于 2026-02-25 12:30:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225222513891.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板">大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板</a><time datetime="2026-02-25T12:00:00.000Z" title="发表于 2026-02-25 12:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225123005910.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mid-training：构建预训练与后训练之间的分布式桥梁"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁">mid-training：构建预训练与后训练之间的分布式桥梁</a><time datetime="2026-02-25T00:00:00.000Z" title="发表于 2026-02-25 00:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-24"/></a><div class="content"><a class="title" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24">Arxiv今日论文 | 2026-02-24</a><time datetime="2026-02-24T12:30:00.000Z" title="发表于 2026-02-24 12:30:00">2026-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-23"/></a><div class="content"><a class="title" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23">Arxiv今日论文 | 2026-02-23</a><time datetime="2026-02-23T12:30:00.000Z" title="发表于 2026-02-23 12:30:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260223165943195.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用&quot;深度思考率&quot;精准度量LLM推理质量"/></a><div class="content"><a class="title" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量">用&quot;深度思考率&quot;精准度量LLM推理质量</a><time datetime="2026-02-23T12:00:00.000Z" title="发表于 2026-02-23 12:00:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-20"/></a><div class="content"><a class="title" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20">Arxiv今日论文 | 2026-02-20</a><time datetime="2026-02-20T12:30:00.000Z" title="发表于 2026-02-20 12:30:00">2026-02-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201606857.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前沿大模型训练方法：深度解析与实践指南"/></a><div class="content"><a class="title" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南">前沿大模型训练方法：深度解析与实践指南</a><time datetime="2026-02-20T10:30:00.000Z" title="发表于 2026-02-20 10:30:00">2026-02-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Weitang Liu</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.lonepatient.top/',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.lonepatient.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo@1.4.11/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (99)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/计算机视觉/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 计算机视觉 (16)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/知识图谱/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 知识图谱 (13)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">👩‍💻 深度学习 (139)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item" style="visibility: hidden"></div><a class="magnet_link_more"  href="http://lonepatient.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-18</span><a class="blog-slider__title" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">通向AGI之路：大型语言模型（LLM）技术精要</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/07/12/gaiic_2022_ner_top10.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220712181905.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-07-12</span><a class="blog-slider__title" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">GAIIC2022商品标题识别二等奖获奖解决思路</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230807190424.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-01-20</span><a class="blog-slider__title" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">2025-03|高质量中文预训练模型集合</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

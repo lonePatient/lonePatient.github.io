@@ -1,0 +1,363 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kaggle的十大深度学习技巧 | 闲记算法</title><meta name="keywords" content="深度学习,Kaggle"><meta name="author" content="Weitang Liu"><meta name="copyright" content="Weitang Liu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="在各种Kaggle竞赛的排行榜上，都有不少刚刚进入深度学习领域的程序员，其中大部分有一个共同点： 都上过Fast.ai的课程。 这些免费、重实战的课程非常鼓励学生去参加Kaggle竞赛，检验自己的能力。当然，也向学生们传授了不少称霸Kaggle的深度学习技巧。 是什么秘诀让新手们在短期内快速掌握并能构建最先进的DL算法？一位名叫塞缪尔（Samuel Lynn-Evans）的法国学员总结了十条经验。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kaggle的十大深度学习技巧">
+<meta property="og:url" content="http://lonepatient.top/2018/08/01/ten-techniques-from-fast-ai.html">
+<meta property="og:site_name" content="闲记算法">
+<meta property="og:description" content="在各种Kaggle竞赛的排行榜上，都有不少刚刚进入深度学习领域的程序员，其中大部分有一个共同点： 都上过Fast.ai的课程。 这些免费、重实战的课程非常鼓励学生去参加Kaggle竞赛，检验自己的能力。当然，也向学生们传授了不少称霸Kaggle的深度学习技巧。 是什么秘诀让新手们在短期内快速掌握并能构建最先进的DL算法？一位名叫塞缪尔（Samuel Lynn-Evans）的法国学员总结了十条经验。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/47127817.jpg">
+<meta property="article:published_time" content="2018-08-01T23:27:08.000Z">
+<meta property="article:modified_time" content="2026-02-27T07:52:12.941Z">
+<meta property="article:author" content="Weitang Liu">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="Kaggle">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/47127817.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lonepatient.top/2018/08/01/ten-techniques-from-fast-ai"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//s4.cnzz.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" data-pjax="data-pjax" src="https://s4.cnzz.com/z_stat.php?id=1273275888&amp;web_id=1273275888"></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-02-27 07:52:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/backgroud.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><script src="https://at.alicdn.com/t/c/font_3570527_dthoqrrv2tv.css"></script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JwRQtLKZggvJH4sJ",ck:"JwRQtLKZggvJH4sJ"})</script><link rel="stylesheet" href="/css/universe.css"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536467946304280" crossorigin="anonymous"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/47127817.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">闲记算法</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Kaggle的十大深度学习技巧<a class="post-edit-link" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts/ten-techniques-from-fast-ai.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-08-01T23:27:08.000Z" title="发表于 2018-08-01 23:27:08">2018-08-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-27T07:52:12.941Z" title="更新于 2026-02-27 07:52:12">2026-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/">优化技巧</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2018/08/01/ten-techniques-from-fast-ai.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>在各种Kaggle竞赛的排行榜上，都有不少刚刚进入深度学习领域的程序员，其中大部分有一个共同点：</p>
+<p>都上过Fast.ai的课程。</p>
+<p>这些免费、重实战的课程非常鼓励学生去参加Kaggle竞赛，检验自己的能力。当然，也向学生们传授了不少称霸Kaggle的深度学习技巧。</p>
+<p>是什么秘诀让新手们在短期内快速掌握并能构建最先进的DL算法？一位名叫塞缪尔（Samuel Lynn-Evans）的法国学员总结了十条经验。</p>
+<span id="more"></span>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/22088906.jpg" alt=""></p>
+<p>他这篇文章发表在FloydHub官方博客上，因为除了来自Fast.ai的技巧之外，他还用了FloydHub的免设置深度学习GPU云平台。</p>
+<p>接下来，我们看看他从fast.ai学来的十大技艺：</p>
+<h2 id="1-使用Fast-ai库">1. 使用Fast.ai库</h2>
+<p>这一条最为简单直接。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fast.ai <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure>
+<p>Fast.ai库是一个新手友好型的深度学习工具箱，而且是目前复现最新算法的首要之选。</p>
+<p>每当Fast.ai团队及AI研究者发现一篇有趣论文时，会在各种数据集上进行测试，并确定合适的调优方法。他们会把效果较好的模型实现加入到这个函数库中，用户可以快速载入这些模型。</p>
+<p>于是，Fast.ai库成了一个功能强大的工具箱，能够快速载入一些当前最新的算法实现，如带重启的随机梯度下降算法、差分学习率和测试时增强等等，这里不逐一提及了。</p>
+<p>下面会分别介绍这些技术，并展示如何使用Fast.ai库来快速使用它们。</p>
+<p>这个函数库是基于PyTorch构建，构建模型时可以流畅地使用。</p>
+<p>Fast.ai库地址：<br>
+<a target="_blank" rel="noopener" href="https://github.com/fastai/fastai">https://github.com/fastai/fastai</a></p>
+<h2 id="2-使用多个而不是单一学习率">2. 使用多个而不是单一学习率</h2>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/47127817.jpg" alt=""></p>
+<p>差分学习率（Differential Learning rates）意味着在训练时变换网络层比提高网络深度更重要。</p>
+<p>基于已有模型来训练深度学习网络，这是一种被验证过很可靠的方法，可以在计算机视觉任务中得到更好的效果。</p>
+<p>大部分已有网络（如Resnet、VGG和Inception等）都是在ImageNet数据集训练的，因此我们要根据所用数据集与ImageNet图像的相似性，来适当改变网络权重。</p>
+<p>在修改这些权重时，我们通常要对模型的最后几层进行修改，因为这些层被用于检测基本特征（如边缘和轮廓），不同数据集有着不同基本特征。</p>
+<p>首先，要使用Fast.ai库来获得预训练的模型，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fastai.conv_learner <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># import library for creating learning object for convolutional #networks</span></span><br><span class="line">model = VVG16()</span><br><span class="line"></span><br><span class="line"><span class="comment"># assign model to resnet, vgg, or even your own custom model</span></span><br><span class="line">PATH = <span class="string">&#x27;./folder_containing_images&#x27;</span> </span><br><span class="line">data = ImageClassifierData.from_paths(PATH)</span><br><span class="line"></span><br><span class="line"><span class="comment"># create fast ai data object, in this method we use from_paths where </span></span><br><span class="line"><span class="comment"># inside PATH each image class is separated into different folders</span></span><br><span class="line"></span><br><span class="line">learn = ConvLearner.pretrained(model, data, precompute=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># create a learn object to quickly utilise state of the art</span></span><br><span class="line"><span class="comment"># techniques from the fast ai library</span></span><br></pre></td></tr></table></figure>
+<p>创建学习对象之后（learn object），通过快速冻结前面网络层并微调后面网络层来解决问题：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">learn.freeze()</span><br><span class="line"></span><br><span class="line"><span class="comment"># freeze layers up to the last one, so weights will not be updated.</span></span><br><span class="line"></span><br><span class="line">learning_rate = <span class="number">0.1</span></span><br><span class="line">learn.fit(learning_rate, epochs=<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># train only the last layer for a few epochs</span></span><br></pre></td></tr></table></figure>
+<p>当后面网络层产生了良好效果，我们会应用差分学习率来改变前面网络层。在实际中，<strong>一般将学习率的缩小倍数设置为10倍</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">learn.unfreeze()</span><br><span class="line"></span><br><span class="line"><span class="comment"># set requires_grads to be True for all layers, so they can be updated</span></span><br><span class="line"></span><br><span class="line">learning_rate = [<span class="number">0.001</span>, <span class="number">0.01</span>, <span class="number">0.1</span>]</span><br><span class="line"><span class="comment"># learning rate is set so that deepest third of layers have a rate of 0.001, # middle layers have a rate of 0.01, and final layers 0.1.</span></span><br><span class="line"></span><br><span class="line">learn.fit(learning_rate, epochs=<span class="number">3</span>)</span><br><span class="line"><span class="comment"># train model for three epoch with using differential learning rates</span></span><br></pre></td></tr></table></figure>
+<h2 id="3-如何找到合适的学习率">3. 如何找到合适的学习率</h2>
+<p>学习率是神经网络训练中最重要的超参数，没有之一，但之前在实际应用中很难为神经网络选择最佳的学习率。</p>
+<p>Leslie Smith的一篇周期性学习率论文发现了答案，这是一个相对不知名的发现，直到它被Fast.ai课程推广后才逐渐被广泛使用。</p>
+<p>这篇论文是：</p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1506.01186">Cyclical Learning Rates for Training Neural Networks</a></p>
+<p>在这种方法中，我们尝试使用较低学习率来训练神经网络，但是在每个批次中以指数形式增加，相应代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">learn.lr_find()</span><br><span class="line"><span class="comment"># run on learn object where learning rate is increased  exponentially</span></span><br><span class="line"></span><br><span class="line">learn.sched.plot_lr()</span><br><span class="line"><span class="comment"># plot graph of learning rate against iterations</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/37721199.jpg" alt=""></p>
+<center> 每次迭代后学习率以指数形式增长 </center> 
+同时，记录每个学习率对应的Loss值，然后画出学习率和Loss值的关系图：
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">learn.sched.plot()</span><br><span class="line"><span class="comment"># plots the loss against the learning rate</span></span><br></pre></td></tr></table></figure>
+![](https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/90428381.jpg)
+<center> 找出Loss值在下降但仍未稳定的点 </center>
+通过找出学习率最高且Loss值仍在下降的值来确定最佳学习率。在上述情况中，该值将为0.01。
+<h2 id="4-余弦退火">4. 余弦退火</h2>
+<p>在采用批次随机梯度下降算法时，神经网络应该越来越接近Loss值的全局最小值。当它逐渐接近这个最小值时，学习率应该变得更小来使得模型不会超调且尽可能接近这一点。</p>
+<p>余弦退火（Cosine annealing）利用余弦函数来降低学习率，进而解决这个问题，如下图所示：</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/50257674.jpg" alt=""></p>
+<center> 余弦值随着x增大而减小 </center>
+从上图可以看出，随着x的增加，余弦值首先缓慢下降，然后加速下降，再次缓慢下降。这种下降模式能和学习率配合，以一种十分有效的计算方式来产生很好的效果。
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">learn.fit(<span class="number">0.1</span>, <span class="number">1</span>)</span><br><span class="line"><span class="comment"># Calling learn fit automatically takes advantage of cosine annealing</span></span><br></pre></td></tr></table></figure>
+<p>我们可以用Fast.ai库中的learn.fit()函数，来快速实现这个算法，在整个周期中不断降低学习率，如下图所示：</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/53605707.jpg" alt=""></p>
+<center> 在一个需要200次迭代的周期中学习率不断降低 </center>
+同时，在这种方法基础上，我们可以进一步引入重启机制。
+<h2 id="5-带重启的SGD算法">5. 带重启的SGD算法</h2>
+<p>在训练时，梯度下降算法可能陷入局部最小值，而不是全局最小值。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/81152034.jpg" alt=""></p>
+<center> 陷入局部最小值的梯度下降算法 </center>
+梯度下降算法可以通过突然提高学习率，来“跳出”局部最小值并找到通向全局最小值的路径。这种方式称为带重启的随机梯度下降方法（stochastic gradient descent with restarts, SGDR），这个方法在Loshchilov和Hutter的ICLR论文中展示出了很好的效果。
+<p>这篇论文是：</p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1608.03983">SGDR: Stochastic Gradient Descent with Warm Restarts</a></p>
+<p>用Fast.ai库可以快速导入SGDR算法。当调用learn.fit(learning_rate, epochs)函数时，学习率在每个周期开始时重置为参数输入时的初始值，然后像上面余弦退火部分描述的那样，逐渐减小。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/36729095.jpg" alt=""></p>
+<center> 每当学习率下降到最小点，在上图中为每100次迭代，我们称为一个循环。 </center>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cycle_len = <span class="number">1</span></span><br><span class="line"><span class="comment"># decide how many epochs it takes for the learning rate to fall to</span></span><br><span class="line"><span class="comment"># its minimum point. In this case, 1 epoch</span></span><br><span class="line"></span><br><span class="line">cycle_mult=<span class="number">2</span></span><br><span class="line"><span class="comment"># at the end of each cycle, multiply the cycle_len value by 2</span></span><br><span class="line"></span><br><span class="line">learn.fit(<span class="number">0.1</span>, <span class="number">3</span>, cycle_len=<span class="number">2</span>, cycle_mult=<span class="number">2</span>)</span><br><span class="line"><span class="comment"># in this case there will be three restarts. The first time with</span></span><br><span class="line"><span class="comment"># cycle_len of 1, so it will take 1 epoch to complete the cycle.</span></span><br><span class="line"><span class="comment"># cycle_mult=2 so the next cycle with have a length of two epochs, </span></span><br><span class="line"><span class="comment"># and the next four.</span></span><br></pre></td></tr></table></figure>
+利用这些参数，和使用差分学习率，这些技巧是Fast.ai用户在图像分类问题上取得良好效果的关键。
+<p>Fast.ai论坛有个帖子专门讨论Cycle_mult和cycle_len函数，<a target="_blank" rel="noopener" href="http://forums.fast.ai/t/understanding-cycle-len-and-cycle-mult/9413/8">地址在这里</a></p>
+<p>更多关于学习率的详细内容可参考这个<a target="_blank" rel="noopener" href="http://course.fast.ai/lessons/lesson2.html">Fast.ai课程</a></p>
+<h2 id="6-理解你的激活函数">6. 理解你的激活函数</h2>
+<p>Softmax只喜欢选择一样东西；</p>
+<p>Sigmoid想知道你在[-1, 1]区间上的位置，并不关心你超出这些值后的增加量；</p>
+<p>Relu是一名俱乐部保镖，要将负数拒之门外。</p>
+<p>……</p>
+<p>以这种思路对待激活函数，看起来很愚蠢，但是安排一个角色后能确保把他们用到正确任务中。</p>
+<p>正如fast.ai创始人Jeremy Howard指出，不少学术论文中也把Softmax函数用在多分类问题中。在DL学习过程中，我也看到它在论文和博客中多次使用不当。</p>
+<h2 id="7-迁移学习在NLP问题中非常有效">7. 迁移学习在NLP问题中非常有效</h2>
+<p>正如预训练好的模型在计算机视觉任务中很有效一样，已有研究表明，自然语言处理（NLP）模型也可以从这种方法中受益。</p>
+<p>在Fast.ai第4课中，Jeremy Howard用迁移学习方法建立了一个模型，来判断IMDB上的电影评论是积极的还是消极的。</p>
+<p>这种方法的效果立竿见影，他所达到的准确率超过了Salesforce论文中展示的所有先前模型：<br>
+<a target="_blank" rel="noopener" href="https://einstein.ai/research/learned-in-translation-contextualized-word-vectors%E3%80%82">https://einstein.ai/research/learned-in-translation-contextualized-word-vectors。</a></p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/5135581.jpg" alt=""></p>
+<p>这个模型的关键在于先训练模型来获得对语言的一些理解，然后再使用这种预训练好的模型作为新模型的一部分来分析情绪。</p>
+<p>为了创建第一个模型，我们训练了一个循环神经网络（RNN）来预测文本序列中的下个单词，这称为语言建模。当训练后网络的准确率达到一定值，它对每个单词的编码模式就会传递给用于情感分析的新模型。</p>
+<p>在上面的例子中，我们看到这个语言模型与另一个模型集成后用于情感分析，但是这种方法可以应用到其他任何NLP任务中，包括翻译和数据提取。</p>
+<p>而且，计算机视觉中的一些技巧，也同样适用于此，如上面提到的冻结网络层和使用差分学习率，在这里也能取得更好的效果。</p>
+<p>这种方法在NLP任务上的使用涉及很多细节，这里就不贴出代码了，可访问相应<a target="_blank" rel="noopener" href="http://course.fast.ai/lessons/lesson4.html">课程</a>和<a target="_blank" rel="noopener" href="https://github.com/fastai/fastai/blob/master/courses/dl1/lesson4-imdb.ipynb">代码</a>。</p>
+<h2 id="8-深度学习在处理结构化数据上的优势">8. 深度学习在处理结构化数据上的优势</h2>
+<p>Fast.ai课程中展示了深度学习在处理结构化数据上的突出表现，且无需借助特征工程以及领域内的特定知识。</p>
+<p>这个库充分利用了PyTorch中embedding函数，允许将分类变量快速转换为嵌入矩阵。</p>
+<p>他们展示出的技术比较简单直接，只需将分类变量转换为数字，然后为每个值分配嵌入向量：</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/95112671.jpg" alt=""></p>
+<p>在这类任务上，传统做法是创建虚拟变量，即进行一次热编码。与之相比，这种方式的优点是用四个数值代替一个数值来描述每一天，因此可获得更高的数据维度和更丰富的关系。</p>
+<p>这种方法在Rossman Kaggle比赛中获得第三名，惜败于两位利用专业知识来创建许多额外特征的领域专家。</p>
+<p>相关课程：<br>
+<a target="_blank" rel="noopener" href="http://course.fast.ai/lessons/lesson4.html">http://course.fast.ai/lessons/lesson4.html</a></p>
+<p>代码：<br>
+<a target="_blank" rel="noopener" href="https://github.com/fastai/fastai/blob/master/courses/dl1/lesson3-rossman.ipynb">https://github.com/fastai/fastai/blob/master/courses/dl1/lesson3-rossman.ipynb</a></p>
+<p>这种用深度学习来减少对特征工程依赖的思路，也被Pinterest证实过。他也提到过，他们正努力通过深度学习模型，期望用更少的工作量来获得更好的效果。</p>
+<h2 id="9-更多内置函数：Dropout层、尺寸设置、TTA">9. 更多内置函数：Dropout层、尺寸设置、TTA</h2>
+<p>4月30日，Fast.ai团队在斯坦福大学举办的DAWNBench竞赛中，赢得了基于Imagenet和CIFAR10的分类任务。在Jeremy的夺冠总结中，他将这次成功归功于fast.ai库中的一些额外函数。</p>
+<p>其中之一是Dropout层，由Geoffrey Hinton两年前在一篇开创性的论文中提出。它最初很受欢迎，但在最近的计算机视觉论文中似乎有所忽略。这篇论文是：</p>
+<p>Dropout: A Simple Way to Prevent Neural Networks from Overfitting：<br>
+<a target="_blank" rel="noopener" href="https://www.cs.toronto.edu/~hinton/absps/JMLRdropout.pdf">https://www.cs.toronto.edu/~hinton/absps/JMLRdropout.pdf</a></p>
+<p>然而，PyTorch库使它的实现变得很简单，用Fast.ai库加载它就更容易了。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/32450403.jpg" alt=""></p>
+<center> 空格表示Dropout函数的作用点</center>
+Dropout函数能减弱过拟合效应，因此要在CIFAR-10这样一个相对较小的数据集上取胜，这点很重要。在创建learn对象时，Fast.ai库会自动加入dropout函数，同时可使用ps变量来修改参数，如下所示：
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">learn = ConvLearner.pretrained(model, data, ps=<span class="number">0.5</span>, precompute=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># creates a dropout of 0.5 (i.e. half the activations) on test dataset. </span></span><br><span class="line"><span class="comment"># This is automatically turned off for the validation set</span></span><br></pre></td></tr></table></figure>
+<p>有一种很简单有效的方法，经常用来处理过拟合效应和提高准确性，<strong>它就是训练小尺寸图像，然后增大尺寸并再次训练相同模型</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># create a data object with images of sz * sz pixels </span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_data</span>(<span class="params">sz</span>): </span><br><span class="line">    tmfs = tfms_from_model(model, sz)</span><br><span class="line">    <span class="comment"># tells what size images should be, additional transformations such</span></span><br><span class="line">    <span class="comment"># image flips and zooms can easily be added here too</span></span><br><span class="line"></span><br><span class="line">    data = ImageClassifierData.from_paths(PATH, tfms=tfms)</span><br><span class="line">    <span class="comment"># creates fastai data object of create size</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line">learn.set_data(get_data(<span class="number">299</span>))</span><br><span class="line"><span class="comment"># changes the data in the learn object to be images of size 299</span></span><br><span class="line"><span class="comment"># without changing the model.</span></span><br><span class="line"></span><br><span class="line">learn.fit(<span class="number">0.1</span>, <span class="number">3</span>)</span><br><span class="line"><span class="comment"># train for a few epochs on larger versions of images, avoiding overfitting</span></span><br></pre></td></tr></table></figure>
+<p>还有一种先进技巧，可将准确率提高若干个百分点，它就是<strong>测试时增强</strong>（test time augmentation, TTA）。这里会为原始图像造出多个不同版本，包括不同区域裁剪和更改缩放程度等，并将它们输入到模型中；然后对多个版本进行计算得到平均输出，作为图像的最终输出分数，可调用learn.TTA()来使用该算法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">preds, target = learn.TTA()</span><br></pre></td></tr></table></figure>
+<p>这种技术很有效，因为原始图像显示的区域可能会缺少一些重要特征，在模型中输入图像的多个版本并取平均值，能解决上述问题。</p>
+<h2 id="10-创新力很关键">10. 创新力很关键</h2>
+<p>在DAWNBench比赛中，Fast.ai团队提出的模型不仅速度最快，而且计算成本低。要明白，要构建成功的DL应用，不只是一个利用大量GPU资源的计算任务，而应该是一个需要创造力、直觉和创新力的问题。</p>
+<p>本文中讨论的一些突破，包括Dropout层、余弦退火和带重启的SGD方法等，实际上是研究者针对一些问题想到的不同解决方式。与简单地增大训练数据集相比，能更好地提升准确率。</p>
+<p>硅谷的很多大公司有大量GPU资源，但是，不要认为他们的先进效果遥不可及，你也能靠创新力提出一些新思路，来挑战效果排行榜。</p>
+<p>事实上，有时计算力的局限也是一种机会，因为需求是创新的动力源泉。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Weitang Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lonepatient.top/2018/08/01/ten-techniques-from-fast-ai.html">http://lonepatient.top/2018/08/01/ten-techniques-from-fast-ai.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lonepatient.top" target="_blank">闲记算法</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><a class="post-meta__tags" href="/tags/Kaggle/">Kaggle</a></div><div class="post_share"><div class="social-share" data-image="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/47127817.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2018/08/02/kaggle-Plant-Seedlings-Classification.html"><img class="prev-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-17/94236920.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">kaggle: Plant Seedlings Classification</div></div></a></div><div class="next-post pull-right"><a href="/2018/07/21/CRF-Layer-on-the-Top-of-BiLSTM%20--3.html"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">BiLSTM模型中CRF层的运行原理(3)</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2018/04/19/Deep_Learning_For_Computer_Vision_With_Python_PB_10.html" title="深度学习与计算机视觉(PB-10)-Kaggle之猫狗比赛"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/9655360.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-04-19</div><div class="title">深度学习与计算机视觉(PB-10)-Kaggle之猫狗比赛</div></div></a></div><div><a href="/2018/01/04/kaggle-web-traffic_1st.html" title="Kaggle网站流量预测任务第一名解决方案"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/99146323.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-01-04</div><div class="title">Kaggle网站流量预测任务第一名解决方案</div></div></a></div><div><a href="/2023/03/02/8-bit_Matrix_Multiplication_transformers_Hugging_Face_Transformers.html" title="用于大型Transformer的8-bit矩阵乘法介绍"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230324140620.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-02</div><div class="title">用于大型Transformer的8-bit矩阵乘法介绍</div></div></a></div><div><a href="/2019/04/30/A-Recipe-for-Training-Neural-Networks.html" title="训练神经网络不得不看的33个技巧"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-04-30</div><div class="title">训练神经网络不得不看的33个技巧</div></div></a></div><div><a href="/2023/05/16/ALBEF.html" title="Align before Fuse：Vision and Language Representation Learning with Momentum Distillation"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20231013155249.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-16</div><div class="title">Align before Fuse：Vision and Language Representation Learning with Momentum Distillation</div></div></a></div><div><a href="/2023/04/18/A_Survey_of_Large_Language_Models.html" title="A Survey of Large Language Models"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230419195449.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-18</div><div class="title">A Survey of Large Language Models</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Weitang Liu</div><div class="author-info__description">一个致力于记录技术的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lonePatient"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/lonePatient" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liuweitangmath@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/277974397" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有任何问题可通过留言板或者微信公众号给我留言，谢谢！<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201201102.jpg"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BD%BF%E7%94%A8Fast-ai%E5%BA%93"><span class="toc-number">1.</span> <span class="toc-text">1. 使用Fast.ai库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BD%BF%E7%94%A8%E5%A4%9A%E4%B8%AA%E8%80%8C%E4%B8%8D%E6%98%AF%E5%8D%95%E4%B8%80%E5%AD%A6%E4%B9%A0%E7%8E%87"><span class="toc-number">2.</span> <span class="toc-text">2. 使用多个而不是单一学习率</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%A6%82%E4%BD%95%E6%89%BE%E5%88%B0%E5%90%88%E9%80%82%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%8E%87"><span class="toc-number">3.</span> <span class="toc-text">3. 如何找到合适的学习率</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%BD%99%E5%BC%A6%E9%80%80%E7%81%AB"><span class="toc-number">4.</span> <span class="toc-text">4. 余弦退火</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%B8%A6%E9%87%8D%E5%90%AF%E7%9A%84SGD%E7%AE%97%E6%B3%95"><span class="toc-number">5.</span> <span class="toc-text">5. 带重启的SGD算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E7%90%86%E8%A7%A3%E4%BD%A0%E7%9A%84%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="toc-number">6.</span> <span class="toc-text">6. 理解你的激活函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0%E5%9C%A8NLP%E9%97%AE%E9%A2%98%E4%B8%AD%E9%9D%9E%E5%B8%B8%E6%9C%89%E6%95%88"><span class="toc-number">7.</span> <span class="toc-text">7. 迁移学习在NLP问题中非常有效</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9C%A8%E5%A4%84%E7%90%86%E7%BB%93%E6%9E%84%E5%8C%96%E6%95%B0%E6%8D%AE%E4%B8%8A%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-number">8.</span> <span class="toc-text">8. 深度学习在处理结构化数据上的优势</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E6%9B%B4%E5%A4%9A%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0%EF%BC%9ADropout%E5%B1%82%E3%80%81%E5%B0%BA%E5%AF%B8%E8%AE%BE%E7%BD%AE%E3%80%81TTA"><span class="toc-number">9.</span> <span class="toc-text">9. 更多内置函数：Dropout层、尺寸设置、TTA</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E5%88%9B%E6%96%B0%E5%8A%9B%E5%BE%88%E5%85%B3%E9%94%AE"><span class="toc-number">10.</span> <span class="toc-text">10. 创新力很关键</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-27"/></a><div class="content"><a class="title" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27">Arxiv今日论文 | 2026-02-27</a><time datetime="2026-02-27T12:30:00.000Z" title="发表于 2026-02-27 12:30:00">2026-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-26"/></a><div class="content"><a class="title" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26">Arxiv今日论文 | 2026-02-26</a><time datetime="2026-02-26T12:30:00.000Z" title="发表于 2026-02-26 12:30:00">2026-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-25"/></a><div class="content"><a class="title" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25">Arxiv今日论文 | 2026-02-25</a><time datetime="2026-02-25T12:30:00.000Z" title="发表于 2026-02-25 12:30:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225222513891.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板">大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板</a><time datetime="2026-02-25T12:00:00.000Z" title="发表于 2026-02-25 12:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225123005910.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mid-training：构建预训练与后训练之间的分布式桥梁"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁">mid-training：构建预训练与后训练之间的分布式桥梁</a><time datetime="2026-02-25T00:00:00.000Z" title="发表于 2026-02-25 00:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-24"/></a><div class="content"><a class="title" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24">Arxiv今日论文 | 2026-02-24</a><time datetime="2026-02-24T12:30:00.000Z" title="发表于 2026-02-24 12:30:00">2026-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-23"/></a><div class="content"><a class="title" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23">Arxiv今日论文 | 2026-02-23</a><time datetime="2026-02-23T12:30:00.000Z" title="发表于 2026-02-23 12:30:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260223165943195.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用&quot;深度思考率&quot;精准度量LLM推理质量"/></a><div class="content"><a class="title" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量">用&quot;深度思考率&quot;精准度量LLM推理质量</a><time datetime="2026-02-23T12:00:00.000Z" title="发表于 2026-02-23 12:00:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-20"/></a><div class="content"><a class="title" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20">Arxiv今日论文 | 2026-02-20</a><time datetime="2026-02-20T12:30:00.000Z" title="发表于 2026-02-20 12:30:00">2026-02-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201606857.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前沿大模型训练方法：深度解析与实践指南"/></a><div class="content"><a class="title" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南">前沿大模型训练方法：深度解析与实践指南</a><time datetime="2026-02-20T10:30:00.000Z" title="发表于 2026-02-20 10:30:00">2026-02-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Weitang Liu</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.lonepatient.top/',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.lonepatient.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo@1.4.11/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (99)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/计算机视觉/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 计算机视觉 (16)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/知识图谱/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 知识图谱 (13)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">👩‍💻 深度学习 (139)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item" style="visibility: hidden"></div><a class="magnet_link_more"  href="http://lonepatient.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-18</span><a class="blog-slider__title" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">通向AGI之路：大型语言模型（LLM）技术精要</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/07/12/gaiic_2022_ner_top10.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220712181905.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-07-12</span><a class="blog-slider__title" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">GAIIC2022商品标题识别二等奖获奖解决思路</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230807190424.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-01-20</span><a class="blog-slider__title" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">2025-03|高质量中文预训练模型集合</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

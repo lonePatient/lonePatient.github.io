@@ -1,0 +1,342 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>(转)美团基于知识图谱的剧本杀标准化建设与应用 | 闲记算法</title><meta name="keywords" content="知识图谱"><meta name="author" content="Weitang Liu"><meta name="copyright" content="Weitang Liu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="剧本杀作为爆发式增长的新兴业务，在商家上单、用户选购、供需匹配等方面存在不足，供给标准化能为用户、商家、平台三方创造价值，助力业务增长。本文介绍了美团到店综合业务数据团队从0到1快速建设剧本杀供给标准化的过程及算法方案。我们将美团到店综合知识图谱（GENE，GEneral NEeds net）覆盖至剧本杀行业，构建剧本杀知识图谱实现供给标准化建设，包括剧本杀供给挖掘、标准剧本库构建、供给与标准剧本">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(转)美团基于知识图谱的剧本杀标准化建设与应用">
+<meta property="og:url" content="http://lonepatient.top/2021/10/28/meituan_jubensha.html">
+<meta property="og:site_name" content="闲记算法">
+<meta property="og:description" content="剧本杀作为爆发式增长的新兴业务，在商家上单、用户选购、供需匹配等方面存在不足，供给标准化能为用户、商家、平台三方创造价值，助力业务增长。本文介绍了美团到店综合业务数据团队从0到1快速建设剧本杀供给标准化的过程及算法方案。我们将美团到店综合知识图谱（GENE，GEneral NEeds net）覆盖至剧本杀行业，构建剧本杀知识图谱实现供给标准化建设，包括剧本杀供给挖掘、标准剧本库构建、供给与标准剧本">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211029190517.png">
+<meta property="article:published_time" content="2021-10-28T23:20:08.000Z">
+<meta property="article:modified_time" content="2026-02-27T07:52:12.940Z">
+<meta property="article:author" content="Weitang Liu">
+<meta property="article:tag" content="知识图谱">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211029190517.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lonepatient.top/2021/10/28/meituan_jubensha"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//s4.cnzz.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" data-pjax="data-pjax" src="https://s4.cnzz.com/z_stat.php?id=1273275888&amp;web_id=1273275888"></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-02-27 07:52:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/backgroud.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><script src="https://at.alicdn.com/t/c/font_3570527_dthoqrrv2tv.css"></script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JwRQtLKZggvJH4sJ",ck:"JwRQtLKZggvJH4sJ"})</script><link rel="stylesheet" href="/css/universe.css"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536467946304280" crossorigin="anonymous"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211029190517.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">闲记算法</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">(转)美团基于知识图谱的剧本杀标准化建设与应用<a class="post-edit-link" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts/meituan_jubensha.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-10-28T23:20:08.000Z" title="发表于 2021-10-28 23:20:08">2021-10-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-27T07:52:12.940Z" title="更新于 2026-02-27 07:52:12">2026-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/">知识图谱</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/%E8%A1%8C%E4%B8%9A%E5%BA%94%E7%94%A8/">行业应用</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">6.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>20分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2021/10/28/meituan_jubensha.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>剧本杀作为爆发式增长的新兴业务，在商家上单、用户选购、供需匹配等方面存在不足，供给标准化能为用户、商家、平台三方创造价值，助力业务增长。本文介绍了美团到店综合业务数据团队从0到1快速建设剧本杀供给标准化的过程及算法方案。我们将美团到店综合知识图谱（GENE，GEneral NEeds net）覆盖至剧本杀行业，构建剧本杀知识图谱实现供给标准化建设，包括剧本杀供给挖掘、标准剧本库构建、供给与标准剧本关联等环节，并在多个场景进行应用落地，希望给大家带来一些帮助或启发。</p>
+<h2 id="背景">背景</h2>
+<p>剧本杀行业近年来呈爆发式增长态势，然而由于剧本杀是新兴行业，平台已有的类目体系和产品形态，越来越难以满足飞速增长的用户和商户需求，主要表现在下面三个方面：</p>
+<ul>
+<li>平台类目缺失：平台缺少专门的“剧本杀”类目，中心化流量入口的缺失，导致用户决策路径混乱，难以建立统一的用户认知。</li>
+<li>用户决策效率低：剧本杀的核心是剧本，由于缺乏标准的剧本库，也未建立标准剧本和供给的关联关系，导致剧本信息展示和供给管理的规范化程度低，影响了用户对剧本选择决策的效率。</li>
+<li>商品上架繁琐：商品信息需要商户人工一一录入，没有可用的标准模板用以信息预填，导致商户在平台上架的剧本比例偏低，上架效率存在较大的提升空间。</li>
+</ul>
+<p>为了解决上述痛点，业务需要进行剧本杀的供给标准化建设：首先建立“剧本杀”新类目，并完成相应的供给（包括商户、商品、内容）的类目迁移。以此为基础，以剧本为核心，搭建标准剧本库，并关联剧本杀供给，继而建立剧本维度的信息分发渠道、评价评分和榜单体系，满足用户“以剧本找店”的决策路径。</p>
+<p>值得指出的是，供给标准化是简化用户认知、帮助用户决策、促进供需匹配的重要抓手，标准化程度的高低对平台业务规模的大小有着决定性影响。具体到剧本杀行业，供给标准化建设是助力剧本杀业务持续增长的重要基础，而标准剧本库的搭建是剧本杀供给标准化的关键。由于基于规格如「城限」、背景如「古风」、题材如「情感」等剧本属性无法确定具体的剧本，但剧本名称如「舍离」则能起唯一标识的作用。因此，标准剧本库的搭建，首先是标准剧本名称的建设，其次是规格、背景、题材、难度、流派等标准剧本属性的建设。</p>
+<p>综上，美团到店综合业务数据团队与业务同行，助力业务进行剧本杀的供给标准化建设。在建设过程中，涉及了剧本名称、剧本属性、类目、商户、商品、内容等多种类型的实体，以及它们之间的多元化关系构建。而知识图谱作为一种揭示实体及实体间关系的语义网络，用以解决该问题显得尤为合适。特别地，我们已经构建了<strong>美团到店综合知识图谱（GENE，GEneral NEeds net）</strong>，因此，我们基于GENE的构建经验快速进行剧本杀这一新业务的知识图谱构建，从0到1实现剧本杀标准化建设，从而改善供给管理和供需匹配，为用户、商户、平台三方创造出更大的价值。</p>
+<h2 id="解决方案">解决方案</h2>
+<p>我们构建的GENE，围绕本地生活用户的综合性需求，以行业体系、需求对象、具象需求、场景要素和场景需求五个层次逐层递进，覆盖了玩乐、医美、教育、亲子、结婚等多个业务，体系设计和技术细节可见<a href="">美团到店综合知识图谱</a>相关的文章。剧本杀作为一项新兴的美团到店综合业务，体现了用户在玩乐上的新需求，天然适配GENE的体系结构。因此，我们将GENE覆盖至剧本杀新业务，沿用相同的思路来进行相应知识图谱的构建，以实现相应的供给标准化。</p>
+<p>基于知识图谱来实现剧本杀标准化建设的关键，是以标准剧本为核心构建剧本杀知识图谱。图谱体系设计如图1所示，具体地，首先在行业体系层进行剧本杀新类目的构建，挖掘剧本杀供给，并建立供给（包括商户、商品、内容）与类目的从属关系。在此基础上，在需求对象层，进一步实现标准剧本名称这一核心对象节点和其剧本属性节点的挖掘以及关系构建，建立标准剧本库，最后将标准剧本库的每个标准剧本与供给和用户建立关联关系。此外，具象需求、场景要素、场景需求三层则实现了对用户在剧本杀上的具象的服务需求和场景化需求的显性表达，这部分由于与剧本杀供给标准化建设的联系不多，在这里不做展开介绍。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211029190151.png" alt=""></p>
+<p>剧本杀知识图谱中用于供给标准化部分的具体样例如下图2所示。其中，标准剧本名称是核心节点，围绕它的各类标准剧本属性节点包括题材、规格、流派、难度、背景、别称等。同时，标准剧本之间可能构建诸如“同系列”等类型的关系，比如「舍离」和「舍离2」。此外，标准剧本还会与商品、商户、内容、用户之间建立关联关系。</p>
+<p>我们基于剧本杀知识图谱的这些节点和关系进行供给标准化，在图谱构建过程中，包括了<strong>剧本杀供给挖掘、标准剧本库构建、供给与标准剧本关联</strong>三个主要步骤，下面对三个步骤的实现细节以及涉及的算法进行介绍。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211029190517.png" alt=""></p>
+<h2 id="实现方法">实现方法</h2>
+<h3 id="剧本杀供给挖掘">剧本杀供给挖掘</h3>
+<p>剧本杀作为新兴的业务，已有的行业类目树中并没有相应的类目，无法直接根据类目获取剧本杀的相关供给（包括商户、商品和内容）。因此，我们需要首先进行剧本杀供给的挖掘，即从当前与剧本杀行业相近类目的供给中挖掘出剧本杀的相关供给。</p>
+<p>对于剧本杀的商户供给挖掘，需要判断商户是否提供剧本杀服务，判别依据包括了商户名、商品名及商品详情、商户UGC三个来源的文本语料。这个本质上是一个多源数据的分类问题，然而由于缺乏标注的训练样本，我们没有直接采用端到端的多源数据分类模型，而是依托业务输入，采用<strong>无监督匹配</strong>和<strong>有监督拟合</strong>相结合的方式高效实现，具体的判别流程如下图3所示，其中：</p>
+<ul>
+<li>无监督匹配：首先构造剧本杀相关的关键词词库，分别在商户名、商品名及商品详情、商户UGC三个来源的文本语料中进行精确匹配，并构建基于BERT[1]的通用语义漂移判别模型进行匹配结果过滤。最后根据业务规则基于各来源的匹配结果计算相应的匹配分数。</li>
+<li>有监督拟合：为了量化不同来源匹配分数对最终判别结果的影响，由运营先人工标注少量商户分数，用以表征商户提供剧本杀服务的强弱。在此基础上，我们构造了一个线性回归模型，拟合标注的商户分数，获取各来源的权重，从而实现对剧本杀商户的精准挖掘。</li>
+</ul>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211029190824.png" alt=""></p>
+<p>采用上述方式，实现了桌面和实景两种剧本杀商户的挖掘，准确率和召回率均达到了要求。基于剧本杀商户的挖掘结果，能够进一步对商品进行挖掘，并创建剧本杀类目，从而为后续剧本杀知识图谱构建及标准化建设打好了数据基础。</p>
+<h3 id="标准剧本库构建">标准剧本库构建</h3>
+<p>标准剧本作为整个剧本杀知识图谱的核心，在剧本杀供给标准化建设中扮演着重要的角色。我们基于剧本杀商品相似聚合的方式，结合人工审核来挖掘标准剧本，并从相关发行方获取剧本授权，从而构建标准剧本库。标准剧本由两部分构成，一个是标准剧本名称，另一个是标准剧本属性。因此，标准剧本库构建也分为标准剧本名称的挖掘和标准剧本属性的挖掘两个部分。</p>
+<h4 id="标准剧本名称的挖掘">标准剧本名称的挖掘</h4>
+<p>我们根据剧本杀商品的特点，先后采用了规则聚合、语义聚合和多模态聚合三种方法进行挖掘迭代，从数十万剧本杀商品的名称中聚合得到数千标准剧本名称。下面分别对三种聚合方法进行介绍。</p>
+<p><code>规则聚合</code></p>
+<p>同一个剧本杀商品在不同商户的命名往往不同，存在较多的不规范和个性化。一方面，同一个剧本名称本身就可以有多种叫法，例如「舍离」、「舍离壹」、「舍离1」就是同一个剧本；另一方面，剧本杀商品名除了包含剧本名称外，商家很多时候也会加入剧本的规格和题材等属性信息以及吸引用户的描述性文字，例如「《舍离》情感本」。所以我们首先考虑剧本杀商品的命名特点，设计相应的清洗策略对剧本杀商品名称进行清洗后再聚合。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211029192453.png" alt=""></p>
+<p>我们除了梳理常见的非剧本词，构建词库进行规则过滤外，也尝试将其转换为命名实体识别问题[2]，采用序列标注对字符进行“是剧本名”与“不是剧本名”两个类别的区分。对于清洗后的剧本杀商品名称，则通过基于最长公共子序列（LCS）的相似度计算规则，结合阈值筛选对其进行聚合，例如「舍离」、「舍离壹」、「舍离1」最后均聚在一起。整个流程如上图4所示，采用规则聚合的方式，能够在建设初期帮助业务快速对剧本杀商品名称进行聚合。</p>
+<p><code>语义聚合</code></p>
+<p>规则聚合的方式虽然简单好用，但由于剧本名称的多样性和复杂性，我们发现聚合结果中仍然存在一些问题：1）不属于同一个剧本的商品被聚合，例如「舍离」和「舍离2」是同一个系列的两个不同剧本，却被聚合在一起。2）属于同一个剧本的商品没有聚合，例如，商品名使用剧本的简称缩写（「唐人街名侦探和猫」和「唐探猫」）或出现错别字（「弗洛伊德之锚」和「佛洛依德之锚」）等情况时则难以规则聚合。</p>
+<p>针对这上述这两种问题，我们进一步考虑使用商品名称语义匹配的方式，从文本语义相同的角度来进行聚合。常用的文本语义匹配模型分为交互式和双塔式两种类型。交互式是把两段文本一起输入进编码器，在编码的过程中让其相互交换信息后再进行判别；双塔式模型是用一个编码器分别给两个文本编码出向量，然后基于两个向量进行判别。</p>
+<p>由于商品数量众多，采用交互式的方法需要将商品名称两两组合后再进行模型预测，效率较为低下，为此，我们采用双塔式的方法来实现，以Sentence-BERT[3]的模型结构为基础，将两个商品名称文本分别通过BERT提取向量后，再使用余弦距离来衡量两者的相似度，完整结构如下图5所示：</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211029192735.png" alt=""></p>
+<p>在训练模型的过程中，我们首先基于规则聚合的结果，通过同聚簇内生成正例和跨聚簇交叉生成负例的方式，构造粗粒度的训练样本，完成初版模型的训练。在此基础上，进一步结合主动学习，对样本数据进行完善。此外，我们还根据上文提到的规则聚合出现的两种问题，针对性的批量生成样本。具体地，通过在商品名称后添加同系列编号，以及使用错字、别字和繁体字替换等方式来实现样本的自动构造。</p>
+<p><code>多模态聚合</code></p>
+<p>通过语义聚合的方式实现了从商品名称文本语义层面的同义聚合，然而我们通过对聚合结果再分析后发现还存在一些问题：两个商品属于同一个剧本，但仅从商品名称的角度是无法判别。例如，「舍离2」和「断念」从语义的角度无法聚合，但是它们本质上是一个剧本「舍离2·断念」。虽然这两个商品的名称各异，但是它们的图像往往是相同或相似的，为此，我们考虑引入商品的图像信息来进行辅助聚合。</p>
+<p>一个简单的方法是，使用CV领域成熟的预训练模型作为图像编码器进行特征提取，直接计算两个商品的图像相似度。为了统一商品图像相似度计算和商品名称语义匹配的结果，我们尝试构建一个剧本杀商品的多模态匹配模型，充分利用商品名称和图像信息来进行匹配。模型沿用语义聚合中使用的双塔式结构，整体结构如下图6所示：</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211029193023.png" alt=""></p>
+<p>在多模态匹配模型中，剧本杀商品的名称和图像分别通过文本编码器和图像编码器得到对应的向量表示后，再进行拼接作为最终的商品向量，最后使用余弦相似度来衡量商品之间的相似度。其中：</p>
+<ul>
+<li>文本编码器：使用文本预训练模型BERT[1]作为文本编码器，将输出平均池化后作为文本的向量表示。</li>
+<li>图像编码器：使用图像预训练模型EfficientNet[4]作为图像编码器，提取网络最后一层输出作为图像的向量表示。</li>
+</ul>
+<p>在训练模型的过程中，文本编码器会进行Finetune，而图像编码器则固定参数，不参与训练。对于训练样本构建，我们以语义聚合的结果为基础，以商品图像相似度来圈定人工标注样本的范围。具体地，对于同聚簇内商品图像相似度高的直接生成正例，跨聚簇交叉的商品图像相似度低的直接生成负例，而对于剩余的样本对则交由人工进行标注确定。通过多模态聚合，弥补了仅使用文本匹配的不足，与其相比准确率提升了5%，进一步提升了标准剧本的挖掘效果。</p>
+<h4 id="标准剧本属性的挖掘">标准剧本属性的挖掘</h4>
+<p>标准剧本的属性包括了剧本的背景、规格、流派、题材、难度等十余个维度。由于商户在剧本杀商品上单的时候会录入商品的这些属性值，所以对于标准剧本属性的挖掘，本质上是对该标准剧本对应的所有聚合商品的属性的挖掘。</p>
+<p>在实际过程中，我们通过投票统计的方式来进行挖掘，即对于标准剧本的某个属性，通过对应的聚合商品在该属性上的属性值进行投票，选择投票最高的属性值，作为该标准剧本的候选属性值，最后由人工审核确认。此外，在标准剧本名称挖掘的过程中，我们发现同一个剧本的叫法多种多样，为了对标准剧本能有更好的描述，还进一步为标准剧本增加了一个别称的属性，通过对标准剧本对应的所有聚合商品的名称进行清洗和去重来获取。</p>
+<h3 id="供给与标准剧本关联">供给与标准剧本关联</h3>
+<p>在完成标准剧本库构建后，还需要建立剧本杀的商品、商户和内容三种供给，与标准剧本的关联关系，从而使剧本杀的供给实现标准化。由于通过商品和标准剧本的关联关系，可以直接获取该商品对应商户和标准剧本的关系，所以我们只需要对商品和内容进行标准剧本关联。</p>
+<h4 id="商品关联">商品关联</h4>
+<p>在前面，我们通过聚合存量剧本杀商品的方式来进行标准剧本的挖掘，在这个过程中其实已经构建了存量商品和标准剧本的关联关系。对于后续新增加的商品，我们还需要将其和标准剧本进行匹配，以建立两者之间的关联关系。而对于与标准剧本无法关联的商品，我们则自动进行标准剧本名称和属性的挖掘，经由人工审核后再加入标准剧本库。</p>
+<p>整个商品关联流程如下图7所示，首先对商品名称进行清洗再进行匹配关联。在匹配环节，我们基于商品和标准剧本的名称及图像的多模态信息，对两者进行匹配判别。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211029194205.jpeg" alt=""></p>
+<p>与商品之间的匹配不同，商品与标准剧本的关联不需要保持匹配的对称性。为了保证关联的效果，我们在3.2.1节的多模态匹配模型的结构基础上进行修改，将商品和标准剧本的向量拼接后通过全连接层和softmax层计算两者关联的概率。训练样本则直接根据存量商品和标准剧本的关联关系构造。通过商品关联，我们实现了绝大部分剧本杀商品的标准化。</p>
+<h4 id="内容关联">内容关联</h4>
+<p>对于剧本杀内容关联标准剧本，主要针对用户产生的内容（UGC，例如用户评价）这一类型的内容和标准剧本的关联。由于一段UGC文本通常包含多个句子，且其中只有部分句子会提及标准剧本相关信息，所以我们将UGC与标准剧本的匹配，细化为其子句粒度的匹配，同时出于效率和效果的平衡的考虑，进一步将匹配过程分为了召回和排序两个阶段，如下图8所示：</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211029194238.png" alt=""></p>
+<p>在召回阶段，将UGC文本进行子句拆分，并根据标准剧本名称及其别称，在子句集合中进行精确匹配，对于匹配中的子句则将进入到排序阶段进行精细化的关联关系判别。</p>
+<p>在排序阶段，将关联关系判别转换为一个Aspect-based的分类问题，参考属性级情感分类的做法[5]，构建基于BERT句间关系分类的匹配模型，将实际命中UGC子句的标准剧本别称和对应的UGC子句用[SEP]相连后输入，通过在BERT后增加全连接层和softmax层来实现是否关联的二分类，最后对模型输出的分类概率进行阈值筛选，获取UGC关联的标准剧本。</p>
+<p>与上文中涉及的模型训练不同，UGC和标准剧本的匹配模型无法快速获取大量训练样本。考虑到训练样本的缺乏，所以首先通过人工少量标注数百个样本，在此基础上，除了采用主动学习外，我们还尝试对比学习，基于Regularized Dropout[6]方法，对模型两次Dropout的输出进行正则约束。最终在训练样本不到1K的情况下，UGC关联标准剧本的准确率达到上线要求，每个标准剧本关联的UGC数量也得到了大幅提升。</p>
+<h2 id="应用实践">应用实践</h2>
+<p>当前剧本杀知识图谱，以数千标准剧本为核心，关联百万供给。剧本杀供给标准化建设的结果已在美团多个业务场景上进行了初步的应用实践。下面介绍具体的应用方式和应用效果。</p>
+<h3 id="类目构建">类目构建</h3>
+<p>通过剧本杀供给挖掘，帮助业务识别出剧本杀商户，从而助力剧本杀新类目和相应剧本杀列表页的构建。剧本杀类目迁移、休闲娱乐频道页的剧本杀入口、剧本杀列表页均已上线，其中，频道页剧本杀ICON固定第三行首位，提供了中心化流量入口，有助于建立统一的用户认知。上线示例如图9所示（(a)休闲娱乐频道页剧本杀入口，(b)剧本杀列表页）。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211029194326.png" alt=""></p>
+<h3 id="个性化推荐">个性化推荐</h3>
+<p>剧本杀知识图谱包含的标准剧本及属性节点，以及其与供给和用户的关联关系，可应用于剧本杀各页面的推荐位。一方面应用于剧本列表页热门剧本推荐（图10(a)），另一方面还应用于剧本详情页的商品在拼场次推荐（图10(b)左）、可玩门店推荐（图10(b)左）和相关剧本推荐模块（图10(b)右）。这些推荐位的应用，帮助培养了用户在平台找剧本的心智，优化了用户认知和选购体验，提高了用户和供给的匹配效率。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211029194359.png" alt=""></p>
+<p>以剧本列表页的热门剧本推荐模块为例，剧本杀知识图谱包含的节点和关系除了可以直接用于剧本的召回，还可以进一步在精排阶段进行应用。在精排中，我们基于剧本杀知识图谱，结合用户行为，参考Deep Interest Network（DIN）[7]模型结构，尝试对用户访问剧本的序列和访问商品的序列进行建模，构建双通道DIN模型，深度刻画用户兴趣，实现剧本的个性化分发。其中商品访问序列部分，通过商品与标准剧本的关联关系将其转为为剧本序列，与候选剧本采用Attention方式进行建模，具体模型结构如下图11所示：</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211029194434.png" alt=""></p>
+<h3 id="信息外露和筛选">信息外露和筛选</h3>
+<p>基于剧本杀知识图谱中的节点和关系，在剧本杀列表页和在剧本列表页增加相关标签筛选项，并外露剧本的属性和关联的供给信息，相关应用如下图12所示。这些标签筛选项和信息的外露，为用户提供了规范的信息展示，降低了用户决策成本，更加方便了用户选店和选剧本。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211029194502.png" alt=""></p>
+<h3 id="评分和榜单">评分和榜单</h3>
+<p>在剧本详情页，内容和标准剧本的关联关系参与到剧本的评分计算中（图13(a)）。在此基础上，基于剧本维度，形成经典必玩和近期热门的剧本榜单，如图13(b)所示，从而为用户的剧本选择决策提供了更多的帮助。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211029194529.png" alt=""></p>
+<h2 id="总结展望">总结展望</h2>
+<p>面对剧本杀这一新兴行业，我们快速响应业务，以标准剧本为核心节点，结合行业特点，通过剧本杀供给挖掘、标准剧本库构建、供给与标准剧本关联，构建相应的知识图谱，从0到1逐步推进剧本杀的供给标准化建设，力求以简单而有效的方法来解决剧本杀业务的问题。</p>
+<p>目前剧本杀知识图谱已在剧本杀多个业务场景中取得应用成果，赋能剧本杀业务持续增长，显著提升了用户体验。在未来的工作中，我们将不断进行优化和探索：</p>
+<p>标准剧本库的持续完善：优化标准剧本名称和属性以及相应的供给关联关系，保证标准剧本库的质与量俱佳，并尝试引入外部的知识补充当前的标准化结果。<br>
+剧本杀场景化：当前剧本杀知识图谱主要以“剧本”这类用户的具象需求对象为主，后续将深入挖掘用户的场景化需求，探索剧本杀和其他行业的联动，更好的助力剧本杀行业的发展。<br>
+更多的应用探索：将图谱数据应用于搜索等模块，在更多的应用场景中提升供给匹配效率，从而创造出更大的价值。</p>
+<h2 id="参考文献">参考文献</h2>
+<p>[1] Devlin J, Chang M W, Lee K, et al. Bert: Pre-training of deep bidirectional transformers for language understanding[J]. arXiv preprint arXiv:1810.04805, 2018.</p>
+<p>[2] Lample G, Ballesteros M, Subramanian S, et al. Neural architectures for named entity recognition[J]. arXiv preprint arXiv:1603.01360, 2016.</p>
+<p>[3] Reimers N, Gurevych I. Sentence-bert: Sentence embeddings using siamese bert-networks[J]. arXiv preprint arXiv:1908.10084, 2019.</p>
+<p>[4] Tan M, Le Q. EfficientNet: Rethinking model scaling for convolutional neural networks[C]//International Conference on Machine Learning. PMLR, 2019: 6105-6114.</p>
+<p>[5] Sun C, Huang L, Qiu X. Utilizing BERT for aspect-based sentiment analysis via constructing auxiliary sentence[J]. arXiv preprint arXiv:1903.09588, 2019.</p>
+<p>[6] Liang X, Wu L, Li J, et al. R-Drop: Regularized Dropout for Neural Networks[J]. arXiv preprint arXiv:2106.14448, 2021.</p>
+<p>[7] Zhou G, Zhu X, Song C, et al. Deep interest network for click-through rate prediction[C]//Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery &amp; Data Mining. 2018: 1059-1068.</p>
+<p>原文地址：<a target="_blank" rel="noopener" href="https://tech.meituan.com/2021/10/28/standardization-of-larp-games-based-on-knowledge-graph.html">https://tech.meituan.com/2021/10/28/standardization-of-larp-games-based-on-knowledge-graph.html</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Weitang Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lonepatient.top/2021/10/28/meituan_jubensha.html">http://lonepatient.top/2021/10/28/meituan_jubensha.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lonepatient.top" target="_blank">闲记算法</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/">知识图谱</a></div><div class="post_share"><div class="social-share" data-image="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211029190517.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/10/30/conda_python_envir.html"><img class="prev-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230319165303.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">使用Anaconda管理Python环境</div></div></a></div><div class="next-post pull-right"><a href="/2021/10/07/Revisiting-Self-Training-for-Few-Shot-Learning-of-Language-Model.html"><img class="next-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20211005135736.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Revisiting Self-Training for Few-Shot Learning of Language Model</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2018/03/20/Application_of_deep_learning_in_knowledge_graph_construction.html" title="深度学习在知识图谱构建中的应用"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-03-20</div><div class="title">深度学习在知识图谱构建中的应用</div></div></a></div><div><a href="/2018/08/31/E-commerce-knowledge-graph.html" title="电商知识图谱"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/57633521.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-08-31</div><div class="title">电商知识图谱</div></div></a></div><div><a href="/2018/04/01/Know-Evolve-Deep-Temporal-Reasoning-for-Dynamic-KG.html" title="Know-Evolve-Deep Temporal Reasoning for Dynamic KG"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/42382734.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-04-01</div><div class="title">Know-Evolve-Deep Temporal Reasoning for Dynamic KG</div></div></a></div><div><a href="/2018/06/29/The_whole_process_of_knowledge_graph_construction_from_bottom_to_top.html" title="一文揭秘！自底向上构建知识图谱全过程"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-06-29</div><div class="title">一文揭秘！自底向上构建知识图谱全过程</div></div></a></div><div><a href="/2018/08/27/health-knowledge-graph.html" title="健康知识图谱"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-27/4294525.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-08-27</div><div class="title">健康知识图谱</div></div></a></div><div><a href="/2018/04/21/introduce knowledge graph.html" title="为什么需要知识图谱？什么是知识图谱?KG的前世今生"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/44425462.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-04-21</div><div class="title">为什么需要知识图谱？什么是知识图谱?KG的前世今生</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Weitang Liu</div><div class="author-info__description">一个致力于记录技术的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lonePatient"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/lonePatient" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liuweitangmath@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/277974397" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有任何问题可通过留言板或者微信公众号给我留言，谢谢！<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201201102.jpg"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">2.</span> <span class="toc-text">解决方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">实现方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%A7%E6%9C%AC%E6%9D%80%E4%BE%9B%E7%BB%99%E6%8C%96%E6%8E%98"><span class="toc-number">3.1.</span> <span class="toc-text">剧本杀供给挖掘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E5%87%86%E5%89%A7%E6%9C%AC%E5%BA%93%E6%9E%84%E5%BB%BA"><span class="toc-number">3.2.</span> <span class="toc-text">标准剧本库构建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%87%E5%87%86%E5%89%A7%E6%9C%AC%E5%90%8D%E7%A7%B0%E7%9A%84%E6%8C%96%E6%8E%98"><span class="toc-number">3.2.1.</span> <span class="toc-text">标准剧本名称的挖掘</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%87%E5%87%86%E5%89%A7%E6%9C%AC%E5%B1%9E%E6%80%A7%E7%9A%84%E6%8C%96%E6%8E%98"><span class="toc-number">3.2.2.</span> <span class="toc-text">标准剧本属性的挖掘</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%9B%E7%BB%99%E4%B8%8E%E6%A0%87%E5%87%86%E5%89%A7%E6%9C%AC%E5%85%B3%E8%81%94"><span class="toc-number">3.3.</span> <span class="toc-text">供给与标准剧本关联</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%95%86%E5%93%81%E5%85%B3%E8%81%94"><span class="toc-number">3.3.1.</span> <span class="toc-text">商品关联</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E5%AE%B9%E5%85%B3%E8%81%94"><span class="toc-number">3.3.2.</span> <span class="toc-text">内容关联</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5"><span class="toc-number">4.</span> <span class="toc-text">应用实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E7%9B%AE%E6%9E%84%E5%BB%BA"><span class="toc-number">4.1.</span> <span class="toc-text">类目构建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AA%E6%80%A7%E5%8C%96%E6%8E%A8%E8%8D%90"><span class="toc-number">4.2.</span> <span class="toc-text">个性化推荐</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E5%A4%96%E9%9C%B2%E5%92%8C%E7%AD%9B%E9%80%89"><span class="toc-number">4.3.</span> <span class="toc-text">信息外露和筛选</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%84%E5%88%86%E5%92%8C%E6%A6%9C%E5%8D%95"><span class="toc-number">4.4.</span> <span class="toc-text">评分和榜单</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E5%B1%95%E6%9C%9B"><span class="toc-number">5.</span> <span class="toc-text">总结展望</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-number">6.</span> <span class="toc-text">参考文献</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-27"/></a><div class="content"><a class="title" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27">Arxiv今日论文 | 2026-02-27</a><time datetime="2026-02-27T12:30:00.000Z" title="发表于 2026-02-27 12:30:00">2026-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-26"/></a><div class="content"><a class="title" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26">Arxiv今日论文 | 2026-02-26</a><time datetime="2026-02-26T12:30:00.000Z" title="发表于 2026-02-26 12:30:00">2026-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-25"/></a><div class="content"><a class="title" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25">Arxiv今日论文 | 2026-02-25</a><time datetime="2026-02-25T12:30:00.000Z" title="发表于 2026-02-25 12:30:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225222513891.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板">大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板</a><time datetime="2026-02-25T12:00:00.000Z" title="发表于 2026-02-25 12:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225123005910.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mid-training：构建预训练与后训练之间的分布式桥梁"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁">mid-training：构建预训练与后训练之间的分布式桥梁</a><time datetime="2026-02-25T00:00:00.000Z" title="发表于 2026-02-25 00:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-24"/></a><div class="content"><a class="title" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24">Arxiv今日论文 | 2026-02-24</a><time datetime="2026-02-24T12:30:00.000Z" title="发表于 2026-02-24 12:30:00">2026-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-23"/></a><div class="content"><a class="title" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23">Arxiv今日论文 | 2026-02-23</a><time datetime="2026-02-23T12:30:00.000Z" title="发表于 2026-02-23 12:30:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260223165943195.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用&quot;深度思考率&quot;精准度量LLM推理质量"/></a><div class="content"><a class="title" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量">用&quot;深度思考率&quot;精准度量LLM推理质量</a><time datetime="2026-02-23T12:00:00.000Z" title="发表于 2026-02-23 12:00:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-20"/></a><div class="content"><a class="title" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20">Arxiv今日论文 | 2026-02-20</a><time datetime="2026-02-20T12:30:00.000Z" title="发表于 2026-02-20 12:30:00">2026-02-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201606857.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前沿大模型训练方法：深度解析与实践指南"/></a><div class="content"><a class="title" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南">前沿大模型训练方法：深度解析与实践指南</a><time datetime="2026-02-20T10:30:00.000Z" title="发表于 2026-02-20 10:30:00">2026-02-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Weitang Liu</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.lonepatient.top/',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.lonepatient.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo@1.4.11/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (99)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/计算机视觉/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 计算机视觉 (16)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/知识图谱/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 知识图谱 (13)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">👩‍💻 深度学习 (139)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item" style="visibility: hidden"></div><a class="magnet_link_more"  href="http://lonepatient.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-18</span><a class="blog-slider__title" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">通向AGI之路：大型语言模型（LLM）技术精要</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/07/12/gaiic_2022_ner_top10.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220712181905.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-07-12</span><a class="blog-slider__title" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">GAIIC2022商品标题识别二等奖获奖解决思路</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230807190424.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-01-20</span><a class="blog-slider__title" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">2025-03|高质量中文预训练模型集合</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

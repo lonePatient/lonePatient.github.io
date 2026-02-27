@@ -1,0 +1,581 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kimi CLI 的 Skills 开发 | 闲记算法</title><meta name="keywords" content="Agent,LLM,AI,skill,kimi,kimi cli"><meta name="author" content="Weitang Liu"><meta name="copyright" content="Weitang Liu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="摘要 随着大型语言模型（LLM）在软件开发领域的广泛应用，如何有效地扩展 AI Agent 的专业能力成为一个重要课题。Kimi Code CLI 通过引入 Agent Skills 机制，为用户提供了一种模块化、可复用的能力扩展方案。本文系统性地介绍了 Kimi CLI Skills 的架构设计、开发流程，并重点阐述了 Flow Skill 这一特殊类型的工作流自动化机制。通过实际案例分析，本文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kimi CLI 的 Skills 开发">
+<meta property="og:url" content="http://lonepatient.top/2026/02/01/kimicli_skills.html">
+<meta property="og:site_name" content="闲记算法">
+<meta property="og:description" content="摘要 随着大型语言模型（LLM）在软件开发领域的广泛应用，如何有效地扩展 AI Agent 的专业能力成为一个重要课题。Kimi Code CLI 通过引入 Agent Skills 机制，为用户提供了一种模块化、可复用的能力扩展方案。本文系统性地介绍了 Kimi CLI Skills 的架构设计、开发流程，并重点阐述了 Flow Skill 这一特殊类型的工作流自动化机制。通过实际案例分析，本文">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2026-02-01T12:30:00.000Z">
+<meta property="article:modified_time" content="2026-02-27T07:52:12.938Z">
+<meta property="article:author" content="Weitang Liu">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="skill">
+<meta property="article:tag" content="kimi">
+<meta property="article:tag" content="kimi cli">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lonepatient.top/2026/02/01/kimicli_skills"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//s4.cnzz.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" data-pjax="data-pjax" src="https://s4.cnzz.com/z_stat.php?id=1273275888&amp;web_id=1273275888"></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-02-27 07:52:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/backgroud.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><script src="https://at.alicdn.com/t/c/font_3570527_dthoqrrv2tv.css"></script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JwRQtLKZggvJH4sJ",ck:"JwRQtLKZggvJH4sJ"})</script><link rel="stylesheet" href="/css/universe.css"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536467946304280" crossorigin="anonymous"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">闲记算法</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Kimi CLI 的 Skills 开发<a class="post-edit-link" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts/kimicli_skills.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-02-01T12:30:00.000Z" title="发表于 2026-02-01 12:30:00">2026-02-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-27T07:52:12.938Z" title="更新于 2026-02-27 07:52:12">2026-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/">自然语言处理</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/">大型语言模型</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/skill/">skill</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>16分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2026/02/01/kimicli_skills.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="摘要">摘要</h2>
+<p>随着大型语言模型（LLM）在软件开发领域的广泛应用，如何有效地扩展 AI Agent 的专业能力成为一个重要课题。Kimi Code CLI 通过引入 <strong>Agent Skills</strong> 机制，为用户提供了一种模块化、可复用的能力扩展方案。本文系统性地介绍了 Kimi CLI Skills 的架构设计、开发流程，并重点阐述了 <strong>Flow Skill</strong> 这一特殊类型的工作流自动化机制。通过实际案例分析，本文展示了如何构建从简单的知识型 Skill 到复杂的多步骤自动化工作流，为开发者提供完整的 Skills 开发实践指南。</p>
+<h2 id="1-引言">1. 引言</h2>
+<h3 id="1-1-背景与动机">1.1 背景与动机</h3>
+<p>在现代软件开发中，AI 编程助手已成为提升效率的重要工具。然而，通用的 AI 模型往往缺乏特定领域的专业知识，例如团队编码规范、项目特定的业务逻辑、或复杂的多步骤工作流程。传统的解决方案是通过详细的提示词（Prompt Engineering）来引导 AI，但这种方法存在明显的局限性：提示词难以复用、知识难以沉淀、工作流程难以自动化。</p>
+<p><strong>Agent Skills</strong> 作为一种开放格式，旨在解决上述问题。它将专业知识和工作流程封装为独立的模块，使 AI Agent 能够按需加载和执行。Kimi Code CLI 作为支持 Agent Skills 的开发工具，为开发者提供了完整的 Skills 开发、管理和使用框架。</p>
+<h3 id="1-2-核心概念">1.2 核心概念</h3>
+<p>Skill 本质上是一个包含 <code>SKILL.md</code> 文件的目录，其中定义了：</p>
+<ul>
+<li><strong>元数据</strong> ：Skill 的名称、描述、类型等信息</li>
+<li><strong>指令内容</strong> ：详细的操作指南、最佳实践、代码示例</li>
+<li><strong>辅助资源</strong> ：脚本、参考文档、模板文件等</li>
+</ul>
+<p>Kimi CLI 在启动时发现所有可用的 Skills，并将其元数据注入系统提示词。AI 根据当前任务自动判断是否需要读取特定 Skill 的详细内容。</p>
+<h3 id="1-3-本文结构">1.3 本文结构</h3>
+<p>本文第 2 节介绍 Skills 的基础架构和目录结构；<br>
+第 3 节详细阐述普通 Skill 的开发流程；<br>
+第 4 节重点分析 Flow Skill 的设计原理和实现方法；<br>
+第 5 节通过实际案例展示 Skills 的应用；<br>
+第 6 节总结最佳实践和未来展望。</p>
+<hr>
+<h2 id="2-Skills-架构与发现机制">2. Skills 架构与发现机制</h2>
+<h3 id="2-1-分层加载机制">2.1 分层加载机制</h3>
+<p>Kimi CLI 采用分层加载机制发现 Skills，优先级从高到低依次为：</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>位置</th>
+<th>作用范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内置 Skills</td>
+<td>软件包内部</td>
+<td>全局可用</td>
+</tr>
+<tr>
+<td>用户级 Skills</td>
+<td><code>~/.config/agents/skills/</code></td>
+<td>所有项目</td>
+</tr>
+<tr>
+<td>项目级 Skills</td>
+<td><code>.agents/skills/</code></td>
+<td>当前项目</td>
+</tr>
+</tbody>
+</table>
+<p>这种设计允许 Skills 在不同粒度上进行定制：内置 Skills 提供基础能力，用户级 Skills 保存个人偏好，项目级 Skills 则针对特定项目需求。</p>
+<h3 id="2-2-目录结构规范">2.2 目录结构规范</h3>
+<p>一个标准的 Skill 目录结构如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">skill-name/</span><br><span class="line">    ├── SKILL.md              # 必需：主文件，包含元数据和指令</span><br><span class="line">    ├── scripts/              # 可选：可执行脚本</span><br><span class="line">    ├── references/           # 可选：参考文档</span><br><span class="line">    └── assets/               # 可选：模板、图片等资源</span><br></pre></td></tr></table></figure>
+<p><strong><a target="_blank" rel="noopener" href="http://SKILL.md">SKILL.md</a></strong> 是 Skill 的核心文件，采用 YAML Frontmatter + Markdown 的格式：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">skill-name</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">Skill</span> <span class="string">的详细描述，说明用途和触发场景</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">flow</span>  <span class="comment"># 可选，默认为普通 skill</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="comment"># Skill 标题</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 使用指南</span></span><br><span class="line"></span><br><span class="line"><span class="string">详细的操作步骤和最佳实践...</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-3-渐进式披露设计">2.3 渐进式披露设计</h3>
+<p>Skills 采用三级加载系统管理上下文：</p>
+<ol>
+<li><strong>元数据层</strong> ：名称和描述始终存在于上下文中（约 100 词）</li>
+<li><strong><a target="_blank" rel="noopener" href="http://SKILL.md">SKILL.md</a> 主体</strong> ：Skill 触发时加载（建议 &lt; 500 行）</li>
+<li><strong>捆绑资源</strong> ：按需加载（无限制，脚本可直接执行）</li>
+</ol>
+<p>这种设计确保上下文窗口的高效使用，避免无关信息干扰。</p>
+<hr>
+<h2 id="3-普通-Skill-开发">3. 普通 Skill 开发</h2>
+<h3 id="3-1-开发流程">3.1 开发流程</h3>
+<p>Skill 创建遵循六个步骤：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐</span><br><span class="line">│  1. 理解需求     │ -&gt; │  2. 规划资源     │ -&gt; │  3. 初始化目录   │</span><br><span class="line">└─────────────────┘    └─────────────────┘    └─────────────────┘</span><br><span class="line">         |                                               |</span><br><span class="line">         v                                               v</span><br><span class="line">┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐</span><br><span class="line">│  6. 迭代优化     │ &lt;- │  5. 打包分发     │ &lt;- │  4. 编写内容     │</span><br><span class="line">└─────────────────┘    └─────────────────┘    └─────────────────┘</span><br></pre></td></tr></table></figure>
+<h3 id="3-2-命名规范">3.2 命名规范</h3>
+<ul>
+<li>使用小写字母、数字和连字符</li>
+<li>长度不超过 64 字符</li>
+<li>优先使用动词开头的短语</li>
+<li>按工具命名空间化（如 <code>gh-address-comments</code>）</li>
+</ul>
+<h3 id="3-3-内容编写原则">3.3 内容编写原则</h3>
+<p><strong>简洁优先</strong> ：默认假设 Kimi 已具备通用知识，只添加非显而易见的领域知识。</p>
+<p><strong>自由度匹配</strong> ：</p>
+<ul>
+<li><strong>高自由度</strong> ：文本指令，适用于多种有效方法的场景</li>
+<li><strong>中自由度</strong> ：伪代码或参数化脚本，适用于有推荐模式但允许变体的场景</li>
+<li><strong>低自由度</strong> ：特定脚本，适用于易错、需严格顺序的操作</li>
+</ul>
+<p><strong>渐进式组织</strong> ：当 Skill 支持多种变体时，将核心流程保留在 <a target="_blank" rel="noopener" href="http://SKILL.md">SKILL.md</a>，变体细节移至 references 文件。</p>
+<h3 id="3-4-示例：Python-项目规范-Skill">3.4 示例：Python 项目规范 Skill</h3>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">python-project</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">Python</span> <span class="string">项目开发规范，包括代码风格、测试和依赖管理。</span></span><br><span class="line">             <span class="string">当需要初始化</span> <span class="string">Python</span> <span class="string">项目、进行代码审查或选择技术栈时触发。</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="comment"># Python 项目规范</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 技术栈</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">-</span> <span class="string">Python</span> <span class="number">3.14</span><span class="string">+</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">ruff：代码格式化和</span> <span class="string">lint</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">pyright：类型检查</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">pytest：测试框架</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">uv：依赖管理</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 代码风格</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">-</span> <span class="string">行长度限制</span> <span class="number">100</span> <span class="string">字符</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">使用类型注解</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">公开函数需要</span> <span class="string">docstring</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 快速导航</span></span><br><span class="line"></span><br><span class="line"><span class="string">|</span> <span class="string">需求</span> <span class="string">|</span> <span class="string">参考文件</span> <span class="string">|</span></span><br><span class="line"><span class="string">|------|----------|</span></span><br><span class="line"><span class="string">|</span> <span class="string">详细编码规范</span> <span class="string">|</span> [<span class="string">references/coding-standards.md</span>]<span class="string">(references/coding-standards.md)</span> <span class="string">|</span></span><br><span class="line"><span class="string">|</span> <span class="string">测试最佳实践</span> <span class="string">|</span> [<span class="string">references/testing.md</span>]<span class="string">(references/testing.md)</span> <span class="string">|</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="4-Flow-Skill：工作流自动化">4. Flow Skill：工作流自动化</h2>
+<h3 id="4-1-设计理念">4.1 设计理念</h3>
+<p><strong>Flow Skill</strong> 是一种特殊的 Skill 类型，它在 <code>SKILL.md</code> 中内嵌 <strong>Agent Flow</strong> 流程图，用于定义多步骤的自动化工作流。与普通 Skill 不同，Flow Skill 通过 <code>/flow:</code> 命令调用，会按照流程图自动执行多个对话轮次。</p>
+<p>Flow Skill 的核心价值在于：</p>
+<ul>
+<li><strong>流程可视化</strong> ：使用 Mermaid 或 D2 图形化描述工作流</li>
+<li><strong>自动化执行</strong> ：AI 自动按流程推进，减少人工干预</li>
+<li><strong>条件分支</strong> ：支持基于 AI 判断的动态流程控制</li>
+<li><strong>状态持久</strong> ：多轮对话间保持上下文连续性</li>
+</ul>
+<h3 id="4-2-创建-Flow-Skill">4.2 创建 Flow Skill</h3>
+<h4 id="4-2-1-Frontmatter-配置">4.2.1 Frontmatter 配置</h4>
+<p>创建 Flow Skill 需要在 Frontmatter 中设置 <code>type: flow</code>：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">code-review-flow</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">自动化代码审查工作流，分析代码变更、检查质量、生成报告</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">flow</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
+<h4 id="4-2-2-流程图语法">4.2.2 流程图语法</h4>
+<p>Flow Skill 支持 <strong>Mermaid</strong> 和 <strong>D2</strong> 两种流程图格式。</p>
+<p><strong>Mermaid 格式示例</strong> ：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">```mermaid</span><br><span class="line">flowchart TD</span><br><span class="line">    A([BEGIN]) --&gt; B[分析代码变更，列出所有修改的文件和功能]</span><br><span class="line">    B --&gt; C&#123;代码质量是否达标？&#125;</span><br><span class="line">    C --&gt;|是| D[生成代码审查报告]</span><br><span class="line">    C --&gt;|否| E[列出问题并提出改进建议]</span><br><span class="line">    E --&gt; B</span><br><span class="line">    D --&gt; F([END])</span><br><span class="line">```</span><br></pre></td></tr></table></figure>
+<p><strong>D2 格式示例</strong> ：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">```d2</span><br><span class="line">BEGIN -&gt; analyze -&gt; check_quality</span><br><span class="line">analyze: 分析现有代码，为功能编写设计文档</span><br><span class="line">check_quality: Review 设计文档是否足够详细</span><br><span class="line">check_quality -&gt; analyze: 否</span><br><span class="line">check_quality -&gt; implement: 是</span><br><span class="line">implement: 开始实现</span><br><span class="line">implement -&gt; END</span><br><span class="line">```</span><br></pre></td></tr></table></figure>
+<h4 id="4-2-3-流程图规范">4.2.3 流程图规范</h4>
+<p><strong>必需元素</strong> ：</p>
+<ul>
+<li><strong>BEGIN 节点</strong> ：流程起点，标记为 <code>([BEGIN])</code> 或 <code>BEGIN</code></li>
+<li><strong>END 节点</strong> ：流程终点，标记为 <code>([END])</code> 或 <code>END</code></li>
+<li><strong>普通节点</strong> ：矩形框，文本作为提示词发送给 Agent</li>
+<li><strong>分支节点</strong> ：菱形框，需要 Agent 在输出中使用 <code>&lt;choice&gt;分支名&lt;/choice&gt;</code> 选择下一步</li>
+</ul>
+<p><strong>节点类型说明</strong> ：</p>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>节点类型</th>
+<th>Mermaid 语法</th>
+<th>D2 语法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>开始/结束</td>
+<td><code>([BEGIN])</code></td>
+<td><code>BEGIN</code></td>
+<td>标记流程起点/终点</td>
+</tr>
+<tr>
+<td>2</td>
+<td>普通节点</td>
+<td><code>[提示词文本]</code></td>
+<td><code>name: 提示词</code></td>
+<td>执行特定任务</td>
+</tr>
+<tr>
+<td>3</td>
+<td>分支节点</td>
+<td><code>&#123;判断条件&#125;</code></td>
+<td>通过连接标签</td>
+<td>条件判断和分支选择</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-3-执行机制详解">4.3 执行机制详解</h3>
+<h4 id="4-3-1-调用方式">4.3.1 调用方式</h4>
+<p>Flow Skill 支持两种调用方式：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># 执行流程（自动按流程图执行多轮对话）</span></span><br><span class="line">/flow:code-review-flow</span><br><span class="line"></span><br><span class="line"><span class="section"># 作为普通 Skill 加载（仅加载 SKILL.md 内容）</span></span><br><span class="line">/skill:code-review-flow</span><br></pre></td></tr></table></figure>
+<h4 id="4-3-2-执行流程">4.3.2 执行流程</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">用户调用 /flow:code-review-flow</span><br><span class="line">         |</span><br><span class="line">         v</span><br><span class="line">┌─────────────────┐</span><br><span class="line">│ 解析 SKILL.md   │</span><br><span class="line">│ 提取流程图定义   │</span><br><span class="line">└─────────────────┘</span><br><span class="line">         |</span><br><span class="line">         v</span><br><span class="line">┌─────────────────┐</span><br><span class="line">│ 定位 BEGIN 节点  │</span><br><span class="line">└─────────────────┘</span><br><span class="line">         |</span><br><span class="line">         v</span><br><span class="line">┌─────────────────┐     ┌─────────────────┐</span><br><span class="line">│ 执行当前节点     │ --&gt; │ 获取 AI 响应     │</span><br><span class="line">│ (发送节点文本)   │     │                 │</span><br><span class="line">└─────────────────┘     └─────────────────┘</span><br><span class="line">         |                       |</span><br><span class="line">         v                       v</span><br><span class="line">┌─────────────────┐     ┌─────────────────┐</span><br><span class="line">│ 解析响应中的     | &lt;-- │ AI 输出结果     │</span><br><span class="line">│ &lt;choice&gt;标签    │     │ 可能包含分支选择 │</span><br><span class="line">└─────────────────┘     └─────────────────┘</span><br><span class="line">         |</span><br><span class="line">         v</span><br><span class="line">┌─────────────────┐</span><br><span class="line">│ 确定下一节点     │</span><br><span class="line">│ (分支或顺序)     │</span><br><span class="line">└─────────────────┘</span><br><span class="line">         |</span><br><span class="line">         +---&gt; END 节点? ---&gt; 流程结束</span><br><span class="line">         |</span><br><span class="line">         +---&gt; 继续执行下一节点</span><br></pre></td></tr></table></figure>
+<h4 id="4-3-3-分支选择机制">4.3.3 分支选择机制</h4>
+<p>在分支节点，AI 需要在输出中包含特定的 XML 标签来指示选择：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">经过分析，代码存在以下问题：</span><br><span class="line">1. 缺少类型注解</span><br><span class="line">2. 函数过长，需要重构</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">choice</span>&gt;</span>否<span class="tag">&lt;/<span class="name">choice</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>系统解析 <code>分支名</code>，根据流程图定义跳转到对应节点。</p>
+<h3 id="4-4-高级-Flow-Skill-设计">4.4 高级 Flow Skill 设计</h3>
+<h4 id="4-4-1-循环结构">4.4.1 循环结构</h4>
+<p>Flow Skill 支持通过分支实现循环：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">```mermaid</span><br><span class="line">flowchart TD</span><br><span class="line">    A([BEGIN]) --&gt; B[收集需求]</span><br><span class="line">    B --&gt; C&#123;需求是否完整？&#125;</span><br><span class="line">    C --&gt;|否| D[询问缺失信息]</span><br><span class="line">    D --&gt; B</span><br><span class="line">    C --&gt;|是| E[生成方案]</span><br><span class="line">    E --&gt; F([END])</span><br><span class="line">```</span><br></pre></td></tr></table></figure>
+<h4 id="4-4-2-多分支决策">4.4.2 多分支决策</h4>
+<p>复杂决策可以有多条出口：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">```d2</span><br><span class="line">BEGIN -&gt; analyze</span><br><span class="line">analyze: 分析代码复杂度</span><br><span class="line">analyze -&gt; simple: 简单</span><br><span class="line">analyze -&gt; moderate: 中等</span><br><span class="line">analyze -&gt; complex: 复杂</span><br><span class="line"></span><br><span class="line">simple: 直接审查</span><br><span class="line">moderate: 标准审查流程</span><br><span class="line">complex: 深度审查 + 架构分析</span><br><span class="line"></span><br><span class="line">simple -&gt; END</span><br><span class="line">moderate -&gt; END</span><br><span class="line">complex -&gt; END</span><br><span class="line">```</span><br></pre></td></tr></table></figure>
+<h4 id="4-4-3-多行节点文本">4.4.3 多行节点文本</h4>
+<p>D2 格式支持使用块字符串语法编写详细的节点指引：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">```d2</span><br><span class="line">BEGIN -&gt; review_step -&gt; END</span><br><span class="line"></span><br><span class="line">review_step: |md</span><br><span class="line">  ## 代码审查步骤</span><br><span class="line"></span><br><span class="line">  1. **静态分析**</span><br><span class="line">     - 运行 linter 检查代码风格</span><br><span class="line">     - 检查类型注解完整性</span><br><span class="line"></span><br><span class="line">  2. **逻辑审查**</span><br><span class="line">     - 验证业务逻辑正确性</span><br><span class="line">     - 检查边界条件处理</span><br><span class="line"></span><br><span class="line">  3. **生成报告**</span><br><span class="line">     - 汇总发现的问题</span><br><span class="line">     - 提供改进建议</span><br><span class="line">|</span><br><span class="line">```</span><br></pre></td></tr></table></figure>
+<h3 id="4-5-Flow-Skill-开发最佳实践">4.5 Flow Skill 开发最佳实践</h3>
+<h4 id="4-5-1-设计原则">4.5.1 设计原则</h4>
+<ol>
+<li><strong>单一职责</strong> ：每个 Flow Skill 专注于一个完整的工作流</li>
+<li><strong>清晰边界</strong> ：BEGIN 和 END 节点明确标记流程范围</li>
+<li><strong>合理粒度</strong> ：节点任务不宜过大或过小，保持可管理性</li>
+<li><strong>错误处理</strong> ：考虑异常情况的分支路径</li>
+</ol>
+<h4 id="4-5-2-调试技巧">4.5.2 调试技巧</h4>
+<ul>
+<li>使用 Mermaid Playground 或 D2 Playground 预览流程图</li>
+<li>先用 <code>/skill:</code> 命令测试 <a target="_blank" rel="noopener" href="http://SKILL.md">SKILL.md</a> 内容</li>
+<li>逐步验证每个节点的提示词效果</li>
+<li>检查 <code>&lt;choice&gt;</code> 标签的格式正确性</li>
+</ul>
+<h4 id="4-5-3-常见陷阱">4.5.3 常见陷阱</h4>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>问题</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>流程卡住</td>
+<td>缺少 <code>&lt;choice&gt;</code> 标签</td>
+<td>确保分支节点输出包含正确格式的选择标签</td>
+</tr>
+<tr>
+<td>2</td>
+<td>流程图解析失败</td>
+<td>语法错误</td>
+<td>使用官方 Playground 验证流程图</td>
+</tr>
+<tr>
+<td>3</td>
+<td>节点执行不符合预期</td>
+<td>提示词不清晰</td>
+<td>细化节点文本，提供具体指令</td>
+</tr>
+<tr>
+<td>4</td>
+<td>无限循环</td>
+<td>循环条件设置不当</td>
+<td>设置最大迭代次数或明确的退出条件</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="5-实践案例">5. 实践案例</h2>
+<h3 id="5-1-案例一：代码审查工作流">5.1 案例一：代码审查工作流</h3>
+<p><strong>需求</strong> ：创建一个自动化的代码审查流程，包括变更分析、质量检查、问题反馈和报告生成。</p>
+<p><strong>实现</strong> ：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">pr-code-review</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">自动化</span> <span class="string">Pull</span> <span class="string">Request</span> <span class="string">代码审查工作流</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">flow</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="comment"># PR 代码审查流程</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">```mermaid</span><br><span class="line">flowchart TD</span><br><span class="line">    A([BEGIN]) --&gt; B[获取 PR 变更，列出所有修改的文件]</span><br><span class="line">    B --&gt; C[分析每个文件的变更类型和影响范围]</span><br><span class="line">    C --&gt; D&#123;是否存在高风险变更？&#125;</span><br><span class="line">    D --&gt;|是| E[标记高风险文件，进行深度审查]</span><br><span class="line">    D --&gt;|否| F[进行标准审查]</span><br><span class="line">    E --&gt; G[检查安全问题、性能影响、兼容性]</span><br><span class="line">    F --&gt; H[检查代码风格、命名规范、注释完整性]</span><br><span class="line">    G --&gt; I[汇总审查结果]</span><br><span class="line">    H --&gt; I</span><br><span class="line">    I --&gt; J&#123;是否发现严重问题？&#125;</span><br><span class="line">    J --&gt;|是| K[生成阻断性审查报告，列出必须修复的问题]</span><br><span class="line">    J --&gt;|否| L[生成通过性审查报告，可选优化建议]</span><br><span class="line">    K --&gt; M([END])</span><br><span class="line">    L --&gt; M</span><br><span class="line">```</span><br></pre></td></tr></table></figure>
+<h2 id="审查标准">审查标准</h2>
+<ul>
+<li><strong>高风险变更</strong>：涉及数据库迁移、API 变更、安全相关代码</li>
+<li><strong>代码风格</strong>：遵循项目编码规范，使用统一的格式化工具</li>
+<li><strong>测试覆盖</strong>：新功能必须有对应的单元测试</li>
+</ul>
+<h3 id="5-2-案例二：需求分析工作流">5.2 案例二：需求分析工作流</h3>
+<p><strong>需求</strong> ：创建一个引导式需求收集和分析流程，确保需求完整性。</p>
+<p><strong>实现</strong> ：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">requirements-gathering</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">引导式需求收集和分析工作流</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">flow</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="comment"># 需求收集流程</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">```d2</span><br><span class="line">BEGIN -&gt; context -&gt; problem -&gt; users -&gt; features -&gt; validate</span><br><span class="line"></span><br><span class="line">context: |md</span><br><span class="line">## 步骤 1：了解业务背景</span><br><span class="line"></span><br><span class="line">询问用户： </span><br><span class="line">- 这个项目的业务目标是什么？ </span><br><span class="line">- 当前面临的痛点有哪些？ </span><br><span class="line">- 项目的成功标准是什么？ </span><br><span class="line">|</span><br><span class="line"></span><br><span class="line">problem: |md</span><br><span class="line">## 步骤 2：定义核心问题</span><br><span class="line"></span><br><span class="line">基于业务背景，提炼： </span><br><span class="line">- 要解决的核心问题 </span><br><span class="line">- 问题的优先级排序 </span><br><span class="line">- 不解决的问题范围 </span><br><span class="line">|</span><br><span class="line"></span><br><span class="line">users: |md</span><br><span class="line">## 步骤 3：识别目标用户</span><br><span class="line"></span><br><span class="line">定义用户画像： </span><br><span class="line">- 主要用户群体 </span><br><span class="line">- 用户的使用场景 </span><br><span class="line">- 用户的痛点和期望 </span><br><span class="line">|</span><br><span class="line"></span><br><span class="line">features: |md</span><br><span class="line">## 步骤 4：梳理功能需求</span><br><span class="line"></span><br><span class="line">列出功能清单： </span><br><span class="line">- 必须实现的核心功能（P0） </span><br><span class="line">- 重要的增强功能（P1） </span><br><span class="line">- 可选的优化功能（P2） </span><br><span class="line">|</span><br><span class="line"></span><br><span class="line">validate: |md</span><br><span class="line">## 步骤 5：验证需求完整性</span><br><span class="line"></span><br><span class="line">检查清单： </span><br><span class="line">- [ ] 业务目标清晰 </span><br><span class="line">- [ ] 核心问题定义明确 </span><br><span class="line">- [ ] 目标用户已识别 </span><br><span class="line">- [ ] 功能需求已分级 </span><br><span class="line">- [ ] 非功能需求已考虑 </span><br><span class="line">|</span><br><span class="line"></span><br><span class="line">validate -&gt; complete: 是</span><br><span class="line">validate -&gt; missing: 否</span><br><span class="line"></span><br><span class="line">missing: 补充缺失信息</span><br><span class="line">missing -&gt; context</span><br><span class="line"></span><br><span class="line">complete: 生成需求文档</span><br><span class="line">complete -&gt; END</span><br><span class="line">```</span><br></pre></td></tr></table></figure>
+<h2 id="输出格式">输出格式</h2>
+<p>最终生成包含以下章节的需求文档：</p>
+<ol>
+<li>项目背景</li>
+<li>问题定义</li>
+<li>用户画像</li>
+<li>功能需求</li>
+<li>非功能需求</li>
+<li>里程碑规划</li>
+</ol>
+<h3 id="5-3-案例三：Bug-诊断工作流">5.3 案例三：Bug 诊断工作流</h3>
+<p><strong>需求</strong> ：创建一个结构化的 Bug 诊断流程，帮助快速定位和解决问题。</p>
+<p><strong>实现</strong> ：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">bug-diagnosis</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">结构化</span> <span class="string">Bug</span> <span class="string">诊断和修复工作流</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">flow</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="comment"># Bug 诊断流程</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">```mermaid</span><br><span class="line">flowchart TD</span><br><span class="line">    A([BEGIN]) --&gt; B[收集 Bug 报告：现象、复现步骤、环境信息]</span><br><span class="line">    B --&gt; C[尝试复现 Bug]</span><br><span class="line">    C --&gt; D&#123;能否复现？&#125;</span><br><span class="line">    D --&gt;|否| E[检查环境差异，询问更多信息]</span><br><span class="line">    E --&gt; C</span><br><span class="line">    D --&gt;|是| F[分析错误日志和堆栈跟踪]</span><br><span class="line">    F --&gt; G[定位问题代码范围]</span><br><span class="line">    G --&gt; H&#123;问题原因是否明确？&#125;</span><br><span class="line">    H --&gt;|否| I[添加调试日志，缩小范围]</span><br><span class="line">    I --&gt; F</span><br><span class="line">    H --&gt;|是| J[设计修复方案]</span><br><span class="line">    J --&gt; K&#123;修复方案是否通过评审？&#125;</span><br><span class="line">    K --&gt;|否| L[重新设计修复方案]</span><br><span class="line">    L --&gt; J</span><br><span class="line">    K --&gt;|是| M[实现修复并验证]</span><br><span class="line">    M --&gt; N[更新测试用例]</span><br><span class="line">    N --&gt; O([END])</span><br><span class="line">```</span><br></pre></td></tr></table></figure>
+<h2 id="诊断清单">诊断清单</h2>
+<ul>
+<li>[ ] 错误现象描述清晰</li>
+<li>[ ] 复现步骤完整</li>
+<li>[ ] 环境信息齐全（OS、版本、依赖）</li>
+<li>[ ] 相关日志已收集</li>
+<li>[ ] 影响范围已评估</li>
+</ul>
+<hr>
+<h2 id="6-最佳实践总结">6. 最佳实践总结</h2>
+<h3 id="6-1-Skill-设计原则">6.1 Skill 设计原则</h3>
+<ol>
+<li><strong>触发精准</strong> ：描述应明确说明 Skill 的用途和触发场景</li>
+<li><strong>内容简洁</strong> ：<a target="_blank" rel="noopener" href="http://SKILL.md">SKILL.md</a> 控制在 500 行以内，详细内容移至 references</li>
+<li><strong>示例丰富</strong> ：提供具体的输入输出示例，降低理解成本</li>
+<li><strong>持续迭代</strong> ：基于实际使用反馈不断优化</li>
+</ol>
+<h3 id="6-2-Flow-Skill-特有原则">6.2 Flow Skill 特有原则</h3>
+<ol>
+<li><strong>流程清晰</strong> ：确保每个节点有明确的输入输出</li>
+<li><strong>分支完备</strong> ：考虑所有可能的执行路径</li>
+<li><strong>退出明确</strong> ：每个分支最终都应导向 END 节点</li>
+<li><strong>提示词精确</strong> ：节点文本应足够具体，指导 AI 完成特定任务</li>
+</ol>
+<h3 id="6-3-组织策略">6.3 组织策略</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">skills/</span><br><span class="line">    ├── coding/                 # 编码相关 Skills</span><br><span class="line">    │   ├── code-review/</span><br><span class="line">    │   ├── refactoring/</span><br><span class="line">    │   └── testing/</span><br><span class="line">    ├── workflow/               # 工作流 Skills</span><br><span class="line">    │   ├── pr-workflow/</span><br><span class="line">    │   ├── release-flow/</span><br><span class="line">    │   └── incident-response/</span><br><span class="line">    └── domain/                 # 领域特定 Skills</span><br><span class="line">        ├── frontend/</span><br><span class="line">        ├── backend/</span><br><span class="line">        └── data-pipeline/</span><br></pre></td></tr></table></figure>
+<h3 id="6-4-版本管理">6.4 版本管理</h3>
+<p>Skills 可以通过 <code>.skill</code> 文件（zip 格式）进行分发：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 打包 Skill</span></span><br><span class="line"><span class="built_in">cd</span> ~/.config/agents/skills/</span><br><span class="line">zip -r my-skill.skill my-skill</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 Skill</span></span><br><span class="line">unzip my-skill.skill -d ~/.config/agents/skills/</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="7-未来展望">7. 未来展望</h2>
+<h3 id="7-1-潜在增强">7.1 潜在增强</h3>
+<ol>
+<li><strong>条件表达式</strong> ：支持更复杂的分支条件，不仅依赖 <code>&lt;choice&gt;</code> 标签</li>
+<li><strong>并行执行</strong> ：支持多个节点并行处理</li>
+<li><strong>状态持久</strong> ：跨会话保存和恢复 Flow 执行状态</li>
+<li><strong>可视化编辑器</strong> ：提供图形化界面设计和调试 Flow</li>
+</ol>
+<h3 id="7-2-生态建设">7.2 生态建设</h3>
+<p>随着 Agent Skills 格式的普及，可以预见：</p>
+<ul>
+<li>社区驱动的 Skill 市场</li>
+<li>跨平台 Skill 兼容性</li>
+<li>与 CI/CD 系统的深度集成</li>
+</ul>
+<hr>
+<h2 id="8-结论">8. 结论</h2>
+<p>Kimi CLI 的 Skills 机制为 AI Agent 的能力扩展提供了一种优雅而强大的解决方案。通过将专业知识和工作流程封装为可复用的模块，开发者可以：</p>
+<ul>
+<li><strong>沉淀最佳实践</strong> ：将团队经验固化为可复用的 Skill</li>
+<li><strong>提升一致性</strong> ：确保 AI 在不同场景下遵循统一标准</li>
+<li><strong>自动化复杂流程</strong> ：通过 Flow Skill 实现多步骤工作流的自动执行</li>
+</ul>
+<p>特别是 <strong>Flow Skill</strong> 的引入，使得 AI Agent 能够按照预定义的流程自动执行复杂任务，标志着从 “单次对话” 向 “持续工作流” 的重要演进。这为未来的 AI 辅助开发开辟了新的可能性。</p>
+<hr>
+<h2 id="参考文献">参考文献</h2>
+<ol>
+<li>Kimi Code CLI 官方文档. <a target="_blank" rel="noopener" href="https://moonshotai.github.io/kimi-cli/">https://moonshotai.github.io/kimi-cli/</a></li>
+<li>Agent Skills 开放格式规范. <a target="_blank" rel="noopener" href="https://agentskills.io/">https://agentskills.io/</a></li>
+<li>Mermaid 流程图文档. <a target="_blank" rel="noopener" href="https://mermaid.js.org/">https://mermaid.js.org/</a></li>
+<li>D2 声明式图表语言. <a target="_blank" rel="noopener" href="https://d2lang.com/">https://d2lang.com/</a></li>
+<li>Kimi CLI Skill Creator 指南. Built-in Skill: skill-creator</li>
+</ol>
+<hr>
+<h2 id="附录-A：Flow-Skill-快速参考">附录 A：Flow Skill 快速参考</h2>
+<h3 id="A-1-Mermaid-语法速查">A.1 Mermaid 语法速查</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">```mermaid</span><br><span class="line">flowchart TD</span><br><span class="line">    %% 节点定义</span><br><span class="line">    A([BEGIN])              %% 开始节点</span><br><span class="line">    B[普通节点]              %% 处理节点</span><br><span class="line">    C&#123;分支节点&#125;              %% 决策节点</span><br><span class="line">    D([END])                %% 结束节点</span><br><span class="line">    </span><br><span class="line">    %% 连接</span><br><span class="line">    A --&gt; B                 %% 直接连接</span><br><span class="line">    B --&gt; C</span><br><span class="line">    C --&gt;|条件1| D          %% 带标签连接</span><br><span class="line">    C --&gt;|条件2| E</span><br><span class="line">```</span><br></pre></td></tr></table></figure>
+<h3 id="A-2-D2-语法速查">A.2 D2 语法速查</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">```d2</span><br><span class="line">BEGIN -&gt; step1 -&gt; decision</span><br><span class="line"></span><br><span class="line">step1: 执行步骤</span><br><span class="line">decision: 决策点</span><br><span class="line"></span><br><span class="line">decision -&gt; step2: 分支A</span><br><span class="line">decision -&gt; step3: 分支B</span><br><span class="line"></span><br><span class="line">step2 -&gt; END</span><br><span class="line">step3 -&gt; END</span><br><span class="line">```</span><br></pre></td></tr></table></figure>
+<h3 id="A-3-常用模板">A.3 常用模板</h3>
+<p><strong>线性流程</strong> ：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">```mermaid</span><br><span class="line">flowchart TD</span><br><span class="line">    A([BEGIN]) --&gt; B[步骤1]</span><br><span class="line">    B --&gt; C[步骤2]</span><br><span class="line">    C --&gt; D[步骤3]</span><br><span class="line">    D --&gt; E([END])</span><br><span class="line">```</span><br></pre></td></tr></table></figure>
+<p><strong>分支流程</strong> ：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">```mermaid</span><br><span class="line">flowchart TD</span><br><span class="line">    A([BEGIN]) --&gt; B&#123;判断条件&#125;</span><br><span class="line">    B --&gt;|是| C[分支A]</span><br><span class="line">    B --&gt;|否| D[分支B]</span><br><span class="line">    C --&gt; E([END])</span><br><span class="line">    D --&gt; E</span><br><span class="line">```</span><br></pre></td></tr></table></figure>
+<p><strong>循环流程</strong> ：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">```mermaid</span><br><span class="line">flowchart TD</span><br><span class="line">    A([BEGIN]) --&gt; B[处理]</span><br><span class="line">    B --&gt; C&#123;完成？&#125;</span><br><span class="line">    C --&gt;|否| B</span><br><span class="line">    C --&gt;|是| D([END])</span><br><span class="line">```</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://zhichai.net/myblog/agi/kimicli_skills.html">原文地址</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Weitang Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lonepatient.top/2026/02/01/kimicli_skills.html">http://lonepatient.top/2026/02/01/kimicli_skills.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lonepatient.top" target="_blank">闲记算法</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Agent/">Agent</a><a class="post-meta__tags" href="/tags/LLM/">LLM</a><a class="post-meta__tags" href="/tags/AI/">AI</a><a class="post-meta__tags" href="/tags/skill/">skill</a><a class="post-meta__tags" href="/tags/kimi/">kimi</a><a class="post-meta__tags" href="/tags/kimi-cli/">kimi cli</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/02/02/arxiv_papers_2026-02-02.html"><img class="prev-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Arxiv今日论文 | 2026-02-02</div></div></a></div><div class="next-post pull-right"><a href="/2026/01/30/arxiv_papers_2026-01-30.html"><img class="next-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Arxiv今日论文 | 2026-01-30</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/07/29/LLM_Powered_Autonomous_Agents.html" title="使用LLM构建AI Agents的正确姿势"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230908194136.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-29</div><div class="title">使用LLM构建AI Agents的正确姿势</div></div></a></div><div><a href="/2023/08/23/LLM_agents_part1.html" title="基于大语言模型的AI Agents—Part 1"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230806160808.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-23</div><div class="title">基于大语言模型的AI Agents—Part 1</div></div></a></div><div><a href="/2023/09/05/engineer_Landing_LLM.html" title="如何工程化落地LLM：五类模式加速 AI 应用开发"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230907104310.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-05</div><div class="title">如何工程化落地LLM：五类模式加速 AI 应用开发</div></div></a></div><div><a href="/2026/02/08/how_to_build_a_prompt_for_anything.html" title="how to build a prompt for anything (and remix them at will)"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-08</div><div class="title">how to build a prompt for anything (and remix them at will)</div></div></a></div><div><a href="/2023/07/30/llm_qa_Embedding_recall.html" title="问答系统使用 Embedding 召回的局限及解决方案"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230907214925.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-30</div><div class="title">问答系统使用 Embedding 召回的局限及解决方案</div></div></a></div><div><a href="/2025/11/02/Squrve：A Unified and Modular Framework for Complex Real-World Text-to-SQL Tasks.html" title="Squrve：A Unified and Modular Framework for Complex Real-World Text-to-SQL Tasks"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202511021509670.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-02</div><div class="title">Squrve：A Unified and Modular Framework for Complex Real-World Text-to-SQL Tasks</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Weitang Liu</div><div class="author-info__description">一个致力于记录技术的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lonePatient"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/lonePatient" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liuweitangmath@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/277974397" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有任何问题可通过留言板或者微信公众号给我留言，谢谢！<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201201102.jpg"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%91%98%E8%A6%81"><span class="toc-number">1.</span> <span class="toc-text">摘要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%BC%95%E8%A8%80"><span class="toc-number">2.</span> <span class="toc-text">1. 引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E8%83%8C%E6%99%AF%E4%B8%8E%E5%8A%A8%E6%9C%BA"><span class="toc-number">2.1.</span> <span class="toc-text">1.1 背景与动机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">2.2.</span> <span class="toc-text">1.2 核心概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E6%9C%AC%E6%96%87%E7%BB%93%E6%9E%84"><span class="toc-number">2.3.</span> <span class="toc-text">1.3 本文结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Skills-%E6%9E%B6%E6%9E%84%E4%B8%8E%E5%8F%91%E7%8E%B0%E6%9C%BA%E5%88%B6"><span class="toc-number">3.</span> <span class="toc-text">2. Skills 架构与发现机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%88%86%E5%B1%82%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 分层加载机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E8%A7%84%E8%8C%83"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 目录结构规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%B8%90%E8%BF%9B%E5%BC%8F%E6%8A%AB%E9%9C%B2%E8%AE%BE%E8%AE%A1"><span class="toc-number">3.3.</span> <span class="toc-text">2.3 渐进式披露设计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%99%AE%E9%80%9A-Skill-%E5%BC%80%E5%8F%91"><span class="toc-number">4.</span> <span class="toc-text">3. 普通 Skill 开发</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="toc-number">4.1.</span> <span class="toc-text">3.1 开发流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83"><span class="toc-number">4.2.</span> <span class="toc-text">3.2 命名规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%86%85%E5%AE%B9%E7%BC%96%E5%86%99%E5%8E%9F%E5%88%99"><span class="toc-number">4.3.</span> <span class="toc-text">3.3 内容编写原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E7%A4%BA%E4%BE%8B%EF%BC%9APython-%E9%A1%B9%E7%9B%AE%E8%A7%84%E8%8C%83-Skill"><span class="toc-number">4.4.</span> <span class="toc-text">3.4 示例：Python 项目规范 Skill</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Flow-Skill%EF%BC%9A%E5%B7%A5%E4%BD%9C%E6%B5%81%E8%87%AA%E5%8A%A8%E5%8C%96"><span class="toc-number">5.</span> <span class="toc-text">4. Flow Skill：工作流自动化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E8%AE%BE%E8%AE%A1%E7%90%86%E5%BF%B5"><span class="toc-number">5.1.</span> <span class="toc-text">4.1 设计理念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%88%9B%E5%BB%BA-Flow-Skill"><span class="toc-number">5.2.</span> <span class="toc-text">4.2 创建 Flow Skill</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-1-Frontmatter-%E9%85%8D%E7%BD%AE"><span class="toc-number">5.2.1.</span> <span class="toc-text">4.2.1 Frontmatter 配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-2-%E6%B5%81%E7%A8%8B%E5%9B%BE%E8%AF%AD%E6%B3%95"><span class="toc-number">5.2.2.</span> <span class="toc-text">4.2.2 流程图语法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-3-%E6%B5%81%E7%A8%8B%E5%9B%BE%E8%A7%84%E8%8C%83"><span class="toc-number">5.2.3.</span> <span class="toc-text">4.2.3 流程图规范</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3"><span class="toc-number">5.3.</span> <span class="toc-text">4.3 执行机制详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-1-%E8%B0%83%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">5.3.1.</span> <span class="toc-text">4.3.1 调用方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-2-%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-number">5.3.2.</span> <span class="toc-text">4.3.2 执行流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-3-%E5%88%86%E6%94%AF%E9%80%89%E6%8B%A9%E6%9C%BA%E5%88%B6"><span class="toc-number">5.3.3.</span> <span class="toc-text">4.3.3 分支选择机制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E9%AB%98%E7%BA%A7-Flow-Skill-%E8%AE%BE%E8%AE%A1"><span class="toc-number">5.4.</span> <span class="toc-text">4.4 高级 Flow Skill 设计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-1-%E5%BE%AA%E7%8E%AF%E7%BB%93%E6%9E%84"><span class="toc-number">5.4.1.</span> <span class="toc-text">4.4.1 循环结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-2-%E5%A4%9A%E5%88%86%E6%94%AF%E5%86%B3%E7%AD%96"><span class="toc-number">5.4.2.</span> <span class="toc-text">4.4.2 多分支决策</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-3-%E5%A4%9A%E8%A1%8C%E8%8A%82%E7%82%B9%E6%96%87%E6%9C%AC"><span class="toc-number">5.4.3.</span> <span class="toc-text">4.4.3 多行节点文本</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-Flow-Skill-%E5%BC%80%E5%8F%91%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-number">5.5.</span> <span class="toc-text">4.5 Flow Skill 开发最佳实践</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-5-1-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="toc-number">5.5.1.</span> <span class="toc-text">4.5.1 设计原则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-5-2-%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7"><span class="toc-number">5.5.2.</span> <span class="toc-text">4.5.2 调试技巧</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-5-3-%E5%B8%B8%E8%A7%81%E9%99%B7%E9%98%B1"><span class="toc-number">5.5.3.</span> <span class="toc-text">4.5.3 常见陷阱</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%AE%9E%E8%B7%B5%E6%A1%88%E4%BE%8B"><span class="toc-number">6.</span> <span class="toc-text">5. 实践案例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E6%A1%88%E4%BE%8B%E4%B8%80%EF%BC%9A%E4%BB%A3%E7%A0%81%E5%AE%A1%E6%9F%A5%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="toc-number">6.1.</span> <span class="toc-text">5.1 案例一：代码审查工作流</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%A1%E6%9F%A5%E6%A0%87%E5%87%86"><span class="toc-number">7.</span> <span class="toc-text">审查标准</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E6%A1%88%E4%BE%8B%E4%BA%8C%EF%BC%9A%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="toc-number">7.1.</span> <span class="toc-text">5.2 案例二：需求分析工作流</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F"><span class="toc-number">8.</span> <span class="toc-text">输出格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E6%A1%88%E4%BE%8B%E4%B8%89%EF%BC%9ABug-%E8%AF%8A%E6%96%AD%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="toc-number">8.1.</span> <span class="toc-text">5.3 案例三：Bug 诊断工作流</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%8A%E6%96%AD%E6%B8%85%E5%8D%95"><span class="toc-number">9.</span> <span class="toc-text">诊断清单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93"><span class="toc-number">10.</span> <span class="toc-text">6. 最佳实践总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-Skill-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="toc-number">10.1.</span> <span class="toc-text">6.1 Skill 设计原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-Flow-Skill-%E7%89%B9%E6%9C%89%E5%8E%9F%E5%88%99"><span class="toc-number">10.2.</span> <span class="toc-text">6.2 Flow Skill 特有原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E7%BB%84%E7%BB%87%E7%AD%96%E7%95%A5"><span class="toc-number">10.3.</span> <span class="toc-text">6.3 组织策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86"><span class="toc-number">10.4.</span> <span class="toc-text">6.4 版本管理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E6%9C%AA%E6%9D%A5%E5%B1%95%E6%9C%9B"><span class="toc-number">11.</span> <span class="toc-text">7. 未来展望</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-%E6%BD%9C%E5%9C%A8%E5%A2%9E%E5%BC%BA"><span class="toc-number">11.1.</span> <span class="toc-text">7.1 潜在增强</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%E7%94%9F%E6%80%81%E5%BB%BA%E8%AE%BE"><span class="toc-number">11.2.</span> <span class="toc-text">7.2 生态建设</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E7%BB%93%E8%AE%BA"><span class="toc-number">12.</span> <span class="toc-text">8. 结论</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-number">13.</span> <span class="toc-text">参考文献</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%84%E5%BD%95-A%EF%BC%9AFlow-Skill-%E5%BF%AB%E9%80%9F%E5%8F%82%E8%80%83"><span class="toc-number">14.</span> <span class="toc-text">附录 A：Flow Skill 快速参考</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-1-Mermaid-%E8%AF%AD%E6%B3%95%E9%80%9F%E6%9F%A5"><span class="toc-number">14.1.</span> <span class="toc-text">A.1 Mermaid 语法速查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#A-2-D2-%E8%AF%AD%E6%B3%95%E9%80%9F%E6%9F%A5"><span class="toc-number">14.2.</span> <span class="toc-text">A.2 D2 语法速查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#A-3-%E5%B8%B8%E7%94%A8%E6%A8%A1%E6%9D%BF"><span class="toc-number">14.3.</span> <span class="toc-text">A.3 常用模板</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-27"/></a><div class="content"><a class="title" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27">Arxiv今日论文 | 2026-02-27</a><time datetime="2026-02-27T12:30:00.000Z" title="发表于 2026-02-27 12:30:00">2026-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-26"/></a><div class="content"><a class="title" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26">Arxiv今日论文 | 2026-02-26</a><time datetime="2026-02-26T12:30:00.000Z" title="发表于 2026-02-26 12:30:00">2026-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-25"/></a><div class="content"><a class="title" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25">Arxiv今日论文 | 2026-02-25</a><time datetime="2026-02-25T12:30:00.000Z" title="发表于 2026-02-25 12:30:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225222513891.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板">大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板</a><time datetime="2026-02-25T12:00:00.000Z" title="发表于 2026-02-25 12:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225123005910.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mid-training：构建预训练与后训练之间的分布式桥梁"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁">mid-training：构建预训练与后训练之间的分布式桥梁</a><time datetime="2026-02-25T00:00:00.000Z" title="发表于 2026-02-25 00:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-24"/></a><div class="content"><a class="title" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24">Arxiv今日论文 | 2026-02-24</a><time datetime="2026-02-24T12:30:00.000Z" title="发表于 2026-02-24 12:30:00">2026-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-23"/></a><div class="content"><a class="title" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23">Arxiv今日论文 | 2026-02-23</a><time datetime="2026-02-23T12:30:00.000Z" title="发表于 2026-02-23 12:30:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260223165943195.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用&quot;深度思考率&quot;精准度量LLM推理质量"/></a><div class="content"><a class="title" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量">用&quot;深度思考率&quot;精准度量LLM推理质量</a><time datetime="2026-02-23T12:00:00.000Z" title="发表于 2026-02-23 12:00:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-20"/></a><div class="content"><a class="title" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20">Arxiv今日论文 | 2026-02-20</a><time datetime="2026-02-20T12:30:00.000Z" title="发表于 2026-02-20 12:30:00">2026-02-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201606857.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前沿大模型训练方法：深度解析与实践指南"/></a><div class="content"><a class="title" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南">前沿大模型训练方法：深度解析与实践指南</a><time datetime="2026-02-20T10:30:00.000Z" title="发表于 2026-02-20 10:30:00">2026-02-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Weitang Liu</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.lonepatient.top/',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.lonepatient.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo@1.4.11/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (99)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/计算机视觉/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 计算机视觉 (16)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/知识图谱/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 知识图谱 (13)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">👩‍💻 深度学习 (139)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item" style="visibility: hidden"></div><a class="magnet_link_more"  href="http://lonepatient.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-18</span><a class="blog-slider__title" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">通向AGI之路：大型语言模型（LLM）技术精要</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/07/12/gaiic_2022_ner_top10.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220712181905.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-07-12</span><a class="blog-slider__title" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">GAIIC2022商品标题识别二等奖获奖解决思路</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230807190424.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-01-20</span><a class="blog-slider__title" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">2025-03|高质量中文预训练模型集合</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

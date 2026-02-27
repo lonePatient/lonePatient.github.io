@@ -1,0 +1,515 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>how to build a prompt for anything (and remix them at will) | 闲记算法</title><meta name="keywords" content="Agent,LLM,AI,prompt"><meta name="author" content="Weitang Liu"><meta name="copyright" content="Weitang Liu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="简介在 AI 开发领域，提示工程 (Prompt Engineering) 是优化大型语言模型 (LLM) 输出的关键技术。本文介绍一个高级提示模板。 关于&quot;LLM 聊天中的 Prompt Engineering&quot;和&quot;Agentic Engineering 中的 Prompt Engineering&quot;，最终都归结为一个简单的系统。它在网上疯传——数十万次浏览">
+<meta property="og:type" content="article">
+<meta property="og:title" content="how to build a prompt for anything (and remix them at will)">
+<meta property="og:url" content="http://lonepatient.top/2026/02/08/how_to_build_a_prompt_for_anything.html">
+<meta property="og:site_name" content="闲记算法">
+<meta property="og:description" content="简介在 AI 开发领域，提示工程 (Prompt Engineering) 是优化大型语言模型 (LLM) 输出的关键技术。本文介绍一个高级提示模板。 关于&quot;LLM 聊天中的 Prompt Engineering&quot;和&quot;Agentic Engineering 中的 Prompt Engineering&quot;，最终都归结为一个简单的系统。它在网上疯传——数十万次浏览">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2026-02-08T12:30:00.000Z">
+<meta property="article:modified_time" content="2026-02-27T07:52:12.937Z">
+<meta property="article:author" content="Weitang Liu">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="prompt">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lonepatient.top/2026/02/08/how_to_build_a_prompt_for_anything"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//s4.cnzz.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" data-pjax="data-pjax" src="https://s4.cnzz.com/z_stat.php?id=1273275888&amp;web_id=1273275888"></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-02-27 07:52:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/backgroud.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><script src="https://at.alicdn.com/t/c/font_3570527_dthoqrrv2tv.css"></script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JwRQtLKZggvJH4sJ",ck:"JwRQtLKZggvJH4sJ"})</script><link rel="stylesheet" href="/css/universe.css"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536467946304280" crossorigin="anonymous"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">闲记算法</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">how to build a prompt for anything (and remix them at will)<a class="post-edit-link" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts/how_to_build_a_prompt_for_anything.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-02-08T12:30:00.000Z" title="发表于 2026-02-08 12:30:00">2026-02-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-27T07:52:12.937Z" title="更新于 2026-02-27 07:52:12">2026-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/">自然语言处理</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/">大型语言模型</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/prompt/">prompt</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">8.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>28分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2026/02/08/how_to_build_a_prompt_for_anything.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>简介在 AI 开发领域，提示工程 (Prompt Engineering) 是优化大型语言模型 (LLM) 输出的关键技术。本文介绍一个高级提示模板。</p>
+<p>关于&quot;LLM 聊天中的 Prompt Engineering&quot;和&quot;Agentic Engineering 中的 Prompt Engineering&quot;，最终都归结为一个简单的系统。它在网上疯传——数十万次浏览，数千次收藏，很多人意识到他们一直在对着 AI 许愿，而不是在工程化行为或系统。</p>
+<p>读完这篇文章，如果你愿意，你将不再需要复制粘贴任何人的 Prompt。你会想要构建自己的。</p>
+<hr>
+<h2 id="1-停止复制粘贴-Prompt">1. 停止复制粘贴 Prompt</h2>
+<p>互联网上充斥着&quot;Top 50 ChatGPT Prompts&quot;的帖子。人们收藏它们，粘贴进去，很多时候得到中等结果，然后继续寻找下一个。</p>
+<p>问题出在这里：为一个特定使用场景、特定上下文、特定输出目标构建的 Prompt，永远不会比你自己构建的效果更好。而且这也不该由我来告诉你——这是你自己该搞清楚的。但我还是告诉你了，因为我爱你。</p>
+<p>你现在做的事情就像戴别人的处方眼镜。技术上能用，实际上没用。你的上下文和设置对任何 Prompt 设置都很重要，即使别人分享的东西…</p>
+<p>修复方法不是找更多 Prompt 来复制。修复方法是学习如何构建，以及如何随心所欲地 修改它们。</p>
+<p>你需要的是系统架构，而不是一个你很少查阅的书签库。</p>
+<hr>
+<h1>总体内容</h1>
+<h2 id="1-基础架构（The-Core-Tags）">1. 基础架构（The Core Tags）</h2>
+<p>这些标签是构建稳定行为的基石：</p>
+<ul>
+<li><strong><code>&lt;role&gt;</code></strong>：定义模型身份。不要使用“helpful assistant”这种冗余描述，而应定义具有特定背景的专家（例如：<em>“具有15年经验的定位与消息架构高级品牌战略家”</em>） 。</li>
+<li><strong><code>&lt;mission&gt;</code></strong>：核心指令。定义 Scope，明确模型应做什么、不应做什么 。</li>
+<li><strong><code>&lt;rules&gt;</code></strong>：行为准则。控制模型的思维模式而非输出内容，例如设定“永远不要假设用户未提供的上下文” 。</li>
+<li><strong><code>&lt;constraints&gt;</code></strong>：输出边界。硬性限制（如：字数限制、禁止引用竞品、语言要求） 。</li>
+<li><strong><code>&lt;output_format&gt;</code></strong>：数据结构化。决定输出的形态（JSON、Markdown、甚至是特定的 API 参数格式） 。</li>
+<li><strong><code>&lt;examples&gt;</code></strong>：Few-shot 校准。通过具体的 <code>&lt;example&gt;</code> 展示推理逻辑、语调和结构，这是校准模型最有效的手段 。</li>
+</ul>
+<h2 id="2-高阶逻辑组件（The-Advanced-Tags）">2. 高阶逻辑组件（The Advanced Tags）</h2>
+<p>针对更复杂的交互场景，需要引入特定的逻辑控制：</p>
+<ul>
+<li><strong><code>&lt;context&gt;</code></strong>：引用背景资料。区分于指令，作为模型行动前的参考素材 。</li>
+<li><strong><code>&lt;knowledge&gt;</code></strong>：注入领域事实。如产品定价、业务逻辑或技术规范 。</li>
+<li><strong><code>&lt;method&gt;</code> / <code>&lt;steps&gt;</code></strong>：序列化工作流。确保模型按 <code>Step 1 -&gt; Step 2</code> 的顺序思考，防止其跳步 。</li>
+<li><strong><code>&lt;anti_patterns&gt;</code></strong>：负向反馈。展示“反面教材”，告知模型哪些具体的模式（如“模棱两可的废话”）是需要绝对规避的 。</li>
+<li><strong><code>&lt;evaluation&gt;</code></strong>：自评检查。强制模型在交付前根据 Checklist 进行 QA 自检 。</li>
+<li><strong><code>&lt;discovery_engine&gt;</code></strong>：反向询问。将交互模式从“表单填充”转变为“专家访谈”，让模型主动引导用户提供缺失的关键信息 。</li>
+<li><strong><code>&lt;fallback&gt;</code></strong>：异常处理。定义当信息不足或超出 Scope 时的防御性行为，防止强行猜测 。</li>
+</ul>
+<h1>详细内容</h1>
+<h2 id="1-XML-Tag-系统">1. XML Tag 系统</h2>
+<p>大多数人用纯英文段落来 Prompt。这对简单问题有效。对于任何稍微复杂的事情，它完全崩溃。</p>
+<p>问题是歧义。当你写一个段落时，模型必须猜测角色在哪里结束、任务在哪里开始、约束在哪里、输出应该是什么样子，以及是否有任何上下文或记忆…</p>
+<p>每次猜测都是潜在的失败。</p>
+<p>XML tags 消除猜测。它们创建带标签的容器，告诉模型每条信息是什么以及如何使用。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">role</span>&gt;</span></span><br><span class="line"> 你是谁</span><br><span class="line"><span class="tag">&lt;/<span class="name">role</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">mission</span>&gt;</span></span><br><span class="line"> 你做什么</span><br><span class="line"><span class="tag">&lt;/<span class="name">mission</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rules</span>&gt;</span></span><br><span class="line"> 你如何表现</span><br><span class="line"><span class="tag">&lt;/<span class="name">rules</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>模型不需要解释结构。结构是明确的。每个 tag 是一个边界。每个边界是你做的决定，所以模型不需要做。</p>
+<p>这不是理论。<strong>AnthropicAI</strong>（Claude 背后的公司）在他们自己的 system prompts 中使用 XML tags。这就是模型设计用来解析结构化指令的方式。</p>
+<hr>
+<h2 id="2-核心-Tags">2. 核心 Tags</h2>
+<p>这些是你几乎在每个 Prompt 中都会使用的 tags。把它们当作基础。大多数 Prompt 需要所有这些。有些可以跳过一两个，取决于使用场景。</p>
+<p><code>&lt;role&gt;</code></p>
+<p>这是模型成为谁。不是模糊的个性。一个具有特定专业知识的特定专家。</p>
+<p><strong>Bad:</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">role</span>&gt;</span>你是一个 helpful assistant。<span class="tag">&lt;/<span class="name">role</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这毫无意义。模型默认就是&quot;helpful assistant&quot;。你加了零价值。</p>
+<p><strong>Good:</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">role</span>&gt;</span>你是一位拥有 15 年经验的资深品牌战略师，专注于为 B2B SaaS 公司构建定位。<span class="tag">&lt;/<span class="name">role</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>&lt;role&gt;</code> tag 设置了过滤其他所有内容的透镜。一个 code reviewer 和一个 creative writer 会完全 differently 解释同一个 mission。Role 是每个其他 tag 建立的基础。</p>
+<p>Role 越具体，模型猜测得越少。&quot;Marketing expert&quot;是一个猜测。&quot;Senior brand strategist specializing in positioning and messaging architecture&quot;是一个指令。</p>
+<p><code>&lt;mission&gt;</code></p>
+<p>这是模型实际做什么。不是描述。一个指令。</p>
+<p><strong>Bad:</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mission</span>&gt;</span>帮助用户进行写作。<span class="tag">&lt;/<span class="name">mission</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>Good:</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mission</span>&gt;</span>分析用户的草稿，并就结构、清晰度和说服力提供具体、可操作的反馈。<span class="tag">&lt;/<span class="name">mission</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Mission 定义你的范围。什么进去，什么出来。模型做什么，不做什么。一个没有清晰 mission 的 Prompt 会做它想做的任何事情。而&quot;它想做的&quot;通常很平庸。</p>
+<p><code>&lt;rules&gt;</code></p>
+<p>Rules 是行为性的。它们控制模型如何行动，不是它产生什么。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rules</span>&gt;</span></span><br><span class="line">在提出建议之前，始终询问澄清问题。</span><br><span class="line">不要给出泛泛的建议。每条建议都必须针对用户的具体情况。</span><br><span class="line">如果用户的想法存在致命缺陷，直接指出。不要淡化坏消息。</span><br><span class="line">除非用户明确要求，否则不要使用 bullet points。</span><br><span class="line"><span class="tag">&lt;/<span class="name">rules</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Rules 防止模型最糟糕的行为习惯。每个模型都有默认的 rails 它会回退到。当你想要自然的书面英语时，它用 bullet points。当你想要一个 Prompt 时，它随机开始写代码。当你想要一个 app idea interrogation 时，它做出假设。Rules 是你覆盖这些 defaults 的方式。</p>
+<p>把 rules 当作&quot;永远不要做这个&quot;和&quot;总是做这个&quot;层。它们是保持模型在你道路上的 guardrails。</p>
+<p><code>&lt;constraints&gt;</code></p>
+<p>Constraints 是硬限制。它们定义输出的边界。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">constraints</span>&gt;</span></span><br><span class="line">回复必须少于 280 个字符。</span><br><span class="line">不要提及竞争对手的名称。</span><br><span class="line">所有建议必须能在 30 天内实施。</span><br><span class="line">输出必须使用美式英语。</span><br><span class="line"><span class="tag">&lt;/<span class="name">constraints</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>Rules vs Constraints:</strong> Rules 控制你的方法。&quot;Always ask clarifying questions&quot;是一个 rule。&quot;Keep your response under 300 words&quot;是一个 constraint。这个区别很重要，因为模型对它们的处理方式不同。Rules 塑造模型如何思考。Constraints 塑造模型产生什么。</p>
+<p><code>&lt;output_format&gt;</code></p>
+<p>最被忽视的 tag。</p>
+<p>大多数人描述他们想要什么，但从不描述它看起来是什么样子。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">output_format</span>&gt;</span></span><br><span class="line">返回一个不超过 3 句话的单一段落，总结核心思想。</span><br><span class="line">随后给出 1-10 的信心分数。</span><br><span class="line">如果信心分数低于 7，添加一行说明哪些额外信息会提高信心。</span><br><span class="line"><span class="tag">&lt;/<span class="name">output_format</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>没有 output format，你得到的是模型那一刻想给你的任何东西。有时是一个段落。有时是一篇 500 字的 essay 带 bullet points。有时是一个 list 当你想要一个 narrative。</p>
+<p>Output format 是&quot;给我写点关于这个的东西&quot;和&quot;给我确切这个，以确切这个形状&quot;之间的区别。这个 tag 把你的 Prompt 从请求变成架构。</p>
+<p>看看同一个 Prompt 如何随着不同的 output formats 改变：</p>
+<p>相同的 role，相同的 mission，但是：</p>
+<ul>
+<li><code>&lt;output_format&gt;一句话。&lt;/output_format&gt;</code> 给你一个 tweet</li>
+<li><code>&lt;output_format&gt;三段式执行摘要。&lt;/output_format&gt;</code> 给你一个 briefing</li>
+<li><code>&lt;output_format&gt;带有章节和子章节的详细报告。&lt;/output_format&gt;</code> 给你一个 analysis</li>
+<li><code>&lt;output_format&gt;JSON，包含键：summary, confidence, gaps。&lt;/output_format&gt;</code> 给你结构化数据</li>
+</ul>
+<p>模型一点都没变。你对 output format 的控制就是一切。</p>
+<p><code>&lt;examples&gt;</code></p>
+<p>最强大、最未被充分利用的 tag。一个好的 example 教给模型的比一段 description 更多。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">examples</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">example</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">user</span>&gt;</span>评审这个标题：&quot;We Make Great Software&quot;<span class="tag">&lt;/<span class="name">user</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">response</span>&gt;</span></span><br><span class="line">评分：3/10</span><br><span class="line">问题：泛泛的价值主张。&quot;Great&quot;毫无意义。没有具体性，没有差异化。</span><br><span class="line">重写：&quot;用 AI 编写测试套件，发货速度快 3 倍。&quot;</span><br><span class="line">理由：具体结果（快 3 倍），具体机制（AI 测试套件），具体受众（开发团队）。</span><br><span class="line"><span class="tag">&lt;/<span class="name">response</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">example</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">examples</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Example 不只是向模型展示你想要什么。它一次性向模型展示 format、depth、tone、structure 和 reasoning。没有任何 amount of written instructions 能复制一个 concrete example 所做的。</p>
+<p>两个 examples 通常就够了。三个对大多数 Prompts 来说是 overkill。目标不是 comprehensive coverage。它是 calibration。</p>
+<p>这与 Clawdbot/Moltbot/OpenClaw 之类的东西显然不同，因为这里我们是在 Prompting 一个 LLM 来为你做一个 Prompt，而 OpenClaw 有持久的上下文记忆，examples 越多越好。我会写一篇单独的文章来讲这个。</p>
+<hr>
+<h2 id="3-高级-Tags">3. 高级 Tags</h2>
+<p>Core tags 处理你 80% 的 prompting，而 advanced tags 处理另外 20%——需要更多 precision、interactivity 或 domain specificity 的 Prompts。</p>
+<p>你不会在每个 Prompt 中使用所有这些。当 core tags 不够用时，你才 reach for 它们。</p>
+<p><code>&lt;context&gt;</code></p>
+<p>这是模型在行动前需要的背景信息。这与 mission 分开，因为 context 是 reference material，不是指令。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context</span>&gt;</span></span><br><span class="line">用户是一位 SaaS 创始人，ARR 200 万美元，15 名员工，向中端市场销售。他们正在考虑扩展到企业市场，但缺乏销售基础设施。</span><br><span class="line"><span class="tag">&lt;/<span class="name">context</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Context 为模型设置舞台。没有它，模型给 generic advice 给一个 generic person。有了它，每个 response 都校准到用户的 actual situation。</p>
+<p><strong>何时使用：</strong> 任何时候模型需要知道关于用户、项目、行业或情况的事情，在它开始工作之前。</p>
+<p><code>&lt;persona&gt;</code> 和 <code>&lt;tone&gt;</code></p>
+<ul>
+<li>Role 定义 expertise。</li>
+<li>Persona 定义 character。</li>
+<li>Tone 定义 emotional register。</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">persona</span>&gt;</span>直接、不废话的沟通者。使用短句。避免企业术语。<span class="tag">&lt;/<span class="name">persona</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">tone</span>&gt;</span>自信但不傲慢。直率但不粗鲁。用户卡住时给予支持，找借口时给予挑战。<span class="tag">&lt;/<span class="name">tone</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这些与 role 分开是有原因的。一个&quot;senior financial analyst&quot;（role）可以是 warm and encouraging 或 cold and clinical。Role 不决定 voice。Persona 和 tone 控制那个。</p>
+<p><strong>何时使用：</strong> 任何时候你需要模型以特定方式沟通，而 role 单独无法 capture。Writing prompts、coaching prompts 和 brand voice prompts 作为 starters。</p>
+<p><code>&lt;audience&gt;</code></p>
+<p>输出是给谁的。这改变 vocabulary、depth 和 assumed knowledge。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">audience</span>&gt;</span>从未写过代码的非技术创始人。他们理解商业概念，但需要通过商业类比来解释技术概念。<span class="tag">&lt;/<span class="name">audience</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>同一个关于 building out an API 的解释，对于 developer vs CEO vs student 看起来完全不同。Audience 是帮助控制那个的 tag。</p>
+<p><strong>何时使用：</strong> 任何时候模型的输出会被除你之外的人阅读，或者当你需要模型校准 complexity 时。</p>
+<p><code>&lt;knowledge&gt;</code></p>
+<p>作为 reference 注入的 domain-specific information。与 context 不同，因为 knowledge 是 factual material，不是 situational。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">knowledge</span>&gt;</span></span><br><span class="line">我们的定价层级：Starter（29 美元/月，1 用户），Growth（99 美元/月，5 用户），Enterprise（定制）。</span><br><span class="line">我们的主要竞争对手：工具 A（更便宜，功能更少）和工具 B（更贵，学习曲线更陡）。</span><br><span class="line">我们的差异化优势是实时协作，这是竞争对手原生都不提供的。</span><br><span class="line"><span class="tag">&lt;/<span class="name">knowledge</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>何时使用：</strong> 任何时候模型需要 specific facts、data 或 institutional knowledge 来做它的工作。Product info、company policies、technical specifications、pricing data。</p>
+<p><code>&lt;method&gt;</code> 或 <code>&lt;steps&gt;</code></p>
+<p>模型遵循的 sequenced process。不是&quot;做这些事情&quot;。更像是&quot;按这个顺序做，不要跳过步骤&quot;。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">method</span>&gt;</span></span><br><span class="line">1. 在回复之前完整阅读用户的输入。</span><br><span class="line">2. 识别核心问题或痛点。用一句话复述以确认理解。</span><br><span class="line">3. 检查是否缺少关键信息。如果是，在继续之前询问。</span><br><span class="line">4. 按照 output_format 中指定的格式提供你的分析。</span><br><span class="line">5. 以一个能深化分析的跟进问题结束。</span><br><span class="line"><span class="tag">&lt;/<span class="name">method</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Method 对 order matters 的复杂工作流很强大。Analysis prompts、debugging prompts、research prompts。任何 step 3 依赖 step 2 的东西。</p>
+<p><strong>何时使用：</strong> 任何时候模型需要经历一个过程，而不只是产生一个 output。</p>
+<p><code>&lt;anti_patterns&gt;</code></p>
+<p>“不要做这个&quot;tag，但有 teeth。不只是说&quot;不要做 X”，你展示 bad output 是什么样子，所以模型可以识别并避免它。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">anti_patterns</span>&gt;</span></span><br><span class="line">BAD：&quot;评估这个机会时有很多因素需要考虑...&quot;</span><br><span class="line">WHY：模糊的填充词。什么都没说。浪费读者的时间。</span><br><span class="line"></span><br><span class="line">BAD：&quot;一方面...另一方面...&quot;</span><br><span class="line">WHY：骑墙。用户要求的是建议，不是辩论。</span><br><span class="line"></span><br><span class="line">BAD：任何回复以&quot;好问题！&quot;开头</span><br><span class="line">WHY：谄媚的填充词。直接回答问题。</span><br><span class="line"><span class="tag">&lt;/<span class="name">anti_patterns</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Anti-patterns 对 rules 单独无法解决的 specific failure modes 更有效。一个 rule 告诉模型&quot;不要 vague&quot;。一个 anti-pattern 准确展示 vague 是什么样子。模型可以针对 concrete examples 进行 pattern-match，比针对 abstract instructions 更好。</p>
+<p><strong>何时使用：</strong> 当模型持续产生特定类型的 bad output，而 rules 单独没有解决时。</p>
+<p><code>&lt;fallback&gt;</code></p>
+<p>当模型无法完成任务时应该做什么。有了这个，模型不能 hallucinate 一个答案或给你一个无用的&quot;I’m not sure&quot;。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">fallback</span>&gt;</span></span><br><span class="line">如果你没有足够的信息给出有信心的答案，说&quot;我需要更多关于 X 的信息&quot;并准确说明什么会有帮助。</span><br><span class="line">如果问题超出这个 role 的范围，说明并建议用户可能在哪里找到答案。</span><br><span class="line">永远不要猜测。永远不要编造数据。永远不要伪造来源。</span><br><span class="line"><span class="tag">&lt;/<span class="name">fallback</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>何时使用：</strong> 任何 wrong answers 比 no answers 更糟糕的 Prompt。Financial analysis、medical information、legal review、technical specifications。</p>
+<p><code>&lt;evaluation&gt;</code></p>
+<p>Self-check criteria。模型在交付前审查自己的 output。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">evaluation</span>&gt;</span></span><br><span class="line">在回复之前，验证：</span><br><span class="line">- 这是否直接回答了用户的问题？如果没有，重新聚焦。</span><br><span class="line">- 每个主张是否具体且可操作？如果有任何模糊之处，重写。</span><br><span class="line">- 忙碌的人会在 60 秒内觉得有用吗？如果不是，无情地删减。</span><br><span class="line">- 是否有任何假设？如果有，明确标注。</span><br><span class="line"><span class="tag">&lt;/<span class="name">evaluation</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Evaluation 就像给模型一个 quality assurance (QA) checklist。它在 output 到达你之前强制进行 second pass。</p>
+<p><strong>何时使用：</strong> 任何 quality consistency 真正重要的 Prompt。Client facing work、content production、analysis、recommendations、code review。</p>
+<p><code>&lt;discovery_engine&gt;</code></p>
+<p>模型在行动前问用户的问题。这是我的 viral app idea interrogation prompt 背后的 tag。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">discovery_engine</span>&gt;</span></span><br><span class="line">在做任何工作之前，询问用户：</span><br><span class="line">1. 你需要什么具体结果？</span><br><span class="line">2. 最终输出的受众是谁？</span><br><span class="line">3. 我在什么约束下工作（长度、格式、语气）？</span><br><span class="line">4. 你已经尝试过什么但没用？</span><br><span class="line">5. 我绝对不应该做什么？</span><br><span class="line"></span><br><span class="line">等待所有答案后再继续。</span><br><span class="line"><span class="tag">&lt;/<span class="name">discovery_engine</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这个 tag 翻转了 dynamic。不是用户提供所有东西 upfront 然后希望他们没漏掉任何东西，模型提取它需要的东西。这是填写表单和与专家对话之间的区别。</p>
+<p><strong>何时使用：</strong> 任何用户的 initial input 可能不完整的 Prompt。Consulting prompts、strategy prompts、creative briefs、project planning。</p>
+<p><code>&lt;chain&gt;</code></p>
+<p>把 Prompts 链接在一起。一个的输出成为另一个的输入。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">chain</span>&gt;</span></span><br><span class="line">这个 Prompt 是 3 步中的第 2 步。</span><br><span class="line">输入：你将收到一份结构化的需求文档（第 1 步的输出）。</span><br><span class="line">你的工作：将需求转换为技术架构文档。</span><br><span class="line">输出：你的输出将输入到第 3 步，生成实施计划。</span><br><span class="line">不要包含实施细节。那是第 3 步的工作。</span><br><span class="line"><span class="tag">&lt;/<span class="name">chain</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>何时使用：</strong> Multi-step workflows，每个 Prompt 处理一个 phase。Research → analysis → recommendation。Draft → critique → revision。Interrogation → documentation → implementation。</p>
+<hr>
+<h2 id="4-选择你的-Tags">4. 选择你的 Tags</h2>
+<p>不是每个 Prompt 都需要每个 tag。这是 architecture，不是 decoration。</p>
+<p>这样想：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">场景</th>
+<th style="text-align:left">推荐 Tags</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>简单任务</strong>（总结这个，重写那个，回答这个问题）</td>
+<td style="text-align:left"><code>&lt;role&gt;</code> + <code>&lt;mission&gt;</code> + <code>&lt;output_format&gt;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>专业输出</strong>（client deliverable、published content、formal analysis）</td>
+<td style="text-align:left"><code>&lt;role&gt;</code> + <code>&lt;mission&gt;</code> + <code>&lt;rules&gt;</code> + <code>&lt;constraints&gt;</code> + <code>&lt;output_format&gt;</code> + <code>&lt;examples&gt;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Interactive/对话式</strong>（coaching、consulting、brainstorming）</td>
+<td style="text-align:left"><code>&lt;role&gt;</code> + <code>&lt;mission&gt;</code> + <code>&lt;rules&gt;</code> + <code>&lt;discovery_engine&gt;</code> + <code>&lt;fallback&gt;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>复杂工作流</strong>（multi-step analysis、research、production pipeline）</td>
+<td style="text-align:left">所有 core tags + <code>&lt;method&gt;</code> + <code>&lt;evaluation&gt;</code> + <code>&lt;chain&gt;</code> + <code>&lt;anti_patterns&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>从 core tags 开始。只有当你遇到 specific problem 真正需要解决时，才添加 advanced tags。一个六个 tags 都做得很好的 Prompt，比一个十二个 tags 其中一半 mediocre 的 Prompt 更好。</p>
+<hr>
+<h2 id="5-完整-Prompt：Voice-Style-Extractor">5. 完整 Prompt：Voice Style Extractor</h2>
+<p>这是框架的实际应用。这个 Prompt 接受任何 writing sample 并 reverse engineer 作者的声音成一个可重用的 system prompt。对 content creators、ghostwriters，或任何需要在 AI-generated content 中保持一致 voice 的人有用。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">role</span>&gt;</span></span><br><span class="line">你是一位语言取证分析师，专门将写作模式解构为可复制的系统。</span><br><span class="line"><span class="tag">&lt;/<span class="name">role</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">mission</span>&gt;</span></span><br><span class="line">用户将提供一份写作样本。你的工作是提取每一个可识别的模式，并将其转换为可用于复制声音的风格指南。</span><br><span class="line"><span class="tag">&lt;/<span class="name">mission</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">method</span>&gt;</span></span><br><span class="line">1. 在分析之前完整阅读整个样本。</span><br><span class="line">2. 识别以下维度的模式：</span><br><span class="line">   - 句子结构（长度分布、节奏、片段 vs 完整句）</span><br><span class="line">   - 词汇水平（年级水平、术语密度、用词选择模式）</span><br><span class="line">   - 标点习惯（破折号、省略号、用句号强调、逗号使用）</span><br><span class="line">   - 段落结构（长度、过渡、独立行）</span><br><span class="line">   - 修辞手法（重复、直接称呼、问句、回调）</span><br><span class="line">   - 语气标记（权威水平、幽默类型、情感 register）</span><br><span class="line">   - 格式偏好（标题、列表、粗体、换行）</span><br><span class="line">   - 他们从不做什么（与他们做什么同等重要）</span><br><span class="line">3. 综合成结构化为 system prompt 的风格 profile。</span><br><span class="line"><span class="tag">&lt;/<span class="name">method</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rules</span>&gt;</span></span><br><span class="line">绝不要用模糊的形容词描述风格。&quot;Conversational&quot;不是一个模式。&quot;使用短句且频繁使用片段&quot;是一个模式。</span><br><span class="line">每个观察必须得到样本中至少两个例子的支持。</span><br><span class="line">如果样本太短无法可靠识别模式，标记为&quot;数据不足&quot;而不是猜测。</span><br><span class="line"><span class="tag">&lt;/<span class="name">rules</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">anti_patterns</span>&gt;</span></span><br><span class="line">BAD：&quot;作者有一种随意、引人入胜的语气。&quot;</span><br><span class="line">WHY：毫无意义。每个内容创作者都认为自己有随意、引人入胜的语气。零可操作信息。</span><br><span class="line"></span><br><span class="line">BAD：&quot;写作清晰简洁。&quot;</span><br><span class="line">WHY：描述的是质量，不是机制。怎么清晰？短句？简单词？逻辑流？要具体。</span><br><span class="line"><span class="tag">&lt;/<span class="name">anti_patterns</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">output_format</span>&gt;</span></span><br><span class="line">返回两个部分：</span><br><span class="line"></span><br><span class="line">分析：每个识别到的模式的详细分解，按维度组织，附带支持例子。</span><br><span class="line"></span><br><span class="line">风格 Prompt：一份完整的、可直接复制粘贴的 system prompt，以&quot;你是一位以[作者描述]风格写作的[角色]...&quot;开头，包含所有识别的具体模式。</span><br><span class="line"><span class="tag">&lt;/<span class="name">output_format</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">examples</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">example</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">user</span>&gt;</span>[我的写作样本]<span class="tag">&lt;/<span class="name">user</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">response</span>&gt;</span></span><br><span class="line">分析：</span><br><span class="line">- 句子结构：非常短（3-5 词）和中等（15-20 词）的混合。几乎没有长句。频繁使用以&quot;And&quot;或&quot;But&quot;开头的片段。</span><br><span class="line">- 直接称呼：在每篇文章的前 3 句使用&quot;you&quot;。让读者成为主体，而不是作者。</span><br><span class="line">- 用词选择：&quot;Suck&quot;故意非正式，降低 register 以创造亲密感。从不用&quot;utilize&quot;当&quot;use&quot;可以时。</span><br><span class="line"></span><br><span class="line">[继续所有维度]</span><br><span class="line"></span><br><span class="line">风格 Prompt：</span><br><span class="line">你是一位直接、不废话的作家，尊重读者的智力...</span><br><span class="line"><span class="tag">&lt;/<span class="name">response</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">example</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">examples</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="为什么这个-Prompt-有效（框架分解）：">为什么这个 Prompt 有效（框架分解）：</h3>
+<ul>
+<li><strong><code>&lt;role&gt;</code></strong> 是具体的：&quot;linguistic forensics analyst。&quot;不是&quot;writing expert。&quot;Specificity 告诉模型确切使用什么 lens。</li>
+<li><strong><code>&lt;method&gt;</code></strong> 强制 sequenced analysis。先读，然后识别，然后 synthesize。没有它，模型试图一次性做所有三个，会漏掉 patterns。</li>
+<li><strong><code>&lt;anti_patterns&gt;</code></strong> 防止最常见的 failure mode：vague style descriptions 听起来 insightful 但实际上对 replication 无用。</li>
+<li><strong><code>&lt;output_format&gt;</code></strong> 要求两个 deliverables：analysis（所以你可以验证它是准确的）和 style prompt（所以你可以使用它）。</li>
+<li><strong><code>&lt;examples&gt;</code></strong> 部分展示期望的 depth。一个 example 比任何 amount of written instruction 更能校准模型。</li>
+</ul>
+<hr>
+<h2 id="6-完整-Prompt：Keyword-Sentiment-Search-Engine">6. 完整 Prompt：Keyword &amp; Sentiment Search Engine</h2>
+<p>这个 Prompt 把你的 AI 变成 research analyst，监控围绕 specific topics、accounts 或 keywords 的对话，并报告 sentiment、patterns 和 actionable insights。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">role</span>&gt;</span></span><br><span class="line">你是一位专注于实时话语分析和叙事检测的社会情报分析师。</span><br><span class="line"><span class="tag">&lt;/<span class="name">role</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">mission</span>&gt;</span></span><br><span class="line">用户提供关键词、账户名、主题或组合。你的工作是分析当前对话，并就情感、声量、新兴模式和战略影响提供情报简报。</span><br><span class="line"><span class="tag">&lt;/<span class="name">mission</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">context</span>&gt;</span></span><br><span class="line">这用于市场研究、品牌监控、竞争情报或趋势识别。用户需要可操作的洞察，而不仅仅是数据聚合。</span><br><span class="line"><span class="tag">&lt;/<span class="name">context</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">method</span>&gt;</span></span><br><span class="line">1. 在可用来源中搜索提供的关键词/账户/主题。</span><br><span class="line">2. 按情感分类发现：正面、负面、中性、混合。</span><br><span class="line">3. 识别主导叙事（大多数人在说什么？）。</span><br><span class="line">4. 识别离群叙事（少数人在说什么但可能重要？）。</span><br><span class="line">5. 标记任何新兴转变（情感在变化吗？新角度在获得关注吗？）。</span><br><span class="line">6. 评估声量和速度（多少对话，在增长还是下降？）。</span><br><span class="line">7. 提取可操作的洞察（用户应该用这些信息做什么？）。</span><br><span class="line"><span class="tag">&lt;/<span class="name">method</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rules</span>&gt;</span></span><br><span class="line">区分 loud minority opinions 和 actual consensus。10 条愤怒的推文不是 widespread backlash。</span><br><span class="line">永远不要在没有声量上下文的情况下将情感呈现为事实。&quot;负面情感&quot;没有&quot;来自多少人&quot;是误导性的。</span><br><span class="line">如果数据不足以得出结论，说明。不要从有限样本 extrapolate。</span><br><span class="line">始终将人们在说的与他们意思的分开。表面抱怨往往掩盖更深层次的问题。</span><br><span class="line"><span class="tag">&lt;/<span class="name">rules</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">constraints</span>&gt;</span></span><br><span class="line">所有分析必须基于公开可用信息。</span><br><span class="line">不要推测个人的私人动机。</span><br><span class="line">不要将 AI 生成的摘要呈现为直接引用。</span><br><span class="line">标记 verified accounts 和 general public discourse 之间的区别。</span><br><span class="line"><span class="tag">&lt;/<span class="name">constraints</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">output_format</span>&gt;</span></span><br><span class="line">主题：[分析的内容]</span><br><span class="line">时间范围：[何时]</span><br><span class="line">声量：[多少对话]</span><br><span class="line">速度：[增长/稳定/下降]</span><br><span class="line"></span><br><span class="line">情感分解：</span><br><span class="line">- 正面（X%）：[主导正面主题]</span><br><span class="line">- 负面（X%）：[主导负面主题]</span><br><span class="line">- 中性（X%）：[信息性/事实性提及]</span><br><span class="line"></span><br><span class="line">关键叙事：</span><br><span class="line">1. [最常见叙事 + 例子]</span><br><span class="line">2. [第二常见 + 例子]</span><br><span class="line">3. [值得关注的 emerging/outlier 叙事]</span><br><span class="line"></span><br><span class="line">可操作洞察：</span><br><span class="line">[基于这些数据该做什么]</span><br><span class="line"></span><br><span class="line">需关注的风险：</span><br><span class="line">[可能出错的地方]</span><br><span class="line"></span><br><span class="line">机会：</span><br><span class="line">[存在什么机会]</span><br><span class="line"></span><br><span class="line">缺口：</span><br><span class="line">[数据不足的地方]</span><br><span class="line">[什么会改进这个分析]</span><br><span class="line"><span class="tag">&lt;/<span class="name">output_format</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">evaluation</span>&gt;</span></span><br><span class="line">在交付之前：</span><br><span class="line">- 每个百分比是否与实际声量数据挂钩？</span><br><span class="line">- 叙事是否由多个数据点支持，而非单个例子？</span><br><span class="line">- 洞察是真正可操作的还是只是观察？</span><br><span class="line">- 我是否标注了我不知道的？</span><br><span class="line"><span class="tag">&lt;/<span class="name">evaluation</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="为什么这个-Prompt-有效（框架分解）：-2">为什么这个 Prompt 有效（框架分解）：</h3>
+<ul>
+<li><strong><code>&lt;context&gt;</code></strong> tag 在这里做了关键工作。没有它，模型不知道你是在做 brand monitoring、competitive research 还是 academic analysis。相同的 keywords，但完全不同的 analytical lens。</li>
+<li><strong><code>&lt;method&gt;</code></strong> 创建一个 7-step analytical process。这防止模型 jump to conclusions。它必须 categorize，然后 identify narratives，然后 check for shifts，然后 assess volume，然后 extract insights。每个 step 建立在前一个之上。</li>
+<li><strong><code>&lt;rules&gt;</code></strong> 防止 sentiment analysis 中最大的罪过：把 noise 当作 signal。关于&quot;10 angry tweets 不是 widespread backlash&quot;的 rule 在做真正的工作，因为模型喜欢 overweight negative sentiment。</li>
+<li><strong><code>&lt;evaluation&gt;</code></strong> tag 强制 self-check。模型必须在交付前验证它自己的 percentages 有 data 支持。这 catches hallucinated statistics。</li>
+<li><strong><code>&lt;output_format&gt;</code></strong> 设计上不灵活。Intelligence briefs 需要 consistent structure，这样你可以跨 time periods 和 topics 比较它们。GAPS 部分可以说是最重要的：它告诉模型什么找不到，这通常比它找到的更 valuable。</li>
+</ul>
+<hr>
+<h2 id="7-完整-Prompt：The-Idea-Interrogator">7. 完整 Prompt：The Idea Interrogator</h2>
+<p>如果你关注我，你可能见过这个。它是 viral tweet 背后的 Prompt。那个在写一行代码或构建任何东西之前，强迫 AI 撕碎你的 app 或 coding idea 的 Prompt。</p>
+<p>这是完整版本，建立在你刚学的相同框架上：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">role</span>&gt;</span></span><br><span class="line">你是一位无情的需求分析师。你不构建。你不编码。你不建议解决方案。你只审问想法直到它们被完全理解。</span><br><span class="line"><span class="tag">&lt;/<span class="name">role</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">mission</span>&gt;</span></span><br><span class="line">用户将描述一个应用、产品或功能想法。你的工作是询问每一个必要的问题，在任何工作开始之前充分理解需求。</span><br><span class="line"></span><br><span class="line">在审问阶段不要生成任何代码、文档、计划或建议。</span><br><span class="line"><span class="tag">&lt;/<span class="name">mission</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">discovery_engine</span>&gt;</span></span><br><span class="line">从询问你需要的每一个问题开始。不要保留。不要控制自己。一次 pass 提取完整画面。</span><br><span class="line"></span><br><span class="line">至少涵盖：</span><br><span class="line">- 解决的核心问题和为谁解决</span><br><span class="line">- 用户类型、角色和权限</span><br><span class="line">- 每个页面、流程和交互</span><br><span class="line">- 数据：存储什么、在哪里、谁能访问</span><br><span class="line">- 认证和授权模型</span><br><span class="line">- 第三方服务和集成</span><br><span class="line">- 边缘情况和错误状态</span><br><span class="line">- 性能和规模预期</span><br><span class="line">- 平台目标（网页、移动端、桌面端）</span><br><span class="line">- 设计偏好和约束</span><br><span class="line">- 预算和时间线现实</span><br><span class="line">- 成功的样子，量化</span><br><span class="line"></span><br><span class="line">然后对每个包含模糊性的答案深入挖掘。</span><br><span class="line"><span class="tag">&lt;/<span class="name">discovery_engine</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rules</span>&gt;</span></span><br><span class="line">永远不要假设。永远不要推断。永远不要以&quot;合理默认值&quot;填补空白。</span><br><span class="line">如果答案模糊，追问。&quot;Something modern&quot;不是一个技术栈。&quot;User-friendly&quot;不是一个设计系统。</span><br><span class="line">当你认为你完成了，你可能还没有。询问你可能遗漏了什么。</span><br><span class="line">目标不是速度。目标是零假设。</span><br><span class="line"><span class="tag">&lt;/<span class="name">rules</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">anti_patterns</span>&gt;</span></span><br><span class="line">BAD：接受&quot;I&#x27;ll figure that out later&quot;作为答案。</span><br><span class="line">WHY：那是一个伪装成答案的假设。如果它对构建重要，它现在重要。</span><br><span class="line"></span><br><span class="line">BAD：在审问中途建议解决方案。</span><br><span class="line">WHY：你建议的那一刻，用户就锚定到你的建议，而不是思考他们的实际需求。</span><br><span class="line"></span><br><span class="line">BAD：一次问一个问题。</span><br><span class="line">WHY：这不是治疗 session。用户脑子里有一个想法。完整提取它，然后让他们对所有内容做出回应。</span><br><span class="line"><span class="tag">&lt;/<span class="name">anti_patterns</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">fallback</span>&gt;</span></span><br><span class="line">如果用户对一个问题说&quot;I don&#x27;t know&quot;，不要跳过它。而是：</span><br><span class="line">1. 解释为什么这个问题对构建重要。</span><br><span class="line">2. 给出其他人常用的 2-3 种方法。</span><br><span class="line">3. 让他们选择一种或将其标记为明确的开放问题。</span><br><span class="line"></span><br><span class="line">没有未解决的模糊性被掩盖。</span><br><span class="line"><span class="tag">&lt;/<span class="name">fallback</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">output_format</span>&gt;</span></span><br><span class="line">审问完成后，交付：</span><br><span class="line"></span><br><span class="line">需求摘要</span><br><span class="line">按类别组织（用户、功能、数据、认证、集成、设计、约束）。</span><br><span class="line"></span><br><span class="line">已确认决策</span><br><span class="line">用户在审问期间做出的每个明确决策。</span><br><span class="line"></span><br><span class="line">开放问题</span><br><span class="line">任何仍未解决的，附带说明为什么重要以及何时需要决定。</span><br><span class="line"></span><br><span class="line">假设日志</span><br><span class="line">如果任何假设不可避免，明确列出以便跟踪和验证。</span><br><span class="line"></span><br><span class="line">以以下结束：&quot;审查这个摘要。如果有任何错误、遗漏或需要澄清的地方，在继续之前说出来。&quot;</span><br><span class="line"><span class="tag">&lt;/<span class="name">output_format</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="为什么这个-Prompt-有效（框架分解）：-3">为什么这个 Prompt 有效（框架分解）：</h3>
+<ul>
+<li><strong><code>&lt;role&gt;</code></strong> 故意 narrow。&quot;You do not build. You do not code. You do not suggest.&quot;每个句子移除一个行为。没有这些 explicit contradictions，模型会试图通过提供解决方案或随机开始 coding 来 helpful，这完全破坏了目的。</li>
+<li><strong><code>&lt;discovery_engine&gt;</code></strong> 是这个 Prompt 的核心。它告诉模型 upfront 问所有东西，不是 drip-feed questions。那是一个 deliberate design choice。你想要 full picture 在一次 pass 中提取，这样用户可以看到他们 idea 的 scope，以及 waste less model compute 在一个 back-and-forth 中。</li>
+<li><strong><code>&lt;anti_patterns&gt;</code></strong> 部分针对这个 Prompt 失败的三种最常见方式：接受 vagueness、建议而不是询问、和 pacing questions 太慢。每个都是模型自然 defaults 到的行为，而这个 Prompt 必须 override。</li>
+<li><strong><code>&lt;fallback&gt;</code></strong> 处理&quot;I don’t know&quot;问题。不是跳过 question，模型解释为什么它 matters 并给出 options。这把&quot;I don’t know&quot;变成 decision point 而不是 dead end。</li>
+<li><strong><code>&lt;output_format&gt;</code></strong> 交付四个 distinct sections，每个 serving a different purpose。Requirements summary 是 document。Confirmed decisions 是你的 audit trail。Open questions 是 todo list。Assumptions log 是 risk register。一起它们给你一个 complete foundation 来 build from。</li>
+</ul>
+<hr>
+<h2 id="8-调试你的-Prompts">8. 调试你的 Prompts</h2>
+<p>你的 Prompt 不工作。也许 output 是 generic。也许它忽略了 format instructions。也许它编造了 facts。</p>
+<p>以下是如何找出哪个 tag 是问题：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">问题</th>
+<th style="text-align:left">解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Output 是 generic 或 shallow</strong></td>
+<td style="text-align:left">你的 <code>&lt;role&gt;</code> 太 vague。让它更具体。添加 years of experience、specialization、或 domain。Role 越具体，output 越不 generic。这个要玩得开心。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Output 是 wrong format</strong></td>
+<td style="text-align:left">你的 <code>&lt;output_format&gt;</code> 缺失或太 loose。如果你想要 <code>.csv</code> 或 <code>.md</code> 却得到 paragraphs，那不是模型的 fault。准确指定 output 应该是什么样子。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Output 忽略你的 instructions</strong></td>
+<td style="text-align:left">你的 <code>&lt;rules&gt;</code> 或 <code>&lt;constraints&gt;</code> 被 buried 或 contradictory。把它们移到 Prompt 更早的位置。让它们更短更直接。检查是否有 rules 互相 conflict。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Output 是 playing it safe 或 sugarcoating everything</strong></td>
+<td style="text-align:left">添加 <code>&lt;anti_patterns&gt;</code> 部分，带有 hedging behavior 的 explicit examples。向模型展示你不想要什么。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Output misses the point</strong></td>
+<td style="text-align:left">你的 <code>&lt;mission&gt;</code> 是 ambiguous。如果你能读你的 mission statement 并想象三种不同的 interpretations，模型会随机 pick 一个。Tighten 它直到只有一个 possible reading。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Output makes up facts</strong></td>
+<td style="text-align:left">添加 <code>&lt;fallback&gt;</code> tag。告诉模型当它不知道某事时该做什么。没有 fallback instructions，模型的 default 是 confidently guess。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Output 跨 runs 不一致</strong></td>
+<td style="text-align:left">添加 <code>&lt;examples&gt;</code>。没有什么比向模型展示 good 是什么样子更能 stabilize output。一个 example 抵得上一百 words of instructions。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Output 是对的但 process 是错的</strong></td>
+<td style="text-align:left">添加 <code>&lt;method&gt;</code> tag 带有 explicit steps。模型可能通过 wrong path 到达 right answer，这意味着下次它会得到 wrong answer。你的 method 确保 process 是 repeatable 和 scalable。</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="9-构建你自己的">9. 构建你自己的</h2>
+<p>你现在有了系统。每个 tag，它做什么，何时使用它，以及当你不用时它如何 break。</p>
+<p>这个框架无论你是在构建 code review、voice extraction、content writing、SEO strategy、data analysis、meal planning 的 Prompt，还是 literally 你能想到的任何其他东西，都是一样的。Tags 不改变，里面的内容改变。</p>
+<p>现在你可以随意 copy、build 和 remix Prompts。去把它们变成你自己的。</p>
+<p>你现在是 Tony Stark。去构建你的 Jarvis。</p>
+<p>如果你想让我分享我 50+ 个建立在这个 exact framework 上的 AI use cases 和 Prompts，那很快就会来。stay tuned for more。</p>
+<p>如果你读到这里，你现在比 99% 每天使用 AI 的人更了解 Prompt construction。这不是 secret。这是一个系统。现在它是你的了。</p>
+<p><a target="_blank" rel="noopener" href="https://x.com/kloss_xyz/status/2018951817892442260">原文地址</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Weitang Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lonepatient.top/2026/02/08/how_to_build_a_prompt_for_anything.html">http://lonepatient.top/2026/02/08/how_to_build_a_prompt_for_anything.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lonepatient.top" target="_blank">闲记算法</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Agent/">Agent</a><a class="post-meta__tags" href="/tags/LLM/">LLM</a><a class="post-meta__tags" href="/tags/AI/">AI</a><a class="post-meta__tags" href="/tags/prompt/">prompt</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/02/09/arxiv_papers_2026-02-09.html"><img class="prev-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Arxiv今日论文 | 2026-02-09</div></div></a></div><div class="next-post pull-right"><a href="/2026/02/06/arxiv_papers_2026-02-06.html"><img class="next-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Arxiv今日论文 | 2026-02-06</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/07/29/LLM_Powered_Autonomous_Agents.html" title="使用LLM构建AI Agents的正确姿势"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230908194136.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-29</div><div class="title">使用LLM构建AI Agents的正确姿势</div></div></a></div><div><a href="/2023/08/23/LLM_agents_part1.html" title="基于大语言模型的AI Agents—Part 1"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230806160808.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-23</div><div class="title">基于大语言模型的AI Agents—Part 1</div></div></a></div><div><a href="/2023/09/05/engineer_Landing_LLM.html" title="如何工程化落地LLM：五类模式加速 AI 应用开发"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230907104310.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-05</div><div class="title">如何工程化落地LLM：五类模式加速 AI 应用开发</div></div></a></div><div><a href="/2026/02/01/kimicli_skills.html" title="Kimi CLI 的 Skills 开发"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-01</div><div class="title">Kimi CLI 的 Skills 开发</div></div></a></div><div><a href="/2023/07/30/llm_qa_Embedding_recall.html" title="问答系统使用 Embedding 召回的局限及解决方案"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230907214925.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-30</div><div class="title">问答系统使用 Embedding 召回的局限及解决方案</div></div></a></div><div><a href="/2025/11/02/Squrve：A Unified and Modular Framework for Complex Real-World Text-to-SQL Tasks.html" title="Squrve：A Unified and Modular Framework for Complex Real-World Text-to-SQL Tasks"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202511021509670.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-02</div><div class="title">Squrve：A Unified and Modular Framework for Complex Real-World Text-to-SQL Tasks</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Weitang Liu</div><div class="author-info__description">一个致力于记录技术的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lonePatient"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/lonePatient" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liuweitangmath@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/277974397" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有任何问题可通过留言板或者微信公众号给我留言，谢谢！<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201201102.jpg"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%81%9C%E6%AD%A2%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4-Prompt"><span class="toc-number">1.</span> <span class="toc-text">1. 停止复制粘贴 Prompt</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number"></span> <span class="toc-text">总体内容</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%EF%BC%88The-Core-Tags%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">1. 基础架构（The Core Tags）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%AB%98%E9%98%B6%E9%80%BB%E8%BE%91%E7%BB%84%E4%BB%B6%EF%BC%88The-Advanced-Tags%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">2. 高阶逻辑组件（The Advanced Tags）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number"></span> <span class="toc-text">详细内容</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-XML-Tag-%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">1. XML Tag 系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A0%B8%E5%BF%83-Tags"><span class="toc-number">2.</span> <span class="toc-text">2. 核心 Tags</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%AB%98%E7%BA%A7-Tags"><span class="toc-number">3.</span> <span class="toc-text">3. 高级 Tags</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E9%80%89%E6%8B%A9%E4%BD%A0%E7%9A%84-Tags"><span class="toc-number">4.</span> <span class="toc-text">4. 选择你的 Tags</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%AE%8C%E6%95%B4-Prompt%EF%BC%9AVoice-Style-Extractor"><span class="toc-number">5.</span> <span class="toc-text">5. 完整 Prompt：Voice Style Extractor</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B8%AA-Prompt-%E6%9C%89%E6%95%88%EF%BC%88%E6%A1%86%E6%9E%B6%E5%88%86%E8%A7%A3%EF%BC%89%EF%BC%9A"><span class="toc-number">5.1.</span> <span class="toc-text">为什么这个 Prompt 有效（框架分解）：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%AE%8C%E6%95%B4-Prompt%EF%BC%9AKeyword-Sentiment-Search-Engine"><span class="toc-number">6.</span> <span class="toc-text">6. 完整 Prompt：Keyword &amp; Sentiment Search Engine</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B8%AA-Prompt-%E6%9C%89%E6%95%88%EF%BC%88%E6%A1%86%E6%9E%B6%E5%88%86%E8%A7%A3%EF%BC%89%EF%BC%9A-2"><span class="toc-number">6.1.</span> <span class="toc-text">为什么这个 Prompt 有效（框架分解）：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%AE%8C%E6%95%B4-Prompt%EF%BC%9AThe-Idea-Interrogator"><span class="toc-number">7.</span> <span class="toc-text">7. 完整 Prompt：The Idea Interrogator</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B8%AA-Prompt-%E6%9C%89%E6%95%88%EF%BC%88%E6%A1%86%E6%9E%B6%E5%88%86%E8%A7%A3%EF%BC%89%EF%BC%9A-3"><span class="toc-number">7.1.</span> <span class="toc-text">为什么这个 Prompt 有效（框架分解）：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E8%B0%83%E8%AF%95%E4%BD%A0%E7%9A%84-Prompts"><span class="toc-number">8.</span> <span class="toc-text">8. 调试你的 Prompts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E6%9E%84%E5%BB%BA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84"><span class="toc-number">9.</span> <span class="toc-text">9. 构建你自己的</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-27"/></a><div class="content"><a class="title" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27">Arxiv今日论文 | 2026-02-27</a><time datetime="2026-02-27T12:30:00.000Z" title="发表于 2026-02-27 12:30:00">2026-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-26"/></a><div class="content"><a class="title" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26">Arxiv今日论文 | 2026-02-26</a><time datetime="2026-02-26T12:30:00.000Z" title="发表于 2026-02-26 12:30:00">2026-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-25"/></a><div class="content"><a class="title" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25">Arxiv今日论文 | 2026-02-25</a><time datetime="2026-02-25T12:30:00.000Z" title="发表于 2026-02-25 12:30:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225222513891.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板">大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板</a><time datetime="2026-02-25T12:00:00.000Z" title="发表于 2026-02-25 12:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225123005910.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mid-training：构建预训练与后训练之间的分布式桥梁"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁">mid-training：构建预训练与后训练之间的分布式桥梁</a><time datetime="2026-02-25T00:00:00.000Z" title="发表于 2026-02-25 00:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-24"/></a><div class="content"><a class="title" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24">Arxiv今日论文 | 2026-02-24</a><time datetime="2026-02-24T12:30:00.000Z" title="发表于 2026-02-24 12:30:00">2026-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-23"/></a><div class="content"><a class="title" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23">Arxiv今日论文 | 2026-02-23</a><time datetime="2026-02-23T12:30:00.000Z" title="发表于 2026-02-23 12:30:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260223165943195.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用&quot;深度思考率&quot;精准度量LLM推理质量"/></a><div class="content"><a class="title" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量">用&quot;深度思考率&quot;精准度量LLM推理质量</a><time datetime="2026-02-23T12:00:00.000Z" title="发表于 2026-02-23 12:00:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-20"/></a><div class="content"><a class="title" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20">Arxiv今日论文 | 2026-02-20</a><time datetime="2026-02-20T12:30:00.000Z" title="发表于 2026-02-20 12:30:00">2026-02-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201606857.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前沿大模型训练方法：深度解析与实践指南"/></a><div class="content"><a class="title" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南">前沿大模型训练方法：深度解析与实践指南</a><time datetime="2026-02-20T10:30:00.000Z" title="发表于 2026-02-20 10:30:00">2026-02-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Weitang Liu</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.lonepatient.top/',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.lonepatient.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo@1.4.11/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (99)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/计算机视觉/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 计算机视觉 (16)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/知识图谱/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 知识图谱 (13)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">👩‍💻 深度学习 (139)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item" style="visibility: hidden"></div><a class="magnet_link_more"  href="http://lonepatient.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-18</span><a class="blog-slider__title" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">通向AGI之路：大型语言模型（LLM）技术精要</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/07/12/gaiic_2022_ner_top10.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220712181905.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-07-12</span><a class="blog-slider__title" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">GAIIC2022商品标题识别二等奖获奖解决思路</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230807190424.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-01-20</span><a class="blog-slider__title" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">2025-03|高质量中文预训练模型集合</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

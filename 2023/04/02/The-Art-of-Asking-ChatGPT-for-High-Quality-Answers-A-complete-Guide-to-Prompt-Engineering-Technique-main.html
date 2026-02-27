@@ -1,0 +1,940 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Prompts技巧工程完全指南 | 闲记算法</title><meta name="keywords" content="NLP,预训练,大型语言模型,深度学习,Prompt,ChatGPT"><meta name="author" content="Weitang Liu"><meta name="copyright" content="Weitang Liu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="博客内容来自于最新书籍《The Art of Asking ChatGPT for High-Quality Answers: A complete Guide to Prompt Engineering Techniques》。本书是一本综合性的指南，目的是帮助您理解和利用各种提示技术，以便从ChatGPT中获得高质量的答案。 最新可参考: https:&#x2F;&#x2F;github.com&#x2F;f&#x2F;awesom">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Prompts技巧工程完全指南">
+<meta property="og:url" content="http://lonepatient.top/2023/04/02/The-Art-of-Asking-ChatGPT-for-High-Quality-Answers-A-complete-Guide-to-Prompt-Engineering-Technique-main.html">
+<meta property="og:site_name" content="闲记算法">
+<meta property="og:description" content="博客内容来自于最新书籍《The Art of Asking ChatGPT for High-Quality Answers: A complete Guide to Prompt Engineering Techniques》。本书是一本综合性的指南，目的是帮助您理解和利用各种提示技术，以便从ChatGPT中获得高质量的答案。 最新可参考: https:&#x2F;&#x2F;github.com&#x2F;f&#x2F;awesom">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230410200141.jpeg">
+<meta property="article:published_time" content="2023-04-02T23:20:08.000Z">
+<meta property="article:modified_time" content="2026-02-27T07:52:12.664Z">
+<meta property="article:author" content="Weitang Liu">
+<meta property="article:tag" content="NLP">
+<meta property="article:tag" content="预训练">
+<meta property="article:tag" content="大型语言模型">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="Prompt">
+<meta property="article:tag" content="ChatGPT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230410200141.jpeg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lonepatient.top/2023/04/02/The-Art-of-Asking-ChatGPT-for-High-Quality-Answers-A-complete-Guide-to-Prompt-Engineering-Technique-main"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//s4.cnzz.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" data-pjax="data-pjax" src="https://s4.cnzz.com/z_stat.php?id=1273275888&amp;web_id=1273275888"></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-02-27 07:52:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/backgroud.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><script src="https://at.alicdn.com/t/c/font_3570527_dthoqrrv2tv.css"></script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JwRQtLKZggvJH4sJ",ck:"JwRQtLKZggvJH4sJ"})</script><link rel="stylesheet" href="/css/universe.css"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536467946304280" crossorigin="anonymous"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230410200141.jpeg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">闲记算法</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Prompts技巧工程完全指南<a class="post-edit-link" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts/The-Art-of-Asking-ChatGPT-for-High-Quality-Answers-A-complete-Guide-to-Prompt-Engineering-Technique-main.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-02T23:20:08.000Z" title="发表于 2023-04-02 23:20:08">2023-04-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-27T07:52:12.664Z" title="更新于 2026-02-27 07:52:12">2026-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/">自然语言处理</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/">大型语言模型</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">12k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>38分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2023/04/02/The-Art-of-Asking-ChatGPT-for-High-Quality-Answers-A-complete-Guide-to-Prompt-Engineering-Technique-main.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>博客内容来自于最新书籍《The Art of Asking ChatGPT for High-Quality Answers: A complete Guide to Prompt Engineering Techniques》。本书是一本综合性的指南，目的是帮助您理解和利用各种提示技术，以便从ChatGPT中获得高质量的答案。</p>
+<div class="note default simple"><p>最新可参考: <a target="_blank" rel="noopener" href="https://github.com/f/awesome-chatgpt-prompts">https://github.com/f/awesome-chatgpt-prompts</a></p>
+</div>
+<p>接下来我们将探索如何用不同的提示技术去完成不同的目的。ChatGPT 是目前最先进的、能够生成类似人类文本的语言模型。然而，了解向ChatGPT提问的正确方式，以获得我们所期望的高质量答案，是至关重要的。</p>
+<p>这就是本书的目的：无论你是一个普通人、研究员、开发者，或者是仅仅想把ChatGPT当成自己工作的个人助理，这本书都适合你。书中使用通俗易懂的语言解释，并且辅以实例和提问技巧的公式。通过这本书，你将学会如何使用提示技巧来控制ChatGPT的输出，让其按照你的需求生成文本。</p>
+<p>在本书中，我还提供了一些如何综合利用不同提示技巧，以达到特定目的的例子。希望这本书能给你丰富的信息，希望你在阅读时，能像我写书时那样开心。</p>
+<h3 id="第一章：Prompt-工程技术简介">第一章：Prompt 工程技术简介</h3>
+<p>什么是 Prompt 工程？</p>
+<p>Prompt 工程是创建提示或指导像 ChatGPT 这样的语言模型输出的过程。它允许用户控制模型的输出并生成符合其特定需求的文本。</p>
+<p>ChatGPT 是一种先进的语言模型，能够生成类似于人类的文本。它建立在 Transformer 架构上，可以处理大量数据并生成高质量的文本。</p>
+<p>然而，为了从 ChatGPT 中获得最佳结果，重要的是要了解如何正确地提示模型。 Prompt可以让用户控制模型的输出并生成相关、准确和高质量的文本。 在使用 ChatGPT 时，了解它的能力和限制非常重要。</p>
+<p>该模型能够生成类似于人类的文本，但如果没有适当的指导，它可能无法始终产生期望的输出。</p>
+<p>这就是 Prompt 工程的作用，通过提供清晰而具体的指令，您可以引导模型的输出并确保其相关。</p>
+<p><strong>Prompt 公式是提示的特定格式，通常由三个主要元素组成：</strong></p>
+<ul>
+<li>任务：对提示要求模型生成的内容进行清晰而简洁的陈述。</li>
+<li>指令：在生成文本时模型应遵循的指令。</li>
+<li>角色：模型在生成文本时应扮演的角色。</li>
+</ul>
+<p>在本书中，我们将探讨可用于 ChatGPT 的各种 Prompt 工程技术。我们将讨论不同类型的提示，以及如何使用它们实现您想要的特定目标。</p>
+<h3 id="第二章：指令提示技术-Instructions-Prompt-Technique">第二章：指令提示技术(Instructions Prompt Technique)</h3>
+<p>现在，让我们开始探索“指令提示技术”，以及如何使用它从ChatGPT中生成高质量的文本。</p>
+<p>指令提示技术是通过为模型提供具体指令来引导ChatGPT的输出的一种方法。这种技术对于确保输出相关和高质量非常有用。</p>
+<p>要使用指令提示技术，您需要为模型提供清晰简洁的任务，以及具体的指令以供模型遵循。</p>
+<p>例如，如果您正在生成客户服务响应，首先要提供一个任务，例如“生成客户咨询的回复（generate responses to customer inquiries）”的指令，以及说明： “回复应该是专业且提供准确的信息（responses should be professional and provide accurate information）”。</p>
+<p>Prompt公式：“按照以下指示生成[任务]：[指令]”</p>
+<p>示例：</p>
+<p><strong>生成客户服务回复：</strong></p>
+<ul>
+<li>任务：生成客户查询的回复</li>
+<li>指令：回复应该是专业且提供准确的信息</li>
+<li>提示公式：“按照以下指示生成专业且准确的客户查询回复：回复应该专业且提供准确的信息。”</li>
+<li>英文: Generate professional and accurate responses to customer inquiries following these instructions: The responses should be professional and provide accurate information</li>
+</ul>
+<p><strong>生成法律文件：</strong></p>
+<ul>
+<li>任务：生成法律文件</li>
+<li>指令：文件应符合相关法律法规</li>
+<li>提示公式：“按照以下指示生成符合相关法律法规的法律文件：文件应符合相关法律法规。”</li>
+<li>英文: Generate a legal document that is compliant with relevant laws and regulations following these instructions: The document should be in compliance with relevant laws and regulations</li>
+</ul>
+<p>使用指令提示技术时，重要的是要记住指令应该清晰具体。这将有助于确保输出相关和高质量。可以将指令提示技术与下一章节中解释的“角色提示”和“种子词提示”相结合，以增强ChatGPT的输出。</p>
+<h3 id="第三章：角色提示（role-prompting-technique）">第三章：角色提示（role prompting technique）</h3>
+<p>角色提示技术是通过为ChatGPT指定一个特定的角色来引导其输出的一种方式。这种技术对于生成针对特定上下文或受众的文本非常有用。</p>
+<p>要使用角色提示技术，您需要为模型提供一个清晰具体的角色。</p>
+<p>例如，如果您正在生成客户服务回复，您可以提供一个角色，如“客户服务代表”。</p>
+<p>提示公式：“作为[角色]生成[任务]”</p>
+<p>示例：</p>
+<p><strong>生成客户服务回复：</strong></p>
+<ul>
+<li>任务：生成对客户查询的回复</li>
+<li>角色：客户服务代表</li>
+<li>提示公式：“作为客户服务代表，生成对客户查询的回复。”</li>
+<li>英文: Generate responses to customer inquiries as a customer service representative</li>
+</ul>
+<p><strong>生成法律文件：</strong></p>
+<ul>
+<li>任务：生成一份法律文件</li>
+<li>角色：律师</li>
+<li>提示公式：“作为律师，生成一份法律文件。”</li>
+<li>英文: Generate a legal document as a lawyer</li>
+</ul>
+<p>将角色提示技术与指令提示和种子词提示结合使用可以增强ChatGPT的输出。</p>
+<p><strong>下面是一个示例，展示了如何将指令提示、角色提示和种子词提示技术结合使用：</strong></p>
+<ul>
+<li>任务：为新智能手机生成产品描述</li>
+<li>指令：描述应该是有信息量的，具有说服力，并突出智能手机的独特功能</li>
+<li>角色：市场代表</li>
+<li>种子词：“创新的”</li>
+<li>提示公式：“作为市场代表，生成一个有信息量的、有说服力的产品描述，突出新智能手机的创新功能。该智能手机具有以下功能[插入您的功能]”</li>
+<li>英文: As a marketing representative, generate an informative, persuasive product description that highlights the innovative features of the new smartphone. The smartphone has the following features [insert your features]</li>
+</ul>
+<p>在这个示例中，指令提示用于确保产品描述具有信息量和说服力。角色提示用于确保描述是从市场代表的角度书写的。而种子词提示则用于确保描述侧重于智能手机的创新功能。</p>
+<h3 id="第四章：标准提示">第四章：标准提示</h3>
+<p>标准提示是一种简单的方法，通过为模型提供一个特定的任务来引导ChatGPT的输出。例如，如果您想生成一篇新闻文章的摘要，您可以提供一个任务，如“总结这篇新闻文章”。</p>
+<p>提示公式：“生成一个[任务]”</p>
+<p>例如：</p>
+<p><strong>生成新闻文章的摘要：</strong></p>
+<ul>
+<li>任务：总结这篇新闻文章</li>
+<li>提示公式：“生成这篇新闻文章的摘要”</li>
+<li>英文: Generate a summary of this news article</li>
+</ul>
+<p><strong>生成一篇产品评论：</strong></p>
+<ul>
+<li>任务：为一款新智能手机撰写评论</li>
+<li>提示公式：“生成这款新智能手机的评论”</li>
+<li>英文: Generate a review of this new smartphone</li>
+</ul>
+<p>此外，标准提示可以与其他技术（如角色提示和种子词提示）结合使用，以增强ChatGPT的输出。</p>
+<p>** 以下是如何将标准提示、角色提示和种子词提示技术结合使用的示例：**</p>
+<ul>
+<li>任务：为一台新笔记本电脑撰写产品评论</li>
+<li>说明：评论应客观、信息丰富，强调笔记本电脑的独特特点</li>
+<li>角色：技术专家</li>
+<li>种子词：“强大的”</li>
+<li>提示公式：“作为一名技术专家，生成一个客观而且信息丰富的产品评论，强调新笔记本电脑的强大特点。”</li>
+<li>英文: As a tech expert, generate an objective and informative product review that highlights the powerful features of the new laptop</li>
+</ul>
+<p>在这个示例中，标准提示技术用于确保模型生成产品评论。角色提示用于确保评论是从技术专家的角度写的。而种子词提示用于确保评论侧重于笔记本电脑的强大特点。</p>
+<h3 id="第五章：零、一和少样本提示">第五章：零、一和少样本提示</h3>
+<p>零样本、一样本和少样本提示是用于从ChatGPT生成文本的技术，最少或没有任何示例。当特定任务的数据有限或任务是新的且未定义时，这些技术非常有用。</p>
+<p>当任务没有可用的示例时，使用零样本提示技术。模型提供一个通用任务，根据对任务的理解生成文本。</p>
+<p>当任务只有一个示例可用时，使用一样本提示技术。模型提供示例，并根据对示例的理解生成文本。</p>
+<p>当任务只有有限数量的示例可用时，使用少样本提示技术。模型提供示例，并根据对示例的理解生成文本。</p>
+<p>提示公式：“基于[数量]个示例生成文本”</p>
+<p>例如：</p>
+<p><strong>为没有可用示例的新产品编写产品描述：</strong></p>
+<ul>
+<li>任务：为新的智能手表编写产品描述</li>
+<li>提示公式：“基于零个示例为这款新智能手表生成产品描述”</li>
+<li>英文: Generate a product description for this new smartwatch with zero examples</li>
+</ul>
+<p><strong>使用一个示例生成产品比较：</strong></p>
+<ul>
+<li>任务：将新款智能手机与最新的iPhone进行比较</li>
+<li>提示公式：“使用一个示例（最新的iPhone）为这款新智能手机生成产品比较”</li>
+<li>英文: Generate a product comparison of this new smartphone with one example (latest iPhone)</li>
+</ul>
+<p><strong>使用少量示例生成产品评论：</strong></p>
+<ul>
+<li>任务：为新的电子阅读器撰写评论</li>
+<li>提示公式：“使用少量示例（3个其他电子阅读器）为这款新电子阅读器生成评论”</li>
+<li>英文: Generate a review of this new e-reader with few examples (3 other e-readers)</li>
+</ul>
+<p>这些技术可用于根据模型对任务或提供的示例的理解生成文本。</p>
+<h3 id="第六章：“让我们思考一下”提示">第六章：“让我们思考一下”提示</h3>
+<p>“让我们思考一下”提示是一种技巧，可鼓励ChatGPT生成反思和思考性的文本。这种技术适用于撰写论文、诗歌或创意写作等任务。</p>
+<p>“让我们思考一下”提示的公式非常简单，即“让我们思考一下”后跟一个主题或问题。</p>
+<p>例如：</p>
+<p><strong>生成一篇反思性论文：</strong></p>
+<ul>
+<li>任务：就个人成长主题写一篇反思性论文</li>
+<li>提示公式：“让我们思考一下：个人成长”</li>
+<li>英文: Let’s think about this: personal growth</li>
+</ul>
+<p><strong>生成一首诗：</strong></p>
+<ul>
+<li>任务：写一首关于季节变化的诗</li>
+<li>提示公式：“让我们思考一下：季节变化”</li>
+<li>英文: Let’s think about this: the changing seasons</li>
+</ul>
+<p>这个提示要求对特定主题或想法展开对话或讨论。发言者邀请ChatGPT参与讨论相关主题。</p>
+<p>模型提供了一个提示，作为对话或文本生成的起点。</p>
+<p>然后，模型使用其训练数据和算法生成与提示相关的响应。这种技术允许ChatGPT根据提供的提示生成上下文适当且连贯的文本。</p>
+<p><strong>要使用“让我们思考一下提示”技术与ChatGPT，您可以遵循以下步骤：</strong></p>
+<ol>
+<li>确定您要讨论的主题或想法。</li>
+<li>制定一个明确表达主题或想法的提示，并开始对话或文本生成。</li>
+<li>用“让我们思考”或“让我们讨论”开头的提示，表明您正在启动对话或讨论。</li>
+</ol>
+<p><strong>以下是使用此技术的一些提示示例：</strong></p>
+<ul>
+<li>提示：“让我们思考气候变化对农业的影响”</li>
+<li>提示：“让我们讨论人工智能的当前状态”</li>
+<li>提示：“让我们谈谈远程工作的好处和缺点” 您还可以添加开放式问题、陈述或一段您希望模型继续或扩展的文本。</li>
+</ul>
+<p>提供提示后，模型将使用其训练数据和算法生成与提示相关的响应，并以连贯的方式继续对话。</p>
+<p>这种独特的提示有助于ChatGPT以不同的视角和角度给出答案，从而产生更具动态性和信息性的段落。</p>
+<p>使用提示的步骤简单易行，可以真正提高您的写作水平。尝试一下，看看效果如何吧。</p>
+<h3 id="第七章：自我一致性提示">第七章：自我一致性提示</h3>
+<p>自我一致性提示是一种技术，用于确保ChatGPT的输出与提供的输入一致。这种技术对于事实核查、数据验证或文本生成中的一致性检查等任务非常有用。</p>
+<p>自我一致性提示的提示公式是输入文本后跟着指令“请确保以下文本是自我一致的”。</p>
+<p>或者，可以提示模型生成与提供的输入一致的文本。</p>
+<p>提示示例及其公式：</p>
+<p><strong>示例1：文本生成</strong></p>
+<ul>
+<li>任务：生成产品评论</li>
+<li>指令：评论应与输入中提供的产品信息一致</li>
+<li>提示公式：“生成与以下产品信息一致的产品评论[插入产品信息]”</li>
+<li>英文: Generate a product review that is consistent with the following product information [insert product information]</li>
+</ul>
+<p><strong>示例2：文本摘要</strong></p>
+<ul>
+<li>任务：概括一篇新闻文章</li>
+<li>指令：摘要应与文章中提供的信息一致</li>
+<li>提示公式：“用与提供的信息一致的方式概括以下新闻文章[插入新闻文章]”</li>
+<li>英文: Summarize the following news article in a way that is consistent with the information provided [insert news article]</li>
+</ul>
+<p><strong>示例3：文本完成</strong></p>
+<ul>
+<li>任务：完成一个句子</li>
+<li>指令：完成应与输入中提供的上下文一致</li>
+<li>提示公式：“以与提供的上下文一致的方式完成以下句子[插入句子]”</li>
+<li>英文: Complete the following sentence in a way that is consistent with the context provided [insert sentence]</li>
+</ul>
+<p><strong>示例4：</strong></p>
+<ol>
+<li><strong>事实核查：</strong></li>
+</ol>
+<ul>
+<li>任务：检查给定新闻文章的一致性</li>
+<li>输入文本：“文章中陈述该城市的人口为500万，但后来又说该城市的人口为700万。”</li>
+<li>提示公式：“请确保以下文本是一致的：文章中陈述该城市的人口为500万，但后来又说该城市的人口为700万。”</li>
+<li>英文: Please ensure the following text is self-consistent: The article states that the population of the city is 5 million, but later on, it says that the population is 7 million.</li>
+</ul>
+<ol start="2">
+<li><strong>数据验证：</strong></li>
+</ol>
+<ul>
+<li>任务：检查给定数据集的一致性</li>
+<li>输入文本：“数据显示7月份的平均温度为30度，但最低温度记录为20度。”</li>
+<li>提示公式：“请确保以下文本是一致的：数据显示7月份的平均温度为30度，但最低温度记录为20度。”</li>
+<li>英文: Please ensure the following text is self-consistent: The data shows that the average temperature in July is 30 degrees, but the minimum temperature is recorded as 20 degrees.</li>
+</ul>
+<h3 id="第八章：种子词提示">第八章：种子词提示</h3>
+<p>种子词提示是一种通过提供特定的种子词或短语来控制ChatGPT输出的技术。种子词提示的提示公式是种子词或短语，后跟指令“请根据以下种子词生成文本”。</p>
+<p>示例：</p>
+<p><strong>文本生成：</strong></p>
+<ul>
+<li>任务：编写一篇有关龙的故事</li>
+<li>种子词：“龙”</li>
+<li>提示公式：“请根据以下种子词生成文本：龙”</li>
+<li>英文: Please generate text based on the following seed-word: Dragon</li>
+</ul>
+<p><strong>语言翻译：</strong></p>
+<ul>
+<li>任务：将一句话从英语翻译成西班牙语</li>
+<li>种子词：“你好”</li>
+<li>提示公式：“请根据以下种子词生成文本：你好”</li>
+<li>英文: Please generate text based on the following seed-word: Hello</li>
+</ul>
+<p>这种技术允许模型生成与种子词相关的文本并对其进行扩展。这是一种控制模型生成文本与某个特定主题或背景相关的方式。</p>
+<p>种子词提示可以与角色提示和指令提示相结合，以创建更具体和有针对性的生成文本。通过提供种子词或短语，模型可以生成与该种子词或短语相关的文本，并通过提供有关期望输出和角色的信息，模型可以以特定于角色或指令的风格或语气生成文本。这样可以更好地控制生成的文本，并可用于各种应用程序。</p>
+<p>以下是提示示例及其公式：</p>
+<p><strong>示例1：文本生成</strong></p>
+<ul>
+<li>任务：编写一首诗</li>
+<li>指令：诗应与种子词“爱”相关，并以十四行诗的形式书写。</li>
+<li>角色：诗人</li>
+<li>提示公式：“作为诗人，根据以下种子词生成与“爱”相关的十四行诗：”</li>
+<li>英文： “Generate a sonnet related to the seed word ‘love’ as a poet”</li>
+</ul>
+<p><strong>示例2：文本完成</strong></p>
+<ul>
+<li>任务：完成一句话</li>
+<li>指令：完成应与种子词“科学”相关，并以研究论文的形式书写。</li>
+<li>角色：研究员</li>
+<li>提示公式：“作为研究员，请在与种子词“科学”相关且以研究论文的形式书写的情况下完成以下句子：[插入句子]”</li>
+<li>英文：  “Complete the following sentence in a way that is related to the seed word ‘science’ and in the style of a research paper as a researcher: [insert sentence]”</li>
+</ul>
+<p><strong>示例3：文本摘要</strong></p>
+<ul>
+<li>任务：摘要一篇新闻文章</li>
+<li>指令：摘要应与种子词“政治”相关，并以中立和公正的语气书写。</li>
+<li>角色：记者</li>
+<li>提示公式：“作为记者，请以中立和公正的语气摘要以下新闻文章，与种子词“政治”相关：[插入新闻文章]”</li>
+<li>英文： “Summarize the following news article in a way that is related to the seed word ‘politics’ in a neutral and unbiased tone as a journalist: [insert news article]”</li>
+</ul>
+<h3 id="第九章：知识生成提示">第九章：知识生成提示</h3>
+<p>知识生成提示是一种从ChatGPT中引出新的、原创的信息的技术。</p>
+<p>知识生成提示的公式是“请生成关于X的新的和原创的信息”，其中X是感兴趣的主题。</p>
+<p>这是一种利用模型预先存在的知识来生成新的信息或回答问题的技术。</p>
+<p>要将此提示与ChatGPT一起使用，需要将问题或主题作为输入提供给模型，以及指定所生成文本的任务或目标的提示。</p>
+<p>提示应包括有关所需输出的信息，例如要生成的文本类型以及任何特定的要求或限制。</p>
+<p>以下是提示示例及其公式：</p>
+<p><strong>示例1：知识生成</strong></p>
+<ul>
+<li>任务：生成有关特定主题的新信息</li>
+<li>说明：生成的信息应准确且与主题相关</li>
+<li>提示公式：“生成有关[特定主题]的新的准确信息”</li>
+<li>英文: &quot;Generate new and accurate information about [specific topic] &quot;</li>
+</ul>
+<p><strong>示例2：问答</strong></p>
+<ul>
+<li>任务：回答问题</li>
+<li>说明：答案应准确且与问题相关</li>
+<li>提示公式：“回答以下问题：[插入问题]”</li>
+<li>英文: “Answer the following question: [insert question]”</li>
+</ul>
+<p><strong>示例3：知识整合</strong></p>
+<ul>
+<li>任务：将新信息与现有知识整合</li>
+<li>说明：整合应准确且与主题相关</li>
+<li>提示公式：“将以下信息与有关[特定主题]的现有知识整合：[插入新信息]”</li>
+<li>英文:  “Integrate the following information with the existing knowledge about [specific topic]: [insert new information]”</li>
+</ul>
+<p><strong>示例4：数据分析</strong></p>
+<ul>
+<li>任务：从给定的数据集中生成有关客户行为的见解</li>
+<li>提示公式：“请从这个数据集中生成有关客户行为的新的和原创的信息”</li>
+<li>英文: “Please generate new and original information about customer behavior from this dataset”</li>
+</ul>
+<h3 id="第十章：知识整合提示">第十章：知识整合提示</h3>
+<p>这种技术利用模型的现有知识来整合新信息或连接不同的信息片段。</p>
+<p>这种技术对于将现有知识与新信息相结合，以生成更全面的特定主题的理解非常有用。</p>
+<p><strong>如何与ChatGPT一起使用：</strong></p>
+<ul>
+<li>模型应该提供新信息和现有知识作为输入，以及指定生成文本的任务或目标的提示。</li>
+<li>提示应包括有关所需输出的信息，例如要生成的文本类型以及任何特定的要求或限制。</li>
+</ul>
+<p>提示示例及其公式：</p>
+<p><strong>示例1：知识整合</strong></p>
+<ul>
+<li>任务：将新信息与现有知识整合</li>
+<li>说明：整合应准确且与主题相关</li>
+<li>提示公式：“将以下信息与关于[具体主题]的现有知识整合：[插入新信息]”</li>
+<li>英文: “Integrate the following information with the existing knowledge about [specific topic]: [insert new information]”</li>
+</ul>
+<p><strong>示例2：连接信息片段</strong></p>
+<ul>
+<li>任务：连接不同的信息片段</li>
+<li>说明：连接应相关且逻辑清晰</li>
+<li>提示公式：“以相关且逻辑清晰的方式连接以下信息片段：[插入信息1] [插入信息2]”</li>
+<li>英文: “Connect the following pieces of information in a way that is relevant and logical: [insert information 1] [insert information 2]”</li>
+</ul>
+<p><strong>示例3：更新现有知识</strong></p>
+<ul>
+<li>任务：使用新信息更新现有知识</li>
+<li>说明：更新的信息应准确且相关</li>
+<li>提示公式：“使用以下信息更新[具体主题]的现有知识：[插入新信息]”</li>
+<li>英文: “Update the existing knowledge about [specific topic] with the following information: [insert new information]”</li>
+</ul>
+<h3 id="第十一章：多项选择提示">第十一章：多项选择提示</h3>
+<p>这种技术向模型提供一个问题或任务以及一组预定义的选项作为潜在答案。</p>
+<p>该技术对于生成仅限于特定选项集的文本非常有用，可用于问答、文本完成和其他任务。模型可以生成仅限于预定义选项的文本。</p>
+<p>要使用ChatGPT的多项选择提示，需要向模型提供一个问题或任务作为输入，以及一组预定义的选项作为潜在答案。提示还应包括有关所需输出的信息，例如要生成的文本类型以及任何特定要求或限制。</p>
+<p>提示示例及其公式：</p>
+<p><strong>示例1：问答</strong></p>
+<ul>
+<li>任务：回答一个多项选择题</li>
+<li>说明：答案应该是预定义的选项之一</li>
+<li>提示公式：“通过选择以下选项之一回答以下问题：[插入问题] [插入选项1] [插入选项2] [插入选项3]”</li>
+<li>英文: “Answer the following question by selecting one of the following options: [insert question] [insert option 1] [insert option 2] [insert option 3]”</li>
+</ul>
+<p><strong>示例2：文本完成</strong></p>
+<ul>
+<li>任务：使用预定义选项之一完成句子</li>
+<li>说明：完成应该是预定义的选项之一</li>
+<li>提示公式：“通过选择以下选项之一完成以下句子：[插入句子] [插入选项1] [插入选项2] [插入选项3]”</li>
+<li>英文: “Complete the following sentence by selecting one of the following options: [insert sentence] [insert option 1] [insert option 2] [insert option 3]”</li>
+</ul>
+<p><strong>示例3：情感分析</strong></p>
+<ul>
+<li>任务：将文本分类为积极、中立或消极</li>
+<li>说明：分类应该是预定义的选项之一</li>
+<li>提示公式：“通过选择以下选项之一，将以下文本分类为积极、中立或消极：[插入文本] [积极] [中立] [消极]”</li>
+<li>英文:  “Classify the following text as positive, neutral or negative by selecting one of the following options: [insert text] [positive] [neutral] [negative]”</li>
+</ul>
+<h3 id="第十二章：可解释的软提示">第十二章：可解释的软提示</h3>
+<p>可解释的软提示是一种技术，可以在提供一定的灵活性的同时控制模型生成的文本。它通过提供一组受控输入和关于所需输出的附加信息来实现。这种技术可以生成更具解释性和可控性的生成文本。</p>
+<p>提示示例及其公式：</p>
+<p><strong>示例1：文本生成</strong></p>
+<ul>
+<li>任务：生成一个故事</li>
+<li>指令：故事应基于一组给定的角色和特定的主题</li>
+<li>提示公式：“基于以下角色生成故事：[插入角色]和主题：[插入主题]”</li>
+<li>英文: “Generate a story based on the following characters: [insert characters] and the theme: [insert theme]”</li>
+</ul>
+<p><strong>示例2：文本完成</strong></p>
+<ul>
+<li>任务：完成一句话</li>
+<li>指令：完成应以特定作者的风格为基础</li>
+<li>提示公式：“以[特定作者]的风格完成以下句子：[插入句子]”</li>
+<li>英文:  “Complete the following sentence in the style of [specific author]: [insert sentence]”</li>
+</ul>
+<p><strong>示例3：语言建模</strong></p>
+<ul>
+<li>任务：以特定风格生成文本</li>
+<li>指令：文本应以特定时期的风格为基础</li>
+<li>提示公式：“以[特定时期]的风格生成文本：[插入上下文]”</li>
+<li>英文: “Generate text in the style of [specific period]: [insert context]”</li>
+</ul>
+<h3 id="第十三章：控制生成提示">第十三章：控制生成提示</h3>
+<p>控制生成提示是一种技术，可让模型在生成文本时对输出进行高度控制。</p>
+<p>这可以通过提供一组特定的输入来实现，例如模板、特定词汇或一组约束条件，这些输入可用于指导生成过程。</p>
+<p>以下是一些示例和它们的公式：</p>
+<p><strong>示例1：文本生成</strong></p>
+<ul>
+<li>任务：生成一个故事</li>
+<li>说明：该故事应基于特定的模板</li>
+<li>提示公式：“根据以下模板生成故事：[插入模板]”</li>
+<li>英文: “Generate a story based on the following template: [insert template]”</li>
+</ul>
+<p><strong>示例2：文本补全</strong></p>
+<ul>
+<li>任务：完成一句话</li>
+<li>说明：完成应使用特定的词汇</li>
+<li>提示公式：“使用以下词汇完成以下句子：[插入词汇]：[插入句子]”</li>
+<li>英文: “Complete the following sentence using the following vocabulary: [insert vocabulary]: [insert sentence]”</li>
+</ul>
+<p><strong>示例3：语言建模</strong></p>
+<ul>
+<li>任务：以特定风格生成文本</li>
+<li>说明：文本应遵循一组特定的语法规则</li>
+<li>提示公式：“生成遵循以下语法规则的文本：[插入规则]：[插入上下文]”</li>
+<li>英文: “Generate text that follows the following grammatical rules: [insert rules]: [insert context]”</li>
+</ul>
+<p>通过提供一组特定的输入来指导生成过程，控制生成提示使得生成的文本更具可控性和可预测性。</p>
+<h3 id="第十四章：问答提示">第十四章：问答提示</h3>
+<p>问答提示是一种技术，可以让模型生成回答特定问题或任务的文本。通过将问题或任务与可能与问题或任务相关的任何其他信息一起作为输入提供给模型来实现此目的。</p>
+<p>一些提示示例及其公式如下：</p>
+<p><strong>示例1：事实问题回答</strong></p>
+<ul>
+<li>任务：回答一个事实性问题</li>
+<li>说明：答案应准确且相关</li>
+<li>提示公式：“回答以下事实问题：[插入问题]”</li>
+<li>英文: “Answer the following factual question: [insert question]”</li>
+</ul>
+<p><strong>示例2：定义</strong></p>
+<ul>
+<li>任务：提供一个词的定义</li>
+<li>说明：定义应准确</li>
+<li>提示公式：“定义以下词汇：[插入单词]”</li>
+<li>英文:  “Define the following word: [insert word]”</li>
+</ul>
+<p><strong>示例3：信息检索</strong></p>
+<ul>
+<li>任务：从特定来源检索信息</li>
+<li>说明：检索到的信息应相关</li>
+<li>提示公式：“从以下来源检索有关[特定主题]的信息：[插入来源]” 这对于问答和信息检索等任务非常有用。</li>
+<li>英文: “Retrieve information about [specific topic] from the following source: [insert source]”</li>
+</ul>
+<h3 id="第十五章：概述提示">第十五章：概述提示</h3>
+<p>概述提示是一种技术，允许模型在保留其主要思想和信息的同时生成给定文本的较短版本。</p>
+<p>这可以通过将较长的文本作为输入提供给模型并要求其生成该文本的摘要来实现。</p>
+<p>这种技术对于文本概述和信息压缩等任务非常有用。</p>
+<p><strong>如何在ChatGPT中使用：</strong></p>
+<ul>
+<li>应该向模型提供较长的文本作为输入，并要求其生成该文本的摘要。</li>
+<li>提示还应包括有关所需输出的信息，例如摘要的所需长度和任何特定要求或限制。</li>
+</ul>
+<p>提示示例及其公式：</p>
+<p><strong>示例1：文章概述</strong></p>
+<ul>
+<li>任务：概述新闻文章</li>
+<li>说明：摘要应是文章主要观点的简要概述</li>
+<li>提示公式：“用一句简短的话概括以下新闻文章：[插入文章]”</li>
+<li>英文: “Summarize the following news article in one short sentence: [insert article]”</li>
+</ul>
+<p><strong>示例2：会议记录</strong></p>
+<ul>
+<li>任务：概括会议记录</li>
+<li>说明：摘要应突出会议的主要决策和行动</li>
+<li>提示公式：“通过列出主要决策和行动来总结以下会议记录：[插入记录]”</li>
+<li>英文:  “Summarize the following meeting transcript by listing the main decisions and actions taken: [insert transcript]”</li>
+</ul>
+<p><strong>示例3：书籍摘要</strong></p>
+<ul>
+<li>任务：总结一本书</li>
+<li>说明：摘要应是书的主要观点的简要概述</li>
+<li>提示公式：“用一段简短的段落总结以下书籍：[插入书名]”</li>
+<li>英文:  “Summarize the following book in one short paragraph: [insert book title]”</li>
+</ul>
+<h3 id="第十六章：对话提示">第十六章：对话提示</h3>
+<p>对话提示是一种技术，允许模型生成模拟两个或更多实体之间对话的文本。通过为模型提供一个上下文和一组角色或实体，以及它们的角色和背景，并要求模型在它们之间生成对话。</p>
+<p>因此，应为模型提供上下文和一组角色或实体，以及它们的角色和背景。还应向模型提供有关所需输出的信息，例如对话或交谈的类型以及任何特定的要求或限制。</p>
+<p>提示示例及其公式：</p>
+<p><strong>示例1：对话生成</strong></p>
+<ul>
+<li>任务：生成两个角色之间的对话</li>
+<li>说明：对话应自然且与给定上下文相关</li>
+<li>提示公式：“在以下情境中生成以下角色之间的对话[插入角色]”</li>
+<li>英文: “Generate a conversation between the following characters [insert characters] in the following context [insert context]”</li>
+</ul>
+<p><strong>示例2：故事写作</strong></p>
+<ul>
+<li>任务：在故事中生成对话</li>
+<li>说明：对话应与故事的角色和事件一致</li>
+<li>提示公式：“在以下故事中生成以下角色之间的对话[插入故事]”</li>
+<li>英文: “Generate a dialogue between the following characters [insert characters] in the following story [insert story]”</li>
+</ul>
+<p><strong>示例3：聊天机器人开发</strong></p>
+<ul>
+<li>任务：为客服聊天机器人生成对话</li>
+<li>说明：对话应专业且提供准确的信息</li>
+<li>提示公式：“在客户询问[插入主题]时，为客服聊天机器人生成专业和准确的对话”</li>
+<li>英文: “Generate a professional and accurate dialogue for a customer service chatbot, when the customer asks aout [insert topic]”</li>
+</ul>
+<p>因此，这种技术对于对话生成、故事写作和聊天机器人开发等任务非常有用。</p>
+<h3 id="第十七章：对抗性提示">第十七章：对抗性提示</h3>
+<p>对抗性提示是一种技术，它允许模型生成抵抗某些类型的攻击或偏见的文本。这种技术可用于训练更为稳健和抵抗某些类型攻击或偏见的模型。</p>
+<p>要在ChatGPT中使用对抗性提示，需要为模型提供一个提示，该提示旨在使模型难以生成符合期望输出的文本。提示还应包括有关所需输出的信息，例如要生成的文本类型和任何特定要求或约束。</p>
+<p>提示示例及其公式：</p>
+<p><strong>示例1：用于文本分类的对抗性提示</strong></p>
+<ul>
+<li>任务：生成被分类为特定标签的文本</li>
+<li>说明：生成的文本应难以分类为特定标签</li>
+<li>提示公式：“生成难以分类为[插入标签]的文本”</li>
+<li>英文:  “Generate text that is difficult to classify as [ insert label]”</li>
+</ul>
+<p><strong>示例2：用于情感分析的对抗性提示</strong></p>
+<ul>
+<li>任务：生成难以分类为特定情感的文本</li>
+<li>说明：生成的文本应难以分类为特定情感</li>
+<li>提示公式：“生成难以分类为具有[插入情感]情感的文本”</li>
+<li>英文: “Generate text that is difficult to classify as aving the sentiment of [insert sentiment]”</li>
+</ul>
+<p><strong>示例3：用于语言翻译的对抗性提示</strong></p>
+<ul>
+<li>任务：生成难以翻译的文本</li>
+<li>说明：生成的文本应难以翻译为目标语言</li>
+<li>提示公式：“生成难以翻译为[插入目标语言]的文本”</li>
+<li>英文: “Generate text that is difficult to translate to [insert target language]”</li>
+</ul>
+<h3 id="第十八章：聚类提示">第十八章：聚类提示</h3>
+<p>聚类提示是一种技术，它可以让模型根据某些特征或特点将相似的数据点分组在一起。</p>
+<p>通过提供一组数据点并要求模型根据某些特征或特点将它们分组成簇，可以实现这一目标。</p>
+<p>这种技术在数据分析、机器学习和自然语言处理等任务中非常有用。</p>
+<p><strong>如何在ChatGPT中使用：</strong></p>
+<p>应该向模型提供一组数据点，并要求它根据某些特征或特点将它们分组成簇。提示还应包括有关所需输出的信息，例如要生成的簇数和任何特定的要求或约束。</p>
+<p>提示示例及其公式：</p>
+<p><strong>示例1：客户评论的聚类</strong></p>
+<ul>
+<li>任务：将相似的客户评论分组在一起</li>
+<li>说明：应根据情感将评论分组</li>
+<li>提示公式：“将以下客户评论根据情感分组成簇：[插入评论]”</li>
+<li>英文: “Group the following customer reviews into clusters based on sentiment: [insert reviews]”</li>
+</ul>
+<p><strong>示例2：新闻文章的聚类</strong></p>
+<ul>
+<li>任务：将相似的新闻文章分组在一起</li>
+<li>说明：应根据主题将文章分组</li>
+<li>提示公式：“将以下新闻文章根据主题分组成簇：[插入文章]”</li>
+<li>英文: “Group the following news articles into clusters based on topic: [insert articles]”</li>
+</ul>
+<p><strong>示例3：科学论文的聚类</strong></p>
+<ul>
+<li>任务：将相似的科学论文分组在一起</li>
+<li>说明：应根据研究领域将论文分组</li>
+<li>提示公式：“将以下科学论文根据研究领域分组成簇：[插入论文]”</li>
+<li>英文: “Group the following scientific papers into clusters based on research area: [insert papers]”</li>
+</ul>
+<h3 id="第十九章：强化学习提示">第十九章：强化学习提示</h3>
+<p>强化学习提示是一种技术，可以使模型从过去的行动中学习，并随着时间的推移提高其性能。要在ChatGPT中使用强化学习提示，需要为模型提供一组输入和奖励，并允许其根据接收到的奖励调整其行为。提示还应包括有关期望输出的信息，例如要完成的任务以及任何特定要求或限制。这种技术对于决策制定、游戏玩法和自然语言生成等任务非常有用。</p>
+<p>提示示例及其公式：</p>
+<p><strong>示例1：用于文本生成的强化学习</strong></p>
+<ul>
+<li>任务：生成与特定风格一致的文本</li>
+<li>说明：模型应根据为生成与特定风格一致的文本而接收到的奖励来调整其行为</li>
+<li>提示公式：“使用强化学习来生成与以下风格一致的文本[插入风格]”</li>
+<li>英文:  “Use reinforcement learning to generate text that is consistent with the following style [insert style]”</li>
+</ul>
+<p><strong>示例2：用于语言翻译的强化学习</strong></p>
+<ul>
+<li>任务：将文本从一种语言翻译成另一种语言</li>
+<li>说明：模型应根据为生成准确翻译而接收到的奖励来调整其行为</li>
+<li>提示公式：“使用强化学习将以下文本[插入文本]从[插入语言]翻译成[插入语言]”</li>
+<li>英文: “Use reinforcement learning to translate the following text [insert text] from [insert language] to [insert language]”</li>
+</ul>
+<p><strong>示例3：用于问答的强化学习</strong></p>
+<ul>
+<li>任务：回答问题</li>
+<li>说明：模型应根据为生成准确答案而接收到的奖励来调整其行为</li>
+<li>提示公式：“使用强化学习来回答以下问题[插入问题]”</li>
+<li>英文: “Use reinforcement learning to generate an answer to the following question [insert question]”</li>
+</ul>
+<h3 id="第二十章：课程学习提示">第二十章：课程学习提示</h3>
+<p>课程学习是一种技术，允许模型通过先训练简单任务，逐渐增加难度来学习复杂任务。</p>
+<p>要在ChatGPT中使用课程学习提示，模型应该提供一系列任务，这些任务逐渐增加难度。</p>
+<p>提示还应包括有关期望输出的信息，例如要完成的最终任务以及任何特定要求或约束条件。</p>
+<p>此技术对自然语言处理、图像识别和机器学习等任务非常有用。</p>
+<p>提示示例及其公式：</p>
+<p><strong>示例1：用于文本生成的课程学习</strong></p>
+<ul>
+<li>任务：生成与特定风格一致的文本</li>
+<li>说明：模型应该在移动到更复杂的风格之前先在简单的风格上进行训练。</li>
+<li>提示公式：“使用课程学习来生成与以下风格[插入风格]一致的文本，按照以下顺序[插入顺序]。”</li>
+<li>英文:  “Use curriculum learning to generate text that is consistent with the following styles [insert styles] in the following order [insert order]”</li>
+</ul>
+<p><strong>示例2：用于语言翻译的课程学习</strong></p>
+<ul>
+<li>任务：将文本从一种语言翻译成另一种语言</li>
+<li>说明：模型应该在移动到更复杂的语言之前先在简单的语言上进行训练。</li>
+<li>提示公式：“使用课程学习将以下语言[插入语言]的文本翻译成以下顺序[插入顺序]。”</li>
+<li>英文: “Use curriculum learning to translate text from the following languages [insert languages] in the following order [insert order]”</li>
+</ul>
+<p><strong>示例3：用于问题回答的课程学习</strong></p>
+<ul>
+<li>任务：回答问题</li>
+<li>说明：模型应该在移动到更复杂的问题之前先在简单的问题上进行训练。</li>
+<li>提示公式：“使用课程学习来回答以下问题[插入问题]，按照以下顺序[插入顺序]生成答案。”</li>
+<li>英文: “Use curriculum learning to generate answers to the following questions [insert questions] in the following order [insert order]”</li>
+</ul>
+<h3 id="第二十一章：情感分析提示">第二十一章：情感分析提示</h3>
+<p>情感分析是一种技术，允许模型确定文本的情绪色彩或态度，例如它是积极的、消极的还是中立的。</p>
+<p>要在ChatGPT中使用情感分析提示，模型应该提供一段文本并要求根据其情感分类。</p>
+<p>提示还应包括关于所需输出的信息，例如要检测的情感类型（例如积极的、消极的、中立的）和任何特定要求或约束条件。</p>
+<p>提示示例及其公式：</p>
+<p><strong>示例1：客户评论的情感分析</strong></p>
+<ul>
+<li>任务：确定客户评论的情感</li>
+<li>说明：模型应该将评论分类为积极的、消极的或中立的</li>
+<li>提示公式：“对以下客户评论进行情感分析[插入评论]，并将它们分类为积极的、消极的或中立的。”</li>
+<li>英文:  “Perform sentiment analysis on the following customer reviews [insert reviews] and classify them as positive, negative, or neutral.”</li>
+</ul>
+<p><strong>示例2：推文的情感分析</strong></p>
+<ul>
+<li>任务：确定推文的情感</li>
+<li>说明：模型应该将推文分类为积极的、消极的或中立的</li>
+<li>提示公式：“对以下推文进行情感分析[插入推文]，并将它们分类为积极的、消极的或中立的。”</li>
+<li>英文： “Perform sentiment analysis on the following tweets [insert tweets] and classify them as positive, negative, or neutral.”</li>
+</ul>
+<p><strong>示例3：产品评论的情感分析</strong></p>
+<ul>
+<li>任务：确定产品评论的情感</li>
+<li>说明：模型应该将评论分类为积极的、消极的或中立的</li>
+<li>提示公式：“对以下产品评论进行情感分析[插入评论]，并将它们分类为积极的、消极的或中立的。”</li>
+<li>英文:  “Perform sentiment analysis on the following product reviews [insert reviews] and classify them as positive, negative, or neutral.”</li>
+</ul>
+<p>这种技术对自然语言处理、客户服务和市场研究等任务非常有用。</p>
+<h3 id="第二十二章：命名实体识别提示">第二十二章：命名实体识别提示</h3>
+<p>命名实体识别（NER）是一种技术，它可以使模型识别和分类文本中的命名实体，例如人名、组织机构、地点和日期等。</p>
+<p>要在ChatGPT中使用命名实体识别提示，需要向模型提供一段文本，并要求它识别和分类文本中的命名实体。</p>
+<p>提示还应包括有关所需输出的信息，例如要识别的命名实体类型（例如人名、组织机构、地点、日期）以及任何特定要求或约束条件。</p>
+<p>提示示例及其公式：</p>
+<p><strong>示例1：新闻文章中的命名实体识别</strong></p>
+<ul>
+<li>任务：在新闻文章中识别和分类命名实体</li>
+<li>说明：模型应识别和分类人名、组织机构、地点和日期</li>
+<li>提示公式：“在以下新闻文章[插入文章]上执行命名实体识别，并识别和分类人名、组织机构、地点和日期。”</li>
+<li>英文: “Perform named entity recognition on the following news article [insert article] and identify and classify people, organizations, locations, and dates.”</li>
+</ul>
+<p><strong>示例2：法律文件中的命名实体识别</strong></p>
+<ul>
+<li>任务：在法律文件中识别和分类命名实体</li>
+<li>说明：模型应识别和分类人名、组织机构、地点和日期</li>
+<li>提示公式：“在以下法律文件[插入文件]上执行命名实体识别，并识别和分类人名、组织机构、地点和日期。”</li>
+<li>英文: “Perform named entity recognition on the following legal document [insert document] and identify and classify people, organizations, locations, and dates.”</li>
+</ul>
+<p><strong>示例3：研究论文中的命名实体识别</strong></p>
+<ul>
+<li>任务：在研究论文中识别和分类命名实体</li>
+<li>说明：模型应识别和分类人名、组织机构、地点和日期</li>
+<li>提示公式：“在以下研究论文[插入论文]上执行命名实体识别，并识别和分类人名、组织机构、地点和日期。”</li>
+<li>英文: “Perform named entity recognition on the following research paper [insert paper] and identify and classify people, organizations, locations, and dates.”</li>
+</ul>
+<h3 id="第二十三章：文本分类提示">第二十三章：文本分类提示</h3>
+<p>文本分类是一种技术，它可以让模型将文本分成不同的类别。这种技术对于自然语言处理、文本分析和情感分析等任务非常有用。</p>
+<p>需要注意的是，文本分类和情感分析是不同的。情感分析特别关注于确定文本中表达的情感或情绪。这可能包括确定文本表达了积极、消极还是中性的情感。情感分析通常用于客户评论、社交媒体帖子和其他需要表达情感的文本。</p>
+<p>要在ChatGPT中使用文本分类提示，模型需要提供一段文本，并要求它根据预定义的类别或标签进行分类。提示还应包括有关所需输出的信息，例如类别或标签的数量以及任何特定的要求或约束。</p>
+<p>提示示例及其公式：</p>
+<p><strong>示例1：对客户评论进行文本分类</strong></p>
+<ul>
+<li>任务：将客户评论分类为不同的类别，例如电子产品、服装和家具</li>
+<li>说明：模型应根据评论的内容对其进行分类</li>
+<li>提示公式：“对以下客户评论 [插入评论] 进行文本分类，并根据其内容将其分类为不同的类别，例如电子产品、服装和家具。”</li>
+<li>英文: “Perform text classification on the following customer reviews [insert reviews] and classify them into different categories such as electronics, clothing and furniture based on their content.”</li>
+</ul>
+<p><strong>示例2：对新闻文章进行文本分类</strong></p>
+<ul>
+<li>任务：将新闻文章分类为不同的类别，例如体育、政治和娱乐</li>
+<li>说明：模型应根据文章的内容对其进行分类</li>
+<li>提示公式：“对以下新闻文章 [插入文章] 进行文本分类，并根据其内容将其分类为不同的类别，例如体育、政治和娱乐。”</li>
+<li>英文:  “Perform text classification on the following news articles [insert articles] and classify them into different categories such as sports, politics, and entertainment based on their content.”</li>
+</ul>
+<p><strong>示例3：对电子邮件进行文本分类</strong></p>
+<ul>
+<li>任务：将电子邮件分类为不同的类别，例如垃圾邮件、重要邮件或紧急邮件</li>
+<li>说明：模型应根据电子邮件的内容和发件人对其进行分类</li>
+<li>提示公式：“对以下电子邮件 [插入电子邮件] 进行文本分类，并根据其内容和发件人将其分类为不同的类别，例如垃圾邮件、重要邮件或紧急邮件。”</li>
+<li>英文: “Perform text classification on the following emails [insert emails] and classify them into different categories such as spam, important, or urgent based on their content and sender.”</li>
+</ul>
+<h3 id="第二十四章：文本生成提示">第二十四章：文本生成提示</h3>
+<p>文本生成提示与本书中提到的其他提示技术相关，例如：零、一、几次提示，受控生成提示，翻译提示，语言建模提示，句子补全提示等。这些提示都与生成文本有关，但它们在生成文本的方式和放置在生成文本上的特定要求或限制方面有所不同。文本生成提示可用于微调预训练模型或训练新模型以执行特定任务。</p>
+<p>提示示例及其公式：</p>
+<p><strong>示例1：故事创作的文本生成</strong></p>
+<ul>
+<li>任务：根据给定的提示生成故事</li>
+<li>说明：故事应至少包含1000个单词，并包括一组特定的角色和情节。</li>
+<li>提示公式：“根据以下提示[插入提示]生成一个至少包含1000个单词，包括角色[插入角色]和情节[插入情节]的故事。”</li>
+<li>英文:  “Generate a story of at least 1000 words, including characters [insert characters] and a plot [insert plot] based on the following prompt [insert prompt].”</li>
+</ul>
+<p><strong>示例2：语言翻译的文本生成</strong></p>
+<ul>
+<li>任务：将给定的文本翻译成另一种语言</li>
+<li>说明：翻译应准确并符合习惯用语。</li>
+<li>提示公式：“将以下文本[插入文本]翻译成[插入目标语言]，并确保其准确且符合习惯用语。”</li>
+<li>英文:  “Translate the following text [insert text] into [insert target language] and make sure that it is accurate and idiomatic.”</li>
+</ul>
+<p><strong>示例3：文本完成的文本生成</strong></p>
+<ul>
+<li>任务：完成给定的文本</li>
+<li>说明：生成的文本应与输入文本连贯一致。</li>
+<li>提示公式：“完成以下文本[插入文本]，并确保其连贯一致且符合输入文本。”</li>
+<li>英文: “Complete the following text [insert text] and make sure that it is coherent and consistent with the input text.”</li>
+</ul>
+<h3 id="结语">结语</h3>
+<p>正如我们在本书中探讨的那样，提示工程是从语言模型（如ChatGPT）中获取高质量答案的强大工具。通过精心设计的各种的提示，我们可以引导模型生成符合我们特定需求和要求的文本。</p>
+<p>在第2章中，我们看到如何使用说明提示来向模型提供明确和具体的指导。</p>
+<p>在第3章中，我们探讨了如何使用角色提示来以特定的语气或风格生成文本。</p>
+<p>在第4章中，我们研究了如何使用标准提示作为微调模型性能的起点。</p>
+<p>我们还研究了几种高级提示技术，如零提示、单个提示和小样本提示、自一致性、种子词提示、知识生成提示、知识整合提示、多项选择提示、可解释的软提示、受控生成提示、问答提示、摘要提示、对话提示、对抗提示、聚类提示、强化学习提示、课程学习提示、情感分析提示、命名实体识别提示和文本分类提示。</p>
+<p>这些技术可以以不同的方式使用，以实现各种不同的结果。随着你继续与ChatGPT和其他语言模型一起工作，值得尝试不同的技术组合，以找到最适合特定用例的方法。</p>
+<p>最后，您可以查看我写的其他主题的书籍。</p>
+<p>感谢您阅读整本书。期待在我的其他书中与您见面。</p>
+<h3 id="关于作者">关于作者</h3>
+<blockquote>
+<p>易卜拉欣·约翰（Ibrahim John）<br>
+伊布拉欣·约翰是《从ChatGPT获得高质量答案的艺术：提示工程技术的完整指南》一书的作者。<br>
+他出生于坦桑尼亚，是科技和商业领域的知名人物。他是三家成功公司的创始人：恩尊达科技有限公司（Nzunda Technologies Limited）、金百思公司（Kingbest Companye Limited）和阿格拉萨农业有限公司（Agrasa Agriculture Limited）。凭借他在领域中的广泛知识和经验，伊布拉欣为提示工程及其在语言建模中的应用带来了独特的视角。他热衷于与他人分享他的知识和专业知识，并致力于帮助人们理解和利用ChatGPT和其他最先进的语言模型的力量。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Weitang Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lonepatient.top/2023/04/02/The-Art-of-Asking-ChatGPT-for-High-Quality-Answers-A-complete-Guide-to-Prompt-Engineering-Technique-main.html">http://lonepatient.top/2023/04/02/The-Art-of-Asking-ChatGPT-for-High-Quality-Answers-A-complete-Guide-to-Prompt-Engineering-Technique-main.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lonepatient.top" target="_blank">闲记算法</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/NLP/">NLP</a><a class="post-meta__tags" href="/tags/%E9%A2%84%E8%AE%AD%E7%BB%83/">预训练</a><a class="post-meta__tags" href="/tags/%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/">大型语言模型</a><a class="post-meta__tags" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><a class="post-meta__tags" href="/tags/Prompt/">Prompt</a><a class="post-meta__tags" href="/tags/ChatGPT/">ChatGPT</a></div><div class="post_share"><div class="social-share" data-image="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230410200141.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/04/12/Emergent_capacity_of_LLM_phenomena_explanations.html"><img class="prev-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230413215813.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">大语言模型的涌现能力：现象与解释</div></div></a></div><div class="next-post pull-right"><a href="/2023/04/01/huggingface_git_clone_models.html"><img class="next-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/imagesSelection_003.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">从HuggingFace仓库中批量下载模型和数据</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/03/10/ChatGPT_Research_Report.html" title="ChatGPT 调研报告"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230310095306.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">ChatGPT 调研报告</div></div></a></div><div><a href="/2023/03/16/chatIE.html" title="Zero-Shot Information Extraction via Chatting with ChatGPT"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230316193601.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-16</div><div class="title">Zero-Shot Information Extraction via Chatting with ChatGPT</div></div></a></div><div><a href="/2023/04/18/A_Survey_of_Large_Language_Models.html" title="A Survey of Large Language Models"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230419195449.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-18</div><div class="title">A Survey of Large Language Models</div></div></a></div><div><a href="/2023/03/09/ChatGPT_Annotation_Guide_is_Here_Data_is_Key.html" title="ChatGPT 标注指南来了！数据是关键"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230309220444.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-09</div><div class="title">ChatGPT 标注指南来了！数据是关键</div></div></a></div><div><a href="/2023/08/06/ChatGPT_Prompting_Cheat_Sheet.html" title="ChatGPT提示快速指南"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230806160808.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-06</div><div class="title">ChatGPT提示快速指南</div></div></a></div><div><a href="/2023/04/12/Emergent_capacity_of_LLM_phenomena_explanations.html" title="大语言模型的涌现能力：现象与解释"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230413215813.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-12</div><div class="title">大语言模型的涌现能力：现象与解释</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Weitang Liu</div><div class="author-info__description">一个致力于记录技术的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lonePatient"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/lonePatient" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liuweitangmath@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/277974397" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有任何问题可通过留言板或者微信公众号给我留言，谢谢！<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201201102.jpg"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9APrompt-%E5%B7%A5%E7%A8%8B%E6%8A%80%E6%9C%AF%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">第一章：Prompt 工程技术简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0%EF%BC%9A%E6%8C%87%E4%BB%A4%E6%8F%90%E7%A4%BA%E6%8A%80%E6%9C%AF-Instructions-Prompt-Technique"><span class="toc-number">2.</span> <span class="toc-text">第二章：指令提示技术(Instructions Prompt Technique)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E8%A7%92%E8%89%B2%E6%8F%90%E7%A4%BA%EF%BC%88role-prompting-technique%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">第三章：角色提示（role prompting technique）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0%EF%BC%9A%E6%A0%87%E5%87%86%E6%8F%90%E7%A4%BA"><span class="toc-number">4.</span> <span class="toc-text">第四章：标准提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0%EF%BC%9A%E9%9B%B6%E3%80%81%E4%B8%80%E5%92%8C%E5%B0%91%E6%A0%B7%E6%9C%AC%E6%8F%90%E7%A4%BA"><span class="toc-number">5.</span> <span class="toc-text">第五章：零、一和少样本提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0%EF%BC%9A%E2%80%9C%E8%AE%A9%E6%88%91%E4%BB%AC%E6%80%9D%E8%80%83%E4%B8%80%E4%B8%8B%E2%80%9D%E6%8F%90%E7%A4%BA"><span class="toc-number">6.</span> <span class="toc-text">第六章：“让我们思考一下”提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0%EF%BC%9A%E8%87%AA%E6%88%91%E4%B8%80%E8%87%B4%E6%80%A7%E6%8F%90%E7%A4%BA"><span class="toc-number">7.</span> <span class="toc-text">第七章：自我一致性提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0%EF%BC%9A%E7%A7%8D%E5%AD%90%E8%AF%8D%E6%8F%90%E7%A4%BA"><span class="toc-number">8.</span> <span class="toc-text">第八章：种子词提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B9%9D%E7%AB%A0%EF%BC%9A%E7%9F%A5%E8%AF%86%E7%94%9F%E6%88%90%E6%8F%90%E7%A4%BA"><span class="toc-number">9.</span> <span class="toc-text">第九章：知识生成提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E7%AB%A0%EF%BC%9A%E7%9F%A5%E8%AF%86%E6%95%B4%E5%90%88%E6%8F%90%E7%A4%BA"><span class="toc-number">10.</span> <span class="toc-text">第十章：知识整合提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0%EF%BC%9A%E5%A4%9A%E9%A1%B9%E9%80%89%E6%8B%A9%E6%8F%90%E7%A4%BA"><span class="toc-number">11.</span> <span class="toc-text">第十一章：多项选择提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0%EF%BC%9A%E5%8F%AF%E8%A7%A3%E9%87%8A%E7%9A%84%E8%BD%AF%E6%8F%90%E7%A4%BA"><span class="toc-number">12.</span> <span class="toc-text">第十二章：可解释的软提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0%EF%BC%9A%E6%8E%A7%E5%88%B6%E7%94%9F%E6%88%90%E6%8F%90%E7%A4%BA"><span class="toc-number">13.</span> <span class="toc-text">第十三章：控制生成提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0%EF%BC%9A%E9%97%AE%E7%AD%94%E6%8F%90%E7%A4%BA"><span class="toc-number">14.</span> <span class="toc-text">第十四章：问答提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0%EF%BC%9A%E6%A6%82%E8%BF%B0%E6%8F%90%E7%A4%BA"><span class="toc-number">15.</span> <span class="toc-text">第十五章：概述提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0%EF%BC%9A%E5%AF%B9%E8%AF%9D%E6%8F%90%E7%A4%BA"><span class="toc-number">16.</span> <span class="toc-text">第十六章：对话提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%83%E7%AB%A0%EF%BC%9A%E5%AF%B9%E6%8A%97%E6%80%A7%E6%8F%90%E7%A4%BA"><span class="toc-number">17.</span> <span class="toc-text">第十七章：对抗性提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%85%AB%E7%AB%A0%EF%BC%9A%E8%81%9A%E7%B1%BB%E6%8F%90%E7%A4%BA"><span class="toc-number">18.</span> <span class="toc-text">第十八章：聚类提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B9%9D%E7%AB%A0%EF%BC%9A%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%8F%90%E7%A4%BA"><span class="toc-number">19.</span> <span class="toc-text">第十九章：强化学习提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E7%AB%A0%EF%BC%9A%E8%AF%BE%E7%A8%8B%E5%AD%A6%E4%B9%A0%E6%8F%90%E7%A4%BA"><span class="toc-number">20.</span> <span class="toc-text">第二十章：课程学习提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%80%E7%AB%A0%EF%BC%9A%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90%E6%8F%90%E7%A4%BA"><span class="toc-number">21.</span> <span class="toc-text">第二十一章：情感分析提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%8C%E7%AB%A0%EF%BC%9A%E5%91%BD%E5%90%8D%E5%AE%9E%E4%BD%93%E8%AF%86%E5%88%AB%E6%8F%90%E7%A4%BA"><span class="toc-number">22.</span> <span class="toc-text">第二十二章：命名实体识别提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%89%E7%AB%A0%EF%BC%9A%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB%E6%8F%90%E7%A4%BA"><span class="toc-number">23.</span> <span class="toc-text">第二十三章：文本分类提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E5%9B%9B%E7%AB%A0%EF%BC%9A%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90%E6%8F%90%E7%A4%BA"><span class="toc-number">24.</span> <span class="toc-text">第二十四章：文本生成提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-number">25.</span> <span class="toc-text">结语</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E4%BD%9C%E8%80%85"><span class="toc-number">26.</span> <span class="toc-text">关于作者</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-27"/></a><div class="content"><a class="title" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27">Arxiv今日论文 | 2026-02-27</a><time datetime="2026-02-27T12:30:00.000Z" title="发表于 2026-02-27 12:30:00">2026-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-26"/></a><div class="content"><a class="title" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26">Arxiv今日论文 | 2026-02-26</a><time datetime="2026-02-26T12:30:00.000Z" title="发表于 2026-02-26 12:30:00">2026-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-25"/></a><div class="content"><a class="title" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25">Arxiv今日论文 | 2026-02-25</a><time datetime="2026-02-25T12:30:00.000Z" title="发表于 2026-02-25 12:30:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225222513891.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板">大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板</a><time datetime="2026-02-25T12:00:00.000Z" title="发表于 2026-02-25 12:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225123005910.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mid-training：构建预训练与后训练之间的分布式桥梁"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁">mid-training：构建预训练与后训练之间的分布式桥梁</a><time datetime="2026-02-25T00:00:00.000Z" title="发表于 2026-02-25 00:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-24"/></a><div class="content"><a class="title" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24">Arxiv今日论文 | 2026-02-24</a><time datetime="2026-02-24T12:30:00.000Z" title="发表于 2026-02-24 12:30:00">2026-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-23"/></a><div class="content"><a class="title" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23">Arxiv今日论文 | 2026-02-23</a><time datetime="2026-02-23T12:30:00.000Z" title="发表于 2026-02-23 12:30:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260223165943195.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用&quot;深度思考率&quot;精准度量LLM推理质量"/></a><div class="content"><a class="title" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量">用&quot;深度思考率&quot;精准度量LLM推理质量</a><time datetime="2026-02-23T12:00:00.000Z" title="发表于 2026-02-23 12:00:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-20"/></a><div class="content"><a class="title" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20">Arxiv今日论文 | 2026-02-20</a><time datetime="2026-02-20T12:30:00.000Z" title="发表于 2026-02-20 12:30:00">2026-02-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201606857.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前沿大模型训练方法：深度解析与实践指南"/></a><div class="content"><a class="title" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南">前沿大模型训练方法：深度解析与实践指南</a><time datetime="2026-02-20T10:30:00.000Z" title="发表于 2026-02-20 10:30:00">2026-02-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Weitang Liu</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.lonepatient.top/',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.lonepatient.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo@1.4.11/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (99)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/计算机视觉/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 计算机视觉 (16)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/知识图谱/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 知识图谱 (13)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">👩‍💻 深度学习 (139)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item" style="visibility: hidden"></div><a class="magnet_link_more"  href="http://lonepatient.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-18</span><a class="blog-slider__title" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">通向AGI之路：大型语言模型（LLM）技术精要</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/07/12/gaiic_2022_ner_top10.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220712181905.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-07-12</span><a class="blog-slider__title" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">GAIIC2022商品标题识别二等奖获奖解决思路</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230807190424.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-01-20</span><a class="blog-slider__title" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">2025-03|高质量中文预训练模型集合</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

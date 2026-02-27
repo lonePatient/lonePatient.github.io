@@ -1,0 +1,455 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Summary of kaggle competition experience | 闲记算法</title><meta name="keywords" content="Kaggle,经验总结"><meta name="author" content="Weitang Liu"><meta name="copyright" content="Weitang Liu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Kaggle 于 2010 年创立，专注数据科学，机器学习竞赛的举办，是全球最大的数据科学社区和数据竞赛平台。在 Kaggle 上，企业或者研究机构发布商业和科研难题，悬赏吸引全球的数据科学家，通过众包的方式解决建模问题。而参赛者可以接触到丰富的真实数据，解决实际问题，角逐名次，赢取奖金。诸如 Google，Facebook，Microsoft 等知名科技公司均在 Kaggle 上面举办过数据挖掘">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Summary of kaggle competition experience">
+<meta property="og:url" content="http://lonepatient.top/2017/05/12/Summary%20of%20kaggle%20competition%20experience.html">
+<meta property="og:site_name" content="闲记算法">
+<meta property="og:description" content="Kaggle 于 2010 年创立，专注数据科学，机器学习竞赛的举办，是全球最大的数据科学社区和数据竞赛平台。在 Kaggle 上，企业或者研究机构发布商业和科研难题，悬赏吸引全球的数据科学家，通过众包的方式解决建模问题。而参赛者可以接触到丰富的真实数据，解决实际问题，角逐名次，赢取奖金。诸如 Google，Facebook，Microsoft 等知名科技公司均在 Kaggle 上面举办过数据挖掘">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/40951416.jpg">
+<meta property="article:published_time" content="2017-05-12T09:50:04.000Z">
+<meta property="article:modified_time" content="2026-02-27T07:52:12.664Z">
+<meta property="article:author" content="Weitang Liu">
+<meta property="article:tag" content="Kaggle">
+<meta property="article:tag" content="经验总结">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/40951416.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lonepatient.top/2017/05/12/Summary%20of%20kaggle%20competition%20experience"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//s4.cnzz.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" data-pjax="data-pjax" src="https://s4.cnzz.com/z_stat.php?id=1273275888&amp;web_id=1273275888"></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-02-27 07:52:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/backgroud.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><script src="https://at.alicdn.com/t/c/font_3570527_dthoqrrv2tv.css"></script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JwRQtLKZggvJH4sJ",ck:"JwRQtLKZggvJH4sJ"})</script><link rel="stylesheet" href="/css/universe.css"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536467946304280" crossorigin="anonymous"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/40951416.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">闲记算法</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Summary of kaggle competition experience<a class="post-edit-link" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts/Summary of kaggle competition experience.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2017-05-12T09:50:04.000Z" title="发表于 2017-05-12 09:50:04">2017-05-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-27T07:52:12.664Z" title="更新于 2026-02-27 07:52:12">2026-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%AF%94%E8%B5%9B/">比赛</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%AF%94%E8%B5%9B/kaggle/">kaggle</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">7.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>23分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2017/05/12/Summary%20of%20kaggle%20competition%20experience.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>Kaggle 于 2010 年创立，专注数据科学，机器学习竞赛的举办，是全球最大的数据科学社区和数据竞赛平台。在 Kaggle 上，企业或者研究机构发布商业和科研难题，悬赏吸引全球的数据科学家，通过众包的方式解决建模问题。而参赛者可以接触到丰富的真实数据，解决实际问题，角逐名次，赢取奖金。诸如 Google，Facebook，Microsoft 等知名科技公司均在 Kaggle 上面举办过数据挖掘比赛。2017年3月，Kaggle 被 Google CloudNext 收购。</p>
+<span id="more"></span>
+<h2 id="1-参赛方式">1 参赛方式</h2>
+<p>可以以个人或者组队的形式参加比赛。组队人数一般没有限制，但需要在 Merger Deadline 前完成组队。为了能参与到比赛中，需要<br>
+在 Entry Deadline 前进行至少一次有效提交。最简单地，可以直接提交官方提供的 Sample Submission。关于组队，建议先<br>
+单独个人进行数据探索和模型构建，以个人身份进行比赛，在比赛后期（譬如离比赛结束还有 2~3 周）再进行组队，以充分发挥组队的效果（类似于模型集<br>
+成，模型差异性越大，越有可能有助于效果的提升，超越单模型的效果）。当然也可以一开始就组好队，方便分工协作，讨论问题和碰撞火花。</p>
+<p>Kaggle 对比赛的公正性相当重视。在比赛中，每个人只允许使用一个账号进行提交。在比赛结束后 1~2 周内，Kaggle 会对使用多账号提交的 Cheater 进行剔除（一般会对 Top 100 的队伍进行 Cheater Detection）。在被剔除者的 Kaggle 个人页面上，该比赛的成绩也会被删除，相当于该选手从没参加过这个比赛。此外，队伍之间也不能私自分享代码或者数据，除非在论坛上面公开发布。</p>
+<p>比赛一般只提交测试集的预测结果，无需提交代码。每人（或每个队伍）每天有提交次数的限制，一般为2次或者5次，在 Submission 页面会有提示。</p>
+<h2 id="2-比赛获奖">2 比赛获奖</h2>
+<p>Kaggle 比赛奖金丰厚，一般前三名均可以获得奖金。在最近落幕的第二届 National Data Science Bowl 中，总奖金池高达 100W 美刀，其中第一名可以获得 50W 美刀的奖励，即使是第十名也能收获 2.5W 美刀的奖金。</p>
+<p>获奖的队伍需要在比赛结束后 1~2 周内，准备好可执行的代码以及 README，算法说明文档等提交给 Kaggle 来进行获奖资格的审核。Kaggle 会邀请获奖队伍在 Kaggle Blog 中发表 Interview，来分享比赛故事和经验心得。对于某些比赛，Kaggle 或者主办方会邀请获奖队伍进行电话/视频会议，获奖队伍进行 Presentation，并与主办方团队进行交流。</p>
+<h2 id="3-比赛类型">3 比赛类型</h2>
+<p>从 Kaggle 提供的官方分类来看，可以划分为以下类型（如下图1所示）：</p>
+<p>◆ <strong>Featured</strong>：商业或科研难题，奖金一般较为丰厚；</p>
+<p>◆ <strong>Recruitment</strong>：比赛的奖励为面试机会；</p>
+<p>◆ <strong>Research</strong>：科研和学术性较强的比赛，也会有一定的奖金，一般需要较强的领域和专业知识；</p>
+<p>◆ <strong>Playground</strong>：提供一些公开的数据集用于尝试模型和算法；</p>
+<p>◆ <strong>Getting Started</strong>：提供一些简单的任务用于熟悉平台和比赛；</p>
+<p>◆ <strong>In Class</strong>：用于课堂项目作业或者考试。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/65897195.jpg" alt=""></p>
+<p><strong>从领域归属划分</strong>：包含搜索相关性，广告点击率预估，销量预估，贷款违约判定，癌症检测等。</p>
+<p><strong>从任务目标划分</strong>：包含回归，分类（二分类，多分类，多标签），排序，混合体（分类+回归）等。</p>
+<p><strong>从数据载体划分</strong>：包含文本，语音，图像和时序序列等。</p>
+<p><strong>从特征形式划分</strong>：包含原始数据，明文特征，脱敏特征（特征的含义不清楚）等。</p>
+<p><strong>1.4 比赛流程</strong></p>
+<p>一个数据挖掘比赛的基本流程如下图所示，具体的模块我将在下一章进行展开陈述。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/40951416.jpg" alt=""></p>
+<p>这里想特别强调的一点是，Kaggle 在计算得分的时候，有Public Leaderboard (LB)和 Private LB 之分。具体而言，参赛选手提交整个测试集的预测结果，Kaggle 使用测试集的一部分计算得分和排名，实时显示在 Public LB上，用于给选手提供及时的反馈和动态展示比赛的进行情况；测试集的剩余部分用于计算参赛选手的最终得分和排名，此即为 Private LB，在比赛结束后会揭晓。用于计算 Public LB 和 Private LB 的数据有不同的划分方式，具体视比赛和数据的类型而定，一般有随机划分，按时间划分或者按一定规则划分。</p>
+<p>这个过程可以概括如下图所示，其目的是避免模型过拟合，以得到泛化能力好的模型。如果不设置 Private LB（即所有的测试数据都用于计算 Public LB），选手不断地从 Public LB（即测试集）中获得反馈，进而调整或筛选模型。这种情况下，测试集实际上是作为验证集参与到模型的构建和调优中来。**Public LB上面的效果并非是在真实未知数据上面的效果，不能可靠地反映模型的效果。**划分 Public LB 和 Private LB 这样的设置，也在提醒参赛者，我们建模的目标是要获得一个在未知数据上表现良好的模型，而并非仅仅是在已知数据上效果好。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/51233487.jpg" alt=""></p>
+<h2 id="4-数据挖掘比赛基本流程">4 数据挖掘比赛基本流程</h2>
+<p>从上面图可以看到，做一个数据挖掘比赛，主要包含了数据分析，数据清洗，特征工程，模型训练和验证等四个大的模块，以下来一一对其进行介绍。</p>
+<h3 id="4-1-数据分析">4.1 数据分析</h3>
+<p>数据分析可能涉及以下方面：</p>
+<p>◆ <strong>分析特征变量的分布</strong></p>
+<p>◇ 特征变量为连续值：如果为长尾分布并且考虑使用线性模型，可以对变量进行幂变换或者对数变换。</p>
+<p>◇ 特征变量为离散值：观察每个离散值的频率分布，对于频次较低的特征，可以考虑统一编码为“其他”类别。</p>
+<p>◆ <strong>分析目标变量的分布</strong></p>
+<p>◇ 目标变量为连续值：查看其值域范围是否较大，如果较大，可以考虑对其进行对数变换，并以变换后的值作为新的目标变量进行建模（在这种情况下，需要对预测结果进行逆变换）。一般情况下，可以对连续变量进行Box-Cox变换。通过变换可以使得模型更好的优化，通常也会带来效果上的提升。</p>
+<p>◇ 目标变量为离散值：如果数据分布不平衡，考虑是否需要上采样/下采样；如果目标变量在某个ID上面分布不平衡，在划分本地训练集和验证集的时候，需要考虑分层采样（Stratified Sampling）。</p>
+<p>◆ <strong>分析****变量之间两两的分布和相关度</strong></p>
+<p>◇ 可以用于发现高相关和共线性的特征。</p>
+<p>通过对数据进行探索性分析（甚至有些情况下需要肉眼观察样本），还可以有助于启发数据清洗和特征抽取，譬如缺失值和异常值的处理，文本数据是否需要进行拼写纠正等。</p>
+<h3 id="4-2-数据清洗">4.2  数据清洗</h3>
+<p>数据清洗是指对提供的原始数据进行一定的加工，使得其方便后续的特征抽取。其与特征抽取的界限有时也没有那么明确。常用的数据清洗一般包括：</p>
+<p>◆ <strong>数据的拼接</strong></p>
+<p>◇ 提供的数据散落在多个文件，需要根据相应的键值进行数据的拼接。</p>
+<p>◆ <strong>特征缺失值的处理</strong></p>
+<p>◇ 特征值为连续值：按不同的分布类型对缺失值进行补全：偏正态分布，使用均值代替，可以保持数据的均值；偏长尾分布，使用中值代替，避免受 outlier 的影响；</p>
+<p>◇ 特征值为离散值：使用众数代替。</p>
+<p>◆ <strong>文本数据的清洗</strong></p>
+<p>◇ 在比赛当中，如果数据包含文本，往往需要进行大量的数据清洗工作。如去除HTML 标签，分词，拼写纠正, 同义词替换，去除停词，抽词干，数字和单位格式统一等。</p>
+<h3 id="4-3-特征工程">4.3 特征工程</h3>
+<p>有一种说法是，特征决定了效果的上限，而不同模型只是以不同的方式或不同的程度来逼近这个上限。这样来看，好的特征输入对于模型的效果至关重要，正所<br>
+谓”Garbage in, garbage out”。要做好特征工程，往往跟领域知识和对问题的理解程度有很大的关系，也跟一个人的经验相关。特征工<br>
+程的做法也是Case by Case，以下就一些点，谈谈自己的一些看法。</p>
+<h4 id="4-3-1-特征变换">4.3.1 特征变换</h4>
+<p>主要针对一些长尾分布的特征，需要进行幂变换或者对数变换，使得模型（LR或者DNN）能更好的优化。需要注意的是，Random Forest 和 GBDT 等模型对单调的函数变换不敏感。其原因在于树模型在求解分裂点的时候，只考虑排序分位点。</p>
+<h4 id="4-3-2-特征编码">4.3.2 特征编码</h4>
+<p>对于离散的类别特征，往往需要进行必要的特征转换/编码才能将其作为特征输入到模型中。常用的编码方式有 LabelEncoder，OneHotEncoder（sklearn里面的接口）。譬如对于”性别”这个特征（取值为男性和女性），使用这两种方式可以分别编码为{0,1}和{[1,0], [0,1]}。</p>
+<p>对于取值较多（如几十万）的类别特征（ID特征），直接进行OneHotEncoder编码会导致特征矩阵非常巨大，影响模型效果。可以使用如下的方式进行处理：</p>
+<p>◆ 统计每个取值在样本中出现的频率，取 Top N 的取值进行 One-hot 编码，剩下的类别分到“其他“类目下，其中 N 需要根据模型效果进行调优；</p>
+<p>◆ 统计每个 ID 特征的一些统计量（譬如历史平均点击率，历史平均浏览率）等代替该 ID 取值作为特征，具体可以参考 Avazu 点击率预估比赛第二名的获奖方案；</p>
+<p>◆ 参考 word2vec 的方式，将每个类别特征的取值映射到一个连续的向量，对这个向量进行初始化，跟模型一起训练。训练结束后，可以同时得到每个ID的Embedding。具体的使用方式，可以参考 Rossmann 销量预估竞赛第三名的获奖方案，<a target="_blank" rel="noopener" href="https://github.com/entron/entity-embedding-rossmann%E3%80%82">https://github.com/entron/entity-embedding-rossmann。</a></p>
+<p>对于 Random Forest 和 GBDT 等模型，如果类别特征存在较多的取值，可以直接使用 LabelEncoder 后的结果作为特征。</p>
+<h3 id="4-4-模型训练和验证">4.4 模型训练和验证</h3>
+<h4 id="4…4-1-模型选择">4…4.1 模型选择</h4>
+<p>在处理好特征后，我们可以进行模型的训练和验证。</p>
+<p>◆ 对于稀疏型特征（如文本特征，One-hot的ID类特征），我们一般使用线性模型，譬如 Linear Regression 或者 Logistic Regression。Random Forest 和 GBDT 等树模型不太适用于稀疏的特征，但可以先对特征进行降维（如PCA，SVD/LSA等），再使用这些特征。稀疏特征直接输入 DNN 会导致网络 weight 较多，不利于优化，也可以考虑先降维，或者对 ID 类特征使用 Embedding 的方式；</p>
+<p>◆ 对于稠密型特征，推荐使用 XGBoost 进行建模，简单易用效果好；</p>
+<p>◆ 数据中既有稀疏特征，又有稠密特征，可以考虑使用线性模型对稀疏特征进行建模，将其输出与稠密特征一起再输入 XGBoost/DNN 建模，具体可以参考5.5.2节 Stacking 部分。</p>
+<h4 id="4-4-2-调参和模型验证">4.4.2 调参和模型验证</h4>
+<p>对于选定的特征和模型，我们往往还需要对模型进行超参数的调优，才能获得比较理想的效果。调参一般可以概括为以下三个步骤：</p>
+<ul>
+<li>1.训练集和验证集的划分: 根据比赛提供的训练集和测试集，模拟其划分方式对训练集进行划分为本地训练集和本地验证集。划分的方式视具体比赛和数据而定，常用的方式有：</li>
+</ul>
+<p>a) 随机划分：譬如随机采样 70% 作为训练集，剩余的 30% 作为测试集。在这种情况下，本地可以采用 KFold 或者 Stratified KFold 的方法来构造训练集和验证集。</p>
+<p>b) 按时间划分：一般对应于时序序列数据，譬如取前 7 天数据作为训练集，后 1 天数据作为测试集。这种情况下，划分本地训练集和验证集也需要按时间先后划分。常见的错误方式是随机划分，这种划分方式可能会导致模型效果被高估。</p>
+<p>c) 按某些规则划分：在 HomeDepot 搜索相关性比赛中，训练集和测试集中的 Query 集合并非完全重合，两者只有部分交集。而在另外一个相似的比赛中（CrowdFlower 搜索相关性比赛），训练集和测试集具有完全一致的 Query 集合。对于 HomeDepot 这个比赛中，训练集和验证集数据的划分，需要考虑 Query 集合并非完全重合这个情况，其中的一种方法可以参考第三名的获奖方案，<a target="_blank" rel="noopener" href="https://github.com/ChenglongChen/Kaggle_HomeDepot%E3%80%82">https://github.com/ChenglongChen/Kaggle_HomeDepot。</a></p>
+<ul>
+<li>
+<p>2.指定参数空间: 在指定参数空间的时候，需要对模型参数以及其如何影响模型的效果有一定的了解，才能指定出合理的参数空间。譬如DNN或者XGBoost中学习率这个参数，一般就选 0.01 左右就 OK 了（太大可能会导致优化算法错过最优化点，太小导致优化收敛过慢）。再如 Random Forest，一般设定树的棵数范围为 100~200 就能有不错的效果，当然也有人固定数棵数为 500，然后只调整其他的超参数。</p>
+</li>
+<li>
+<p>3.按照一定的方法进行参数搜索: 常用的参数搜索方法有，Grid Search，Random Search以及一些自动化的方法（如 Hyperopt）。其中，Hyperopt 的方法，根据历史已经评估过的参数组合的效果，来推测本次评估使用哪个参数组合更有可能获得更好的效果。有关这些方法的介绍和对比，可以参考文献 [2]。</p>
+</li>
+</ul>
+<h4 id="4-4-3-适当利用-Public-LB-的反馈">4.4.3 适当利用 Public LB 的反馈</h4>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/61814654.jpg" alt=""></p>
+<p>在4.4.2节中我们提到本地验证（Local Validation）结果，当将预测结果提交到 Kaggle 上时，我们还会接收到 Public LB 的反馈结果。如果这两个结果的变化趋势是一致的，如 Local Validation 有提升，Public LB 也有提升，我们可以借助 Local Validation 的变化来感知模型的演进情况，而无需靠大量的 Submission。如果两者的变化趋势不一致，需要考虑2.4.2节中提及的本地训练集和验证集的划分方式，是否跟训练集和测试集的划分方式一致。</p>
+<p>另外，在以下一些情况下，往往 Public LB 反馈亦会提供有用信息，适当地使用这些反馈也许会给你带来优势。如上图所示，(a)和(b)表示数据与时间没有明显的关系（如图像分类），©和(d)表示数据随时间变化（如销量预估中的时序序列）。(a)和(b)的区别在于，训练集样本数相对于 Public LB 的量级大小，其中(a)中训练集样本数远超于 Public LB 的样本数，这种情况下基于训练集的 Local Validation 更可靠；而(b)中，训练集数目与 Public LB 相当，这种情况下，可以结合 Public LB 的反馈来指导模型的选择。一种融合的方式是根据 Local Validation 和 Public LB 的样本数目，按比例进行加权。譬如评估标准为正确率，Local Validation 的样本数为 N_l，正确率为 A_l；Public LB 的样本数为 N_p，正确率为 A_p。则可以使用融合后的指标：（N_l * A_l + N_p * A_p）/(N_l + N_p)，来进行模型的筛选。对于©和(d)，由于数据分布跟时间相关，很有必要使用 Public LB 的反馈来进行模型的选择，尤其对于©图所示的情况。</p>
+<h3 id="4-5-模型集成">4.5 模型集成</h3>
+<p>如果想在比赛中获得名次，几乎都要进行模型集成（组队也是一种模型集成）。关于模型集成的介绍，已经有比较好的博文了，可以参考 [3]。在这里，我简单介绍下常用的方法，以及个人的一些经验。</p>
+<h4 id="4-5-1-Averaging-和-Voting">4.5.1 Averaging 和 Voting</h4>
+<p>直接对多个模型的预测结果求平均或者投票。对于目标变量为连续值的任务，使用平均；对于目标变量为离散值的任务，使用投票的方式。</p>
+<h4 id="4-5-2-Stacking">4.5.2 Stacking</h4>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/17865702.jpg" alt=""></p>
+<p>上图展示了使用 5-Fold 进行一次 Stacking 的过程（当然在其上可以再叠加 Stage 2, Stage 3 等）。其主要的步骤如下：</p>
+<ul>
+<li>
+<p>1.数据集划分: 将训练数据按照5-Fold进行划分（如果数据跟时间有关，需要按时间划分，更一般的划分方式请参考3.4.2节，这里不再赘述）；</p>
+</li>
+<li>
+<p>2.基础模型训练 I: （如上图第一行左半部分所示）。按照交叉验证（Cross Validation）的方法，在训练集（Training Fold）上面训练模型（如图灰色部分所示），并在验证集（Validation Fold）上面做预测，得到预测结果（如图黄色部分所示）。最后综合得到整个训练集上面的预测结果（如图第一个黄色部分的CV Prediction所示）。</p>
+</li>
+<li>
+<p>3.基础模型训练 II:（如图第二和三行左半部分所示）。在全量的训练集上训练模型（如图第二行灰色部分所示），并在测试集上面做预测，得到预测结果（如图第三行虚线后绿色部分所示）。</p>
+</li>
+<li>
+<p>4.Stage 1 模型集成训练 I:（如图第一行右半部分所示）。将步骤 2 中得到的 CV Prediction 当作新的训练集，按照步骤 2 可以得到 Stage 1模型集成的 CV Prediction。</p>
+</li>
+<li>
+<p>5.Stage 1 模型集成训练 II:（如图5第二和三行右半部分所示）。将步骤 2 中得到的 CV Prediction 当作新的训练集和步骤 3 中得到的 Prediction 当作新的测试集，按照步骤 3 可以得到 Stage 1 模型集成的测试集 Prediction。此为 Stage 1 的输出，可以提交至 Kaggle 验证其效果。</p>
+</li>
+</ul>
+<p>在图中，基础模型只展示了一个，而实际应用中，基础模型可以多种多样，如SVM，DNN，XGBoost 等。也可以相同的模型，不同的参数，或者不同的样本权重。重复4和5两个步骤，可以相继叠加 Stage 2, Stage 3 等模型。</p>
+<h4 id="4-5-3-Blending">4.5.3 Blending</h4>
+<p>Blending 与 Stacking 类似，但单独留出一部分数据（如 20%）用于训练 Stage X 模型。</p>
+<h4 id="4-5-4-Bagging-Ensemble-Selection">4.5.4 Bagging Ensemble Selection</h4>
+<p>Bagging Ensemble Selection [5] 是我在 CrowdFlower 搜索相关性比赛中使用的方法，其主要的优点在于可以以优化任意的指标来进行模型集成。这些指标可以是可导的（如 LogLoss 等）和不可导的（如正确率，AUC，Quadratic Weighted Kappa等）。它是一个前向贪婪算法，存在过拟合的可能性，作者在文献 [5] 中提出了一系列的方法（如 Bagging）来降低这种风险，稳定集成模型的性能。使用这个方法，需要有成百上千的基础模型。为此，在 CrowdFlower 的比赛中，我把在调参过程中所有的中间模型以及相应的预测结果保留下来，作为基础模型。这样做的好处是，不仅仅能够找到最优的单模型（Best Single Model），而且所有的中间模型还可以参与模型集成，进一步提升效果。</p>
+<h3 id="4-6-自动化框架">4.6 自动化框架</h3>
+<p>从上面的介绍可以看到，做一个数据挖掘比赛涉及到的模块非常多，若有一个较自动化的框架会使得整个过程更加的高效。在 CrowdFlower 比赛较前期，我对整一个项目的代码架构进行了重构，抽象出来特征工程，模型调参和验证，以及模型集成等三大模块，极大的提高了尝试新特征，新模型的效率，也是我最终能斩获名次的一个有利因素。这份代码开源在 Github 上面，目前是 Github 有关 Kaggle 竞赛解决方案的 Most Stars，地址：<a target="_blank" rel="noopener" href="https://github.com/ChenglongChen/Kaggle_CrowdFlower%E3%80%82">https://github.com/ChenglongChen/Kaggle_CrowdFlower。</a></p>
+<p>其主要包含以下部分：</p>
+<p><strong>1. 模块化特征工程</strong></p>
+<p>a) 接口统一，只需写少量的代码就能够生成新的特征；</p>
+<p>b) 自动将单独的特征拼接成特征矩阵。</p>
+<p><strong>2. 自动化模型调参和验证</strong></p>
+<p>a) 自定义训练集和验证集的划分方法；</p>
+<p>b) 使用 Grid Search / Hyperopt 等方法，对特定的模型在指定的参数空间进行调优，并记录最佳的模型参数以及相应的性能。</p>
+<p><strong>3. 自动化模型集成</strong></p>
+<p>a) 对于指定的基础模型，按照一定的方法（如Averaging/Stacking/Blending 等）生成集成模型。</p>
+<h2 id="5-Kaggle竞赛方案盘点">5 Kaggle竞赛方案盘点</h2>
+<p>到目前为止，Kaggle 平台上面已经举办了大大小小不同的赛事，覆盖图像分类，销量预估，搜索相关性，点击率预估等应用场景。在不少的比赛中，获胜者都<br>
+会把自己的方案开源出来，并且非常乐于分享比赛经验和技巧心得。这些开源方案和经验分享对于广大的新手和老手来说，是入门和进阶非常好的参考资料。以下笔<br>
+者结合自身的背景和兴趣，对不同场景的竞赛开源方案作一个简单的盘点，总结其常用的方法和工具，以期启发思路。</p>
+<h3 id="5-1-图像分类">5.1 图像分类</h3>
+<h4 id="5-1-1-任务名称">5.1.1 任务名称</h4>
+<p>National Data Science Bowl</p>
+<h4 id="5-1-2-任务详情">5.1.2 任务详情</h4>
+<p>随着深度学习在视觉图像领域获得巨大成功，Kaggle 上面出现了越来越多跟视觉图像相关的比赛。这些比赛的发布吸引了众多参赛选手，探索基于深度学习的方法来解决垂直领域的图像问题。NDSB就是其中一个比较早期的图像分类相关的比赛。这个比赛的目标是利用提供的大量的海洋浮游生物的二值图像，通过构建模型，从而实现自动分类。</p>
+<h4 id="5-1-3-获奖方案">5.1.3 获奖方案</h4>
+<p>● <strong>1st place</strong>：Cyclic Pooling + Rolling Feature Maps + Unsupervised and Semi-Supervised Approaches。值得一提的是，这个队伍的主力队员也是Galaxy Zoo行星图像分类比赛的第一名，其也是Theano中基于FFT的Fast Conv的开发者。在两次比赛中，使用的都是 Theano，而且用的非常溜。方案链接：<a target="_blank" rel="noopener" href="http://benanne.github.io/2015/03/17/plankton.html">http://benanne.github.io/2015/03/17/plankton.html</a></p>
+<p>● <strong>2nd place</strong>：Deep CNN designing theory + VGG-like model + RReLU。这个队伍阵容也相当强大，有前MSRA 的研究员Xudong Cao，还有大神Tianqi Chen，Naiyan Wang，Bing XU等。Tianqi 等大神当时使用的是 CXXNet（MXNet 的前身），也在这个比赛中进行了推广。Tianqi 大神另外一个大名鼎鼎的作品就是 XGBoost，现在 Kaggle 上面几乎每场比赛的 Top 10 队伍都会使用。方案链接：<a target="_blank" rel="noopener" href="https://www.kaggle.com/c/datasciencebowl/discussion/13166">https://www.kaggle.com/c/datasciencebowl/discussion/13166</a></p>
+<p>● <strong>17th place</strong>：Realtime data augmentation + BN + PReLU。方案链接：<a target="_blank" rel="noopener" href="https://github.com/ChenglongChen/caffe-windows">https://github.com/ChenglongChen/caffe-windows</a></p>
+<h4 id="5-1-4-常用工具">5.1.4 常用工具</h4>
+<p><strong>▲ Theano</strong>: <a target="_blank" rel="noopener" href="http://deeplearning.net/software/theano/">http://deeplearning.net/software/theano/</a></p>
+<p>▲ <strong>Keras</strong>: <a target="_blank" rel="noopener" href="https://keras.io/">https://keras.io/</a></p>
+<p>▲ <strong>Cuda-convnet2</strong>: <a target="_blank" rel="noopener" href="https://github.com/akrizhevsky/cuda-convnet2">https://github.com/akrizhevsky/cuda-convnet2</a></p>
+<p>▲ <strong>Caffe</strong>: <a target="_blank" rel="noopener" href="http://caffe.berkeleyvision.org/">http://caffe.berkeleyvision.org/</a></p>
+<p>▲ <strong>CXXNET</strong>: <a target="_blank" rel="noopener" href="https://github.com/dmlc/cxxnet">https://github.com/dmlc/cxxnet</a></p>
+<p>▲ <strong>MXNet</strong>: <a target="_blank" rel="noopener" href="https://github.com/dmlc/mxnet">https://github.com/dmlc/mxnet</a></p>
+<p>▲ <strong>PaddlePaddle</strong>: <a target="_blank" rel="noopener" href="http://www.paddlepaddle.org/cn/index.html">http://www.paddlepaddle.org/cn/index.html</a></p>
+<h3 id="5-2-销量预估">5.2 销量预估</h3>
+<h4 id="5-2-1-任务名称">5.2.1 任务名称</h4>
+<p>Walmart Recruiting - Store Sales Forecasting</p>
+<h4 id="5-2-2-任务详情">5.2.2 任务详情</h4>
+<p>Walmart 提供 2010-02-05 到 2012-11-01 期间的周销售记录作为训练数据，需要参赛选手建立模型预测 2012-11-02 到 2013-07-26 周销售量。比赛提供的特征数据包含：Store ID, Department ID, CPI，气温，汽油价格，失业率，是否节假日等。</p>
+<h4 id="5-2-3-获奖方案">5.2.3 获奖方案</h4>
+<p>● <strong>1st place</strong>：Time series forecasting method: stlf + arima + ets。主要是基于时序序列的统计方法，大量使用了 Rob J Hyndman 的 forecast R 包。方案链接：<a target="_blank" rel="noopener" href="https://www.kaggle.com/c/walmart-recruiting-store-sales-forecasting/discussion/8125">https://www.kaggle.com/c/walmart-recruiting-store-sales-forecasting/discussion/8125</a></p>
+<p>● <strong>2nd place</strong>：Time series forecasting + ML: arima + RF + LR + PCR。时序序列的统计方法+传统机器学习方法的混合；方案链接：<a target="_blank" rel="noopener" href="https://www.kaggle.com/c/walmart-recruiting-store-sales-forecasting/discussion/8023">https://www.kaggle.com/c/walmart-recruiting-store-sales-forecasting/discussion/8023</a></p>
+<p>● <strong>16th place</strong>：Feature engineering + GBM。方案链接：<a target="_blank" rel="noopener" href="https://github.com/ChenglongChen/Kaggle_Walmart-Recruiting-Store-Sales-Forecasting">https://github.com/ChenglongChen/Kaggle_Walmart-Recruiting-Store-Sales-Forecasting</a></p>
+<h4 id="5-2-4-常用工具">5.2.4 常用工具</h4>
+<p>▲ <strong>R forecast package</strong>: <a target="_blank" rel="noopener" href="https://cran.r-project.org/web/packages/forecast/index.html">https://cran.r-project.org/web/packages/forecast/index.html</a></p>
+<p>▲ <strong>R GBM package</strong>: <a target="_blank" rel="noopener" href="https://cran.r-project.org/web/packages/gbm/index.html">https://cran.r-project.org/web/packages/gbm/index.html</a></p>
+<h3 id="5-3-搜索相关性">5.3 搜索相关性</h3>
+<h4 id="5-3-1-任务名称">5.3.1 任务名称**</h4>
+<p>CrowdFlower Search Results Relevance</p>
+<h4 id="5-3-2-任务详情">5.3.2 任务详情</h4>
+<p>比赛要求选手利用约几万个 (query, title, description) 元组的数据作为训练样本，构建模型预测其相关性打分 {1, 2, 3, 4}。比赛提供了 query, title和description的原始文本数据。比赛使用 Quadratic Weighted Kappa 作为评估标准，使得该任务有别于常见的回归和分类任务。</p>
+<h4 id="5-3-3-获奖方案">5.3.3 获奖方案</h4>
+<p>● <strong>1st place</strong>：Data Cleaning + Feature Engineering + Base Model + Ensemble。对原始文本数据进行清洗后，提取了属性特征，距离特征和基于分组的统计特征等大量的特征，使用了不同的目标函数训练不同的模型（回归，分类，排序等），最后使用模型集成的方法对不同模型的预测结果进行融合。方案链接：<a target="_blank" rel="noopener" href="https://github.com/ChenglongChen/Kaggle_CrowdFlower">https://github.com/ChenglongChen/Kaggle_CrowdFlower</a></p>
+<p>● <strong>2nd place</strong>：A Similar Workflow</p>
+<p>● <strong>3rd place</strong>： A Similar Workflow</p>
+<h4 id="5-3-4-常用工具">5.3.4 常用工具</h4>
+<p>▲ <strong>NLTK:</strong> <a target="_blank" rel="noopener" href="http://www.nltk.org/">http://www.nltk.org/</a></p>
+<p>▲ <strong>Gensim</strong>: <a target="_blank" rel="noopener" href="https://radimrehurek.com/gensim/">https://radimrehurek.com/gensim/</a></p>
+<p>▲ <strong>XGBoost</strong>: <a target="_blank" rel="noopener" href="https://github.com/dmlc/xgboost">https://github.com/dmlc/xgboost</a></p>
+<p>▲ <strong>RGF</strong>: <a target="_blank" rel="noopener" href="https://github.com/baidu/fast_rgf">https://github.com/baidu/fast_rgf</a></p>
+<h3 id="5-4-点击率预估-I">5.4 点击率预估 I</h3>
+<h4 id="5-4-1-任务名称">5.4.1 任务名称</h4>
+<p>Criteo Display Advertising Challenge</p>
+<h4 id="5-4-2-任务详情">5.4.2 任务详情</h4>
+<p>经典的点击率预估比赛。该比赛中提供了7天的训练数据，1 天的测试数据。其中有13 个整数特征，26 个类别特征，均脱敏，因此无法知道具体特征含义。</p>
+<h4 id="5-4-3-获奖方案">5.4.3 获奖方案</h4>
+<p>● <strong>1st place</strong>：GBDT 特征编码 + FFM。台大的队伍，借鉴了Facebook的方案 [6]，使用 GBDT 对特征进行编码，然后将编码后的特征以及其他特征输入到 Field-aware Factorization Machine（FFM） 中进行建模。方案链接：<a target="_blank" rel="noopener" href="https://www.kaggle.com/c/criteo-display-ad-challenge/discussion/10555">https://www.kaggle.com/c/criteo-display-ad-challenge/discussion/10555</a></p>
+<p>● <strong>3rd place</strong>：Quadratic Feature Generation + FTRL。传统特征工程和 FTRL 线性模型的结合。方案链接：<a target="_blank" rel="noopener" href="https://www.kaggle.com/c/criteo-display-ad-challenge/discussion/10534">https://www.kaggle.com/c/criteo-display-ad-challenge/discussion/10534</a></p>
+<p>● <strong>4th place</strong>：Feature Engineering + Sparse DNN</p>
+<h4 id="5-4-4-常用工具">5.4.4 常用工具</h4>
+<p>▲ <strong>Vowpal Wabbit</strong>: <a target="_blank" rel="noopener" href="https://github.com/JohnLangford/vowpal_wabbit">https://github.com/JohnLangford/vowpal_wabbit</a></p>
+<p>▲ <strong>XGBoost</strong>: <a target="_blank" rel="noopener" href="https://github.com/dmlc/xgboost">https://github.com/dmlc/xgboost</a></p>
+<p>▲ <strong>LIBFFM</strong>: <a target="_blank" rel="noopener" href="http://www.csie.ntu.edu.tw/~r01922136/libffm/">http://www.csie.ntu.edu.tw/~r01922136/libffm/</a></p>
+<h3 id="5-5-点击率预估-II">5.5 点击率预估 II</h3>
+<h4 id="5-5-1-任务名称">5.5.1 任务名称</h4>
+<p>Avazu Click-Through Rate Prediction</p>
+<h4 id="5-5-2-任务详情">5.5.2 任务详情</h4>
+<p>点击率预估比赛。提供了 10 天的训练数据，1 天的测试数据，并且提供时间，banner 位置，site, app, device 特征等，8个脱敏类别特征。</p>
+<h4 id="5-5-3-获奖方案">5.5.3 获奖方案</h4>
+<p>● <strong>1st place</strong>：Feature Engineering + FFM + Ensemble。还是台大的队伍，这次比赛，他们大量使用了 FFM，并只基于 FFM 进行集成。方案链接：<a target="_blank" rel="noopener" href="https://www.kaggle.com/c/avazu-ctr-prediction/discussion/12608">https://www.kaggle.com/c/avazu-ctr-prediction/discussion/12608</a></p>
+<p>● <strong>2nd place</strong>：Feature Engineering + GBDT 特征编码 + FFM + Blending。Owenzhang（曾经长时间雄霸 Kaggle 排行榜第一）的竞赛方案。Owenzhang 的特征工程做得非常有参考价值。方案链接：<a target="_blank" rel="noopener" href="https://github.com/owenzhang/kaggle-avazu">https://github.com/owenzhang/kaggle-avazu</a></p>
+<h4 id="5-5-4-常用工具">5.5.4 常用工具</h4>
+<p>▲ <strong>LIBFFM</strong>: <a target="_blank" rel="noopener" href="http://www.csie.ntu.edu.tw/~r01922136/libffm/">http://www.csie.ntu.edu.tw/~r01922136/libffm/</a></p>
+<p>▲ <strong>XGBoost</strong>: <a target="_blank" rel="noopener" href="https://github.com/dmlc/xgboost">https://github.com/dmlc/xgboost</a></p>
+<hr>
+<h2 id="6参考资料">6参考资料</h2>
+<p>[1] Owenzhang 的分享： Tips for Data Science Competitions</p>
+<p>[2] Algorithms for Hyper-Parameter Optimization</p>
+<p>[3] MLWave博客：Kaggle Ensembling Guide</p>
+<p>[4] Jeong-Yoon Lee 的分享：Winning Data Science Competitions</p>
+<p>[5] Ensemble Selection from Libraries of Models</p>
+<p>[6] Practical Lessons from Predicting Clicks on Ads at Facebook</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Weitang Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lonepatient.top/2017/05/12/Summary%20of%20kaggle%20competition%20experience.html">http://lonepatient.top/2017/05/12/Summary%20of%20kaggle%20competition%20experience.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lonepatient.top" target="_blank">闲记算法</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Kaggle/">Kaggle</a><a class="post-meta__tags" href="/tags/%E7%BB%8F%E9%AA%8C%E6%80%BB%E7%BB%93/">经验总结</a></div><div class="post_share"><div class="social-share" data-image="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/40951416.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2017/09/11/Attention%20Model-in-NLP.html"><img class="prev-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/28749492.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">自然语言处理中的Attention Model：是什么及为什么</div></div></a></div><div class="next-post pull-right"><a href="/2017/05/07/keras_data%20cleaning.html"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">使用Keras进行数据处理</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2018/07/10/Adversarial validation.html" title="Adversarial validation"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/20210206210559.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-07-10</div><div class="title">Adversarial validation</div></div></a></div><div><a href="/2018/04/19/Deep_Learning_For_Computer_Vision_With_Python_PB_10.html" title="深度学习与计算机视觉(PB-10)-Kaggle之猫狗比赛"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/9655360.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-04-19</div><div class="title">深度学习与计算机视觉(PB-10)-Kaggle之猫狗比赛</div></div></a></div><div><a href="/2018/01/29/Instacart-Market-Basket-Analysis.html" title="Instacart Market Basket Analysis(2nd place)"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/30142479.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-01-29</div><div class="title">Instacart Market Basket Analysis(2nd place)</div></div></a></div><div><a href="/2017/04/22/Kaggle predict consumer credit default.html" title="Kaggle债务违约预测冠军经验分享"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/74899786.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2017-04-22</div><div class="title">Kaggle债务违约预测冠军经验分享</div></div></a></div><div><a href="/2018/03/29/Plot-Python-XGBoost-feature-importances.html" title="Plot Python XGBoost feature importances"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-03-29</div><div class="title">Plot Python XGBoost feature importances</div></div></a></div><div><a href="/2017/01/04/guide-data-exploration.html" title="数据探索的综合指南"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/44457865.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2017-01-04</div><div class="title">数据探索的综合指南</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Weitang Liu</div><div class="author-info__description">一个致力于记录技术的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lonePatient"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/lonePatient" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liuweitangmath@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/277974397" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有任何问题可通过留言板或者微信公众号给我留言，谢谢！<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201201102.jpg"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8F%82%E8%B5%9B%E6%96%B9%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">1 参赛方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%AF%94%E8%B5%9B%E8%8E%B7%E5%A5%96"><span class="toc-number">2.</span> <span class="toc-text">2 比赛获奖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%AF%94%E8%B5%9B%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.</span> <span class="toc-text">3 比赛类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E6%AF%94%E8%B5%9B%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B"><span class="toc-number">4.</span> <span class="toc-text">4 数据挖掘比赛基本流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 数据分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97"><span class="toc-number">4.2.</span> <span class="toc-text">4.2  数据清洗</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 特征工程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-1-%E7%89%B9%E5%BE%81%E5%8F%98%E6%8D%A2"><span class="toc-number">4.3.1.</span> <span class="toc-text">4.3.1 特征变换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-2-%E7%89%B9%E5%BE%81%E7%BC%96%E7%A0%81"><span class="toc-number">4.3.2.</span> <span class="toc-text">4.3.2 特征编码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%92%8C%E9%AA%8C%E8%AF%81"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 模型训练和验证</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E2%80%A64-1-%E6%A8%A1%E5%9E%8B%E9%80%89%E6%8B%A9"><span class="toc-number">4.4.1.</span> <span class="toc-text">4…4.1 模型选择</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-2-%E8%B0%83%E5%8F%82%E5%92%8C%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81"><span class="toc-number">4.4.2.</span> <span class="toc-text">4.4.2 调参和模型验证</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-3-%E9%80%82%E5%BD%93%E5%88%A9%E7%94%A8-Public-LB-%E7%9A%84%E5%8F%8D%E9%A6%88"><span class="toc-number">4.4.3.</span> <span class="toc-text">4.4.3 适当利用 Public LB 的反馈</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-%E6%A8%A1%E5%9E%8B%E9%9B%86%E6%88%90"><span class="toc-number">4.5.</span> <span class="toc-text">4.5 模型集成</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-5-1-Averaging-%E5%92%8C-Voting"><span class="toc-number">4.5.1.</span> <span class="toc-text">4.5.1 Averaging 和 Voting</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-5-2-Stacking"><span class="toc-number">4.5.2.</span> <span class="toc-text">4.5.2 Stacking</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-5-3-Blending"><span class="toc-number">4.5.3.</span> <span class="toc-text">4.5.3 Blending</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-5-4-Bagging-Ensemble-Selection"><span class="toc-number">4.5.4.</span> <span class="toc-text">4.5.4 Bagging Ensemble Selection</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-%E8%87%AA%E5%8A%A8%E5%8C%96%E6%A1%86%E6%9E%B6"><span class="toc-number">4.6.</span> <span class="toc-text">4.6 自动化框架</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Kaggle%E7%AB%9E%E8%B5%9B%E6%96%B9%E6%A1%88%E7%9B%98%E7%82%B9"><span class="toc-number">5.</span> <span class="toc-text">5 Kaggle竞赛方案盘点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 图像分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-1-%E4%BB%BB%E5%8A%A1%E5%90%8D%E7%A7%B0"><span class="toc-number">5.1.1.</span> <span class="toc-text">5.1.1 任务名称</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-2-%E4%BB%BB%E5%8A%A1%E8%AF%A6%E6%83%85"><span class="toc-number">5.1.2.</span> <span class="toc-text">5.1.2 任务详情</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-3-%E8%8E%B7%E5%A5%96%E6%96%B9%E6%A1%88"><span class="toc-number">5.1.3.</span> <span class="toc-text">5.1.3 获奖方案</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-4-%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">5.1.4.</span> <span class="toc-text">5.1.4 常用工具</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E9%94%80%E9%87%8F%E9%A2%84%E4%BC%B0"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 销量预估</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-1-%E4%BB%BB%E5%8A%A1%E5%90%8D%E7%A7%B0"><span class="toc-number">5.2.1.</span> <span class="toc-text">5.2.1 任务名称</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-2-%E4%BB%BB%E5%8A%A1%E8%AF%A6%E6%83%85"><span class="toc-number">5.2.2.</span> <span class="toc-text">5.2.2 任务详情</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-3-%E8%8E%B7%E5%A5%96%E6%96%B9%E6%A1%88"><span class="toc-number">5.2.3.</span> <span class="toc-text">5.2.3 获奖方案</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-4-%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">5.2.4.</span> <span class="toc-text">5.2.4 常用工具</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E6%90%9C%E7%B4%A2%E7%9B%B8%E5%85%B3%E6%80%A7"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 搜索相关性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3-1-%E4%BB%BB%E5%8A%A1%E5%90%8D%E7%A7%B0"><span class="toc-number">5.3.1.</span> <span class="toc-text">5.3.1 任务名称**</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3-2-%E4%BB%BB%E5%8A%A1%E8%AF%A6%E6%83%85"><span class="toc-number">5.3.2.</span> <span class="toc-text">5.3.2 任务详情</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3-3-%E8%8E%B7%E5%A5%96%E6%96%B9%E6%A1%88"><span class="toc-number">5.3.3.</span> <span class="toc-text">5.3.3 获奖方案</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3-4-%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">5.3.4.</span> <span class="toc-text">5.3.4 常用工具</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-%E7%82%B9%E5%87%BB%E7%8E%87%E9%A2%84%E4%BC%B0-I"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 点击率预估 I</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-4-1-%E4%BB%BB%E5%8A%A1%E5%90%8D%E7%A7%B0"><span class="toc-number">5.4.1.</span> <span class="toc-text">5.4.1 任务名称</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-4-2-%E4%BB%BB%E5%8A%A1%E8%AF%A6%E6%83%85"><span class="toc-number">5.4.2.</span> <span class="toc-text">5.4.2 任务详情</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-4-3-%E8%8E%B7%E5%A5%96%E6%96%B9%E6%A1%88"><span class="toc-number">5.4.3.</span> <span class="toc-text">5.4.3 获奖方案</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-4-4-%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">5.4.4.</span> <span class="toc-text">5.4.4 常用工具</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-%E7%82%B9%E5%87%BB%E7%8E%87%E9%A2%84%E4%BC%B0-II"><span class="toc-number">5.5.</span> <span class="toc-text">5.5 点击率预估 II</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-5-1-%E4%BB%BB%E5%8A%A1%E5%90%8D%E7%A7%B0"><span class="toc-number">5.5.1.</span> <span class="toc-text">5.5.1 任务名称</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-5-2-%E4%BB%BB%E5%8A%A1%E8%AF%A6%E6%83%85"><span class="toc-number">5.5.2.</span> <span class="toc-text">5.5.2 任务详情</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-5-3-%E8%8E%B7%E5%A5%96%E6%96%B9%E6%A1%88"><span class="toc-number">5.5.3.</span> <span class="toc-text">5.5.3 获奖方案</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-5-4-%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">5.5.4.</span> <span class="toc-text">5.5.4 常用工具</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">6.</span> <span class="toc-text">6参考资料</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-27"/></a><div class="content"><a class="title" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27">Arxiv今日论文 | 2026-02-27</a><time datetime="2026-02-27T12:30:00.000Z" title="发表于 2026-02-27 12:30:00">2026-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-26"/></a><div class="content"><a class="title" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26">Arxiv今日论文 | 2026-02-26</a><time datetime="2026-02-26T12:30:00.000Z" title="发表于 2026-02-26 12:30:00">2026-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-25"/></a><div class="content"><a class="title" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25">Arxiv今日论文 | 2026-02-25</a><time datetime="2026-02-25T12:30:00.000Z" title="发表于 2026-02-25 12:30:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225222513891.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板">大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板</a><time datetime="2026-02-25T12:00:00.000Z" title="发表于 2026-02-25 12:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225123005910.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mid-training：构建预训练与后训练之间的分布式桥梁"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁">mid-training：构建预训练与后训练之间的分布式桥梁</a><time datetime="2026-02-25T00:00:00.000Z" title="发表于 2026-02-25 00:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-24"/></a><div class="content"><a class="title" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24">Arxiv今日论文 | 2026-02-24</a><time datetime="2026-02-24T12:30:00.000Z" title="发表于 2026-02-24 12:30:00">2026-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-23"/></a><div class="content"><a class="title" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23">Arxiv今日论文 | 2026-02-23</a><time datetime="2026-02-23T12:30:00.000Z" title="发表于 2026-02-23 12:30:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260223165943195.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用&quot;深度思考率&quot;精准度量LLM推理质量"/></a><div class="content"><a class="title" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量">用&quot;深度思考率&quot;精准度量LLM推理质量</a><time datetime="2026-02-23T12:00:00.000Z" title="发表于 2026-02-23 12:00:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-20"/></a><div class="content"><a class="title" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20">Arxiv今日论文 | 2026-02-20</a><time datetime="2026-02-20T12:30:00.000Z" title="发表于 2026-02-20 12:30:00">2026-02-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201606857.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前沿大模型训练方法：深度解析与实践指南"/></a><div class="content"><a class="title" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南">前沿大模型训练方法：深度解析与实践指南</a><time datetime="2026-02-20T10:30:00.000Z" title="发表于 2026-02-20 10:30:00">2026-02-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Weitang Liu</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.lonepatient.top/',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.lonepatient.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo@1.4.11/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (99)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/计算机视觉/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 计算机视觉 (16)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/知识图谱/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 知识图谱 (13)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">👩‍💻 深度学习 (139)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item" style="visibility: hidden"></div><a class="magnet_link_more"  href="http://lonepatient.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-18</span><a class="blog-slider__title" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">通向AGI之路：大型语言模型（LLM）技术精要</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/07/12/gaiic_2022_ner_top10.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220712181905.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-07-12</span><a class="blog-slider__title" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">GAIIC2022商品标题识别二等奖获奖解决思路</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230807190424.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-01-20</span><a class="blog-slider__title" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">2025-03|高质量中文预训练模型集合</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>聊聊工业界中如何求解NER问题 | 闲记算法</title><meta name="keywords" content="NLP,NER"><meta name="author" content="Weitang Liu"><meta name="copyright" content="Weitang Liu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="NER是一个已经解决了的问题吗？或许，一切才刚刚开始。 例如，面对下面笔者在工作中遇到的12个关于NER的系列问题，你有什么好的trick呢？不着急，让我们通过本篇文章，逐一解答以下问题：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="聊聊工业界中如何求解NER问题">
+<meta property="og:url" content="http://lonepatient.top/2020/07/05/name_entity_identification_in_industry.html">
+<meta property="og:site_name" content="闲记算法">
+<meta property="og:description" content="NER是一个已经解决了的问题吗？或许，一切才刚刚开始。 例如，面对下面笔者在工作中遇到的12个关于NER的系列问题，你有什么好的trick呢？不着急，让我们通过本篇文章，逐一解答以下问题：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/20210206205846.jpg">
+<meta property="article:published_time" content="2020-07-05T23:20:08.000Z">
+<meta property="article:modified_time" content="2026-02-27T07:52:12.940Z">
+<meta property="article:author" content="Weitang Liu">
+<meta property="article:tag" content="NLP">
+<meta property="article:tag" content="NER">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/20210206205846.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lonepatient.top/2020/07/05/name_entity_identification_in_industry"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//s4.cnzz.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" data-pjax="data-pjax" src="https://s4.cnzz.com/z_stat.php?id=1273275888&amp;web_id=1273275888"></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-02-27 07:52:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/backgroud.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><script src="https://at.alicdn.com/t/c/font_3570527_dthoqrrv2tv.css"></script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JwRQtLKZggvJH4sJ",ck:"JwRQtLKZggvJH4sJ"})</script><link rel="stylesheet" href="/css/universe.css"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536467946304280" crossorigin="anonymous"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/20210206205846.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">闲记算法</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">聊聊工业界中如何求解NER问题<a class="post-edit-link" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts/name_entity_identification_in_industry.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-07-05T23:20:08.000Z" title="发表于 2020-07-05 23:20:08">2020-07-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-27T07:52:12.940Z" title="更新于 2026-02-27 07:52:12">2026-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/">自然语言处理</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/%E5%91%BD%E5%90%8D%E5%AE%9E%E4%BD%93%E8%AF%86%E5%88%AB/">命名实体识别</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2020/07/05/name_entity_identification_in_industry.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>NER是一个已经解决了的问题吗？或许，一切才刚刚开始。</p>
+<p>例如，面对下面笔者在工作中遇到的12个关于NER的系列问题，你有什么好的trick呢？不着急，让我们通过本篇文章，逐一解答以下问题：</p>
+<span id="more"></span>
+<blockquote>
+<p>Q1、如何快速有效地提升NER性能（非模型迭代）？<br>
+Q2、如何在模型层面提升NER性能？<br>
+Q3、如何构建引入词汇信息（词向量）的NER？<br>
+Q4、如何解决NER实体span过长的问题？<br>
+Q5、如何客观看待BERT在NER中的作用？<br>
+Q6、如何冷启动NER任务？<br>
+Q7、如何有效解决低资源NER问题？<br>
+Q8、如何缓解NER标注数据的噪声问题？<br>
+Q9、如何克服NER中的类别不平衡问题？<br>
+Q10、如何对NER任务进行领域迁移？<br>
+Q11、如何让NER系统变得“透明”且健壮？<br>
+Q12、如何解决低耗时场景下的NER任务？</p>
+</blockquote>
+<h3 id="工业界中的NER问题为什么不易解决？">工业界中的NER问题为什么不易解决？</h3>
+<p>众所周知，命名实体识别（Named Entity Recognition，NER）是一项基础而又重要的NLP任务，往往作为信息抽取、问答对话、机器翻译等方向的或显式或隐式的基础任务。或许在很多人眼里，NER似乎只是一个书本概念，跟句法分析一样存在感不强。</p>
+<p>究其缘由：一方面是因为深度学习在NLP领域遍地开花，使得智能问答等曾经复杂的NLP任务，变得可以端到端学习，于是分词、词性分析、NER、句法分析等曾经的显式任务都隐式地编码到了大型神经网络的参数中；另一方面，深度学习流行之后，NER问题相比之前有了比较长足的进步，LSTM+CRF的模式基本成为业内标配，很多人认为“这个事情应该差不多了”。</p>
+<p>但是，现实真的如此吗？在工业界解决NER任务的NLPer，往往发现事情远没有这样简单。</p>
+<p>在真实的工业界场景中，通常面临<strong>标注成本昂贵</strong>、<strong>泛化迁移能力不足</strong>、<strong>可解释性不强</strong>、<strong>计算资源受限</strong>等问题，想要将NER完美落（bian）地（xian）可不简单，那些在经典benchmark上自称做到SOTA的方法放在现实场景中往往“也就那样”。以医疗领域为例：</p>
+<ol>
+<li>不同医院、不同疾病、不同科室的文本描述形式不一致，而标注成本又很昂贵，一个通用的NER系统往往不具备“想象中”的泛化迁移能力。当前的NER技术在医疗领域并不适合做成泛化的工具。</li>
+<li>由于医疗领域的严肃性，我们既要知其然、更要知其所以然：NER系统往往不能采用“一竿子插到底”的黑箱算法，处理过程应该随着处理对象的层次和深度而逐步叠加模块，下级模块使用上级结果，方便进行迭代优化、并具备可解释性，这样做可解耦医学事件、也便于进行医学实体消歧。</li>
+<li>仅仅使用统计模型的NER系统往往不是万能的，医疗领域相关的实体词典和特征挖掘对NER性能也起着关键作用。此外，NER结果往往不能直接使用，还需进行医学术语标准化。</li>
+<li>由于医院数据不可出院，需要在院内部署NER系统。而通常医院内部的GPU计算资源又不是很充足（成本问题），我们需要让机器学习模型又轻又快（BERT上不动哇），同时要更充分的利用显存。</li>
+</ol>
+<p>以上种种困难，导致了工业界场景求解NER问题不再那么容易，不是一个想当然的事情。</p>
+<h3 id="做NER的几条教训（趟过的坑）">做NER的几条教训（趟过的坑）</h3>
+<p>下面给出笔者在医疗领域做NER的经验教训（趟过的坑）：</p>
+<ol>
+<li>提升NER性能（performance）的⽅式往往不是直接堆砌⼀个BERT+CRF，这样做不仅效果不一定会好，推断速度也非常堪忧。就算BERT效果还不错，付出的代价也是惨重的</li>
+</ol>
+<blockquote>
+<p>就算直接使用BERT+CRF进行finetune，BERT和CRF层的学习率也不要设成一样，让CRF层学习率要更大一些（一般是BERT的5～10倍），要让CRF层快速收敛。</p>
+</blockquote>
+<ol start="2">
+<li>在NER任务上，也不要试图对BERT进⾏蒸馏压缩，很可能吃⼒不讨好。</li>
+</ol>
+<blockquote>
+<p>哈哈，也许废了半天劲去蒸馏，效果下降到还不如1层lstm+crf，推断速度还是慢～</p>
+</blockquote>
+<ol start="3">
+<li>NER任务是⼀个重底层的任务，上层模型再深、性能提升往往也是有限的（甚至是下降的）。</li>
+</ol>
+<blockquote>
+<p>不要盲目搭建很深的网络，也不要痴迷于各种attention了。</p>
+</blockquote>
+<ol start="4">
+<li>
+<p>NER任务不同的解码方式（CRF/指针网络/Biaffine[1]）之间的差异其实也是有限的，不要过分拘泥于解码⽅式。</p>
+</li>
+<li>
+<p>通过QA阅读理解的方式进行NER任务，效果也许会提升，但计算复杂度上来了，你需要对同⼀⽂本进行多次编码(对同⼀文本会构造多个question)。可以简化，比如参考： <a target="_blank" rel="noopener" href="https://github.com/lonePatient/BERT-NER-Pytorch">https://github.com/lonePatient/BERT-NER-Pytorch</a></p>
+</li>
+<li>
+<p>设计NER任务时，尽量不要引入嵌套实体，不好做，这往往是一个长尾问题。</p>
+</li>
+<li>
+<p>不要直接拿Transformer做NER，这是不合适的，详细可参考TENER[2]。</p>
+</li>
+</ol>
+<h3 id="工业界中NER问题的正确打开⽅式是怎样的？12个trick逐一剖析">工业界中NER问题的正确打开⽅式是怎样的？12个trick逐一剖析</h3>
+<p>笔者首先给出一个非常直接的打开方式：1层lstm+crf！</p>
+<p>从模型层面看，你也许会问：为什么非是1层lstm+crf？1层lstm+crf不能解决业务问题怎么办？遇到更为复杂的场景该怎么办？不着急，且听我慢慢道来。</p>
+<p>让我们回到一开始列出的那12个问题，并逐一解答：</p>
+<h4 id="Q1、如何快速有效地提升NER性能？">Q1、如何快速有效地提升NER性能？</h4>
+<p>如果1层lstm+crf，这么直接的打开方式导致NER性能达不到业务目标，这一点也不意外（这是万里长征的第一步～）。这时候除了badcase分析，不要忘记一个快速提升的重要手段：<strong>规则+领域词典</strong>。</p>
+<ul>
+<li>在垂直领域，一个不断积累、不断完善的实体词典对NER性能的提升是稳健的，基于规则+词典也可以快速应急处理一些badcase；</li>
+<li>对于通⽤领域，可以多种分词工具和多种句法短语⼯具进行融合来提取候选实体，并结合词典进行NER。</li>
+</ul>
+<p>此外，怎么更好地将实体词典融入到NER模型中，也是一个值得探索的问题（如嵌入到图神经网络中提取特征[3]）。</p>
+<h4 id="Q2、如何在模型层面提升NER性能？">Q2、如何在模型层面提升NER性能？</h4>
+<p>如果想在模型层面（仍然是1层lstm+crf）搞点事情，上文讲过NER是一个重底层的任务，1层lstm足以很好捕捉NER任务中的方向信息和局部特征了。</p>
+<p>我们应该集中精力在embedding层下功夫，那就是引入丰富的特征：比如char、bigram、词典特征、词性特征、elmo等等，还有更多业务相关的特征；在垂直领域，如果可以预训练一个领域相关的字向量&amp;语言模型，那是最好不过的了。</p>
+<p>总之，底层的特征越丰富、差异化越大越好。我们需要构造不同视角下的特征。</p>
+<h4 id="Q3、如何构建引入词汇信息（词向量）的NER？">Q3、如何构建引入词汇信息（词向量）的NER？</h4>
+<blockquote>
+<p>将词向量引入到模型中，一种简单粗暴的做法就是将词向量对齐到相应的字符，然后将字词向量进行混合，但这需要对原始文本进行分词（存在误差），性能提升通常是有限的。</p>
+</blockquote>
+<p>我们知道中文NER通常是基于字符进行标注的，这是由于基于词汇标注存在分词误差问题。但词汇边界对于实体边界是很有用的，我们该怎么把蕴藏词汇信息的词向量“恰当”地引入到模型中呢？</p>
+<p>一种行之有效的方法就是信息无损的、引入词汇信息的NER方法，我称之为词汇增强，具体可参考专栏文章<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/142615620">《中文NER的正确打开方式：词汇增强方法总结》</a>。</p>
+<p>ACL2020的Simple-Lexicon[4]和FLAT[5]两篇论文，不仅词汇增强模型十分轻量、而且可以比肩BERT的效果。</p>
+<h4 id="Q4、如何解决NER实体span过长的问题？">Q4、如何解决NER实体span过长的问题？</h4>
+<p>如果NER任务中某一类实体span比较长（⽐如医疗NER中的⼿术名称是很长的），直接采取CRF解码可能会导致很多连续的实体span断裂。除了加入规则进行修正外，这时候也可尝试引入指针网络+CRF构建多任务学习解决。</p>
+<blockquote>
+<p>指针网络会更容易捕捉较长的span，不过指针网络的收敛是较慢的，可以对CRF和指针网络设置不同学习率，或者设置不同的loss权重。</p>
+</blockquote>
+<h4 id="Q5、如何客观看待BERT在NER中的作用？">Q5、如何客观看待BERT在NER中的作用？</h4>
+<p>对于工业场景中的绝大部分NLP问题（特别是垂直领域），都没有必要堆资源。但这绝不代表BERT是“一无是处”的，在不受计算资源限制、通用领域、小样本的场景下，BERT表现会更好。我们要更好地去利用BERT的优势：</p>
+<ul>
+<li>
+<p>在低耗时场景中，BERT可以作为一个“对标竞品”，我们可以采取轻量化的多种策略组合去逼近甚至超越BERT的性能；</p>
+</li>
+<li>
+<p>在垂直领域应用BERT时，我们首先确认领域内的语料与BERT原始的预训练语料之间是否存在gap，如果这个gap越大，那么我们就不要停止预训练：继续在领域内进行预训练，继续在具体任务上进行预训练。</p>
+</li>
+<li>
+<p>在小样本条件下，利用BERT可以更好帮助我们解决低资源问题：比如基于BERT等预训练模型的文本增强技术[6]，又比如与主动学习、半监督学习、领域自适应结合（后续详细介绍）。</p>
+</li>
+<li>
+<p>在竞赛任务中，BERT很有用！我们可以选取不同的预训练语⾔模型在底层进行特征拼接。具体地，可以将char、bigram和BERT、XLNet等一起拼接喂入1层lstm+crf中。语⾔模型的差异越⼤，效果越好。如果需要对语言模型finetune，需要设置不同的学习率。</p>
+</li>
+</ul>
+<h4 id="Q6、如何冷启动NER任务？">Q6、如何冷启动NER任务？</h4>
+<p>如果⾯临的是⼀个冷启动的NER任务，业务问题定义好后，首先要做的就是维护好一个领域词典，而不是急忙去标数据、跑模型；当基于规则+词典的NER系统不能够满足业务需求时，才需要启动人工标注数据、构造机器学习模型。</p>
+<p>当然，我们可以采取一些省成本的标注方式，如结合领域化的预训练语言模型+主动学习，挖掘那些“不确定性高”、并且“具备代表性”的高价值样本。</p>
+<blockquote>
+<p>需要注意的是，由于NER通常转化为一个序列标注任务，不同于传统的分类任务，我们需要设计一个专门针对序列标注的主动学习框架。</p>
+</blockquote>
+<h4 id="Q7、如何有效解决低资源NER问题？">Q7、如何有效解决低资源NER问题？</h4>
+<p>如果拿到的NER标注数据还是不够，又不想标注人员介入，这确实是一个比较困难的问题。</p>
+<p>低资源NLP问题的解决方法通常都针对分类任务，这相对容易一些，如可以采取文本增强、半监督学习等方式，可参考专栏文章<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/146777068">《标注样本少怎么办？「文本增强+半监督学习」总结 》</a>。</p>
+<p>上述解决低资源NLP问题的方法，往往在NER中提升并不明显。NER本质是基于token的分类任务，其对噪声极其敏感的。如果盲目应用弱监督方法去解决低资源NER问题，可能会导致全局性的性能下降，甚至还不如直接基于词典的NER。</p>
+<p>这里给出一些可以尝试的解决思路（笔者个人建议，也许还会翻车啊）：</p>
+<ul>
+<li>上文已介绍BERT在低资源条件下能更好地发挥作用：我们可以使用BERT（领域预训练的BERT）进行数据蒸馏（半监督学习+置信度选择），同时利用实体词典辅助标注。</li>
+<li>还可以利用实体词典+BERT相结合，进行半监督自训练，具体可参考文献[7]。</li>
+<li>工业界毕竟不是搞学术，要想更好地解决低资源NER问题，RD在必要时还是要干预、并进行核查的。</li>
+</ul>
+<h4 id="Q8、如何缓解NER标注数据的噪声问题？">Q8、如何缓解NER标注数据的噪声问题？</h4>
+<p>实际工作中，我们常常会遇到NER数据可能存在标注质量问题，也许是标注规范就不合理（一定要提前评估风险，不然就白干了），当然，正常的情况下只是存在一些小规模的噪声。</p>
+<p>一种简单地有效的方式就是对训练集进行交叉验证，然后人工去清洗这些“脏数据”。当然也可以将noisy label learning应用于NER任务，惩罚那些噪音大的样本loss权重，具体可参考文献[8]。</p>
+<h4 id="Q9、如何克服NER中的类别不平衡问题？">Q9、如何克服NER中的类别不平衡问题？</h4>
+<p>NER任务中，常常会出现某个类别下的实体个数稀少的问题，而常规的解决方法无外乎是重采样、loss惩罚、Dice loss[9]等等。而在医疗NER中，我们常常会发现这类实体本身就是一个长尾实体（填充率低），如果能挖掘相关规则模板、构建词典库也许会比模型更加鲁棒。</p>
+<h4 id="Q10、如何对NER任务进行领域迁移？">Q10、如何对NER任务进行领域迁移？</h4>
+<p>在医疗领域，我们希望NER模型能够在不同医院、不同疾病间进行更好地泛化迁移（这是一个领域自适应问题：源域标注数据多，目标域标注数据较少），领域自适应针对NER的相关研究不多，通常是对抗迁移[10]或特征迁移[11]。</p>
+<p>在具体实践中，对抗&amp;特征迁移通常还不如直接采取finetune方式（对源域进行预训练，在目标域finetune），特别是在后BERT时代。</p>
+<p>此外，在医疗领域，泛化迁移问题并不是一个容易解决的问题，试图去将NER做成一个泛化工具往往是困难的。或许我们更应该从业务角度出发去将NER任务定制化，而不是拘泥于那些无法落地的前沿技术。</p>
+<h4 id="Q11、如何让NER系统变得“透明”且健壮？">Q11、如何让NER系统变得“透明”且健壮？</h4>
+<p>一个好的NER系统并不是“一竿子插到底”的黑箱算法。在医疗领域，实体类型众多，我们往往需要构建一套多层级、多粒度、多策略的NER系统。 例如：</p>
+<ul>
+<li>多层级的NER系统更加“透明”，可以回溯实体的来源（利于医学实体消歧），方便“可插拔”地迭代优化；同时也不需要构建数目众多的实体类型，让模型“吃不消”。</li>
+<li>多粒度的NER系统可以提高准召。如，第⼀步抽取⽐较粗粒度的实体，通过模型+规则+词典等多策略保证⾼召回；第⼆步进⾏细粒度的实体分类，通过模型+规则保证⾼准确。</li>
+</ul>
+<h4 id="Q12、如何解决低耗时场景下的NER任务？">Q12、如何解决低耗时场景下的NER任务？</h4>
+<p>笔者经验，重点应放在工程层面，而不是模型层面的压缩：</p>
+<p>因为，从模型层面来看，1层lstm+CRF已经够快了</p>
+<ul>
+<li>如果觉得lstm会慢，换成cnn或transformer也许更快一些，不过效果好不好要具体分析；通常来说，lstm对于NER任务的⽅向性和局部特征捕捉会好于别的编码器。</li>
+<li>如果觉得crf的解码速度慢，引入label attention机制把crf拿掉，比如LAN这篇论文[12]；当然可以⽤指针网络替换crf，不过指针网络收敛慢⼀些。</li>
+<li>如果想进行模型压缩，比如对lstm+crf做量化剪枝也是⼀个需要权衡的⼯作，有可能费力不讨好~</li>
+</ul>
+<blockquote>
+<p>lstm+crf已经够小了，对小模型进行压缩往往不如对大模型压缩更加健壮[13]。</p>
+</blockquote>
+<p>从模型+工程层面来看，重点应放在如何在多层级的NER系统中进行显存调度、或者使当前层级的显存占用最大化等。</p>
+<h3 id="总结">总结</h3>
+<p>我们要在1层lstm+CRF的基础上，引入更丰富的embedding特征，并进行多策略组合，这大概率可以解决垂直领域的NER问题。我们要更好地利用BERT、使其价值最大化。BERT虽好，可不要过度信任啊～我们要更加稳妥地解决复杂NER问题（词汇增强、冷启动、低资源、噪声、不平衡、领域迁移、可解释、低耗时），这是一个需要权衡的过程，切记不要盲目追前沿，很多脏活累活还是要干一干的。</p>
+<p>可以看出，哪怕是命名实体识别，中文分词甚至文本分类这些看似已经在公开数据集上被求解的任务，放在实际的工业界场景下都可能存在大量的挑战。</p>
+<p>此外，对于复杂场景的NER问题，值得借鉴的学术前沿也不够多。很多泛机器学习知识大多集中在CV领域，在NLP领域更多的是转化为一个分类任务去解决。从这个角度看，NER不是一个像分类任务那样简单的问题。</p>
+<p>这也是提醒还未踏入工业界的小伙伴们，不仅要刷paper追前沿，更要记得积极实践，在实际问题中积累NLP炼丹技巧哦。</p>
+<p>原文地址： <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/152463745?from_voters_page=true">https://zhuanlan.zhihu.com/p/152463745?from_voters_page=true</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Weitang Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lonepatient.top/2020/07/05/name_entity_identification_in_industry.html">http://lonepatient.top/2020/07/05/name_entity_identification_in_industry.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lonepatient.top" target="_blank">闲记算法</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/NLP/">NLP</a><a class="post-meta__tags" href="/tags/NER/">NER</a></div><div class="post_share"><div class="social-share" data-image="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/20210206205846.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/07/11/Boundary-Enhanced-Neural-Span-Classification-for-Nested-Named-Entity-Recognition.html"><img class="prev-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/20200822231058.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Boundary Enhanced Neural Span Classification for Nested Named Entity Recognition</div></div></a></div><div class="next-post pull-right"><a href="/2020/04/20/Getting-Started-Guide-to-Product-Level-Deep-Learning-Systems.html"><img class="next-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20221031180534.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">产品级深度学习系统入门指南</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2019/09/28/2019_daguan_info_extract_competition.html" title="2019达观杯信息提取第九名方案"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/092819170162_0sk2ppt_1.Jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-09-28</div><div class="title">2019达观杯信息提取第九名方案</div></div></a></div><div><a href="/2021/05/29/An-Analysis-of-Simple-Data-Augmentation-for-Named-Entity-Recognition.html" title="An Analysis of Simple Data Augmentation for Named Entity Recognition"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/2021-05-29%2014.18.23.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-29</div><div class="title">An Analysis of Simple Data Augmentation for Named Entity Recognition</div></div></a></div><div><a href="/2018/07/06/CRF-Layer-on-the-Top-of-BiLSTM --1.html" title="BiLSTM模型中CRF层的运行原理(1)"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/20181227235235.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-07-06</div><div class="title">BiLSTM模型中CRF层的运行原理(1)</div></div></a></div><div><a href="/2018/07/14/CRF-Layer-on-the-Top-of-BiLSTM --2.html" title="BiLSTM模型中CRF层的运行原理(2)"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/20181228000013.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-07-14</div><div class="title">BiLSTM模型中CRF层的运行原理(2)</div></div></a></div><div><a href="/2018/07/21/CRF-Layer-on-the-Top-of-BiLSTM --3.html" title="BiLSTM模型中CRF层的运行原理(3)"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-07-21</div><div class="title">BiLSTM模型中CRF层的运行原理(3)</div></div></a></div><div><a href="/2018/08/08/CRF-Layer-on-the-Top-of-BiLSTM --4.html" title="BiLSTM-CRF模型中CRF层的运行原理(4)"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/20190225222140.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-08-08</div><div class="title">BiLSTM-CRF模型中CRF层的运行原理(4)</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Weitang Liu</div><div class="author-info__description">一个致力于记录技术的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lonePatient"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/lonePatient" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liuweitangmath@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/277974397" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有任何问题可通过留言板或者微信公众号给我留言，谢谢！<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201201102.jpg"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%B8%9A%E7%95%8C%E4%B8%AD%E7%9A%84NER%E9%97%AE%E9%A2%98%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E6%98%93%E8%A7%A3%E5%86%B3%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">工业界中的NER问题为什么不易解决？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%9ANER%E7%9A%84%E5%87%A0%E6%9D%A1%E6%95%99%E8%AE%AD%EF%BC%88%E8%B6%9F%E8%BF%87%E7%9A%84%E5%9D%91%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">做NER的几条教训（趟过的坑）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%B8%9A%E7%95%8C%E4%B8%ADNER%E9%97%AE%E9%A2%98%E7%9A%84%E6%AD%A3%E7%A1%AE%E6%89%93%E5%BC%80%E2%BD%85%E5%BC%8F%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84%EF%BC%9F12%E4%B8%AAtrick%E9%80%90%E4%B8%80%E5%89%96%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">工业界中NER问题的正确打开⽅式是怎样的？12个trick逐一剖析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Q1%E3%80%81%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E6%9C%89%E6%95%88%E5%9C%B0%E6%8F%90%E5%8D%87NER%E6%80%A7%E8%83%BD%EF%BC%9F"><span class="toc-number">3.1.</span> <span class="toc-text">Q1、如何快速有效地提升NER性能？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Q2%E3%80%81%E5%A6%82%E4%BD%95%E5%9C%A8%E6%A8%A1%E5%9E%8B%E5%B1%82%E9%9D%A2%E6%8F%90%E5%8D%87NER%E6%80%A7%E8%83%BD%EF%BC%9F"><span class="toc-number">3.2.</span> <span class="toc-text">Q2、如何在模型层面提升NER性能？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Q3%E3%80%81%E5%A6%82%E4%BD%95%E6%9E%84%E5%BB%BA%E5%BC%95%E5%85%A5%E8%AF%8D%E6%B1%87%E4%BF%A1%E6%81%AF%EF%BC%88%E8%AF%8D%E5%90%91%E9%87%8F%EF%BC%89%E7%9A%84NER%EF%BC%9F"><span class="toc-number">3.3.</span> <span class="toc-text">Q3、如何构建引入词汇信息（词向量）的NER？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Q4%E3%80%81%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3NER%E5%AE%9E%E4%BD%93span%E8%BF%87%E9%95%BF%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-number">3.4.</span> <span class="toc-text">Q4、如何解决NER实体span过长的问题？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Q5%E3%80%81%E5%A6%82%E4%BD%95%E5%AE%A2%E8%A7%82%E7%9C%8B%E5%BE%85BERT%E5%9C%A8NER%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">3.5.</span> <span class="toc-text">Q5、如何客观看待BERT在NER中的作用？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Q6%E3%80%81%E5%A6%82%E4%BD%95%E5%86%B7%E5%90%AF%E5%8A%A8NER%E4%BB%BB%E5%8A%A1%EF%BC%9F"><span class="toc-number">3.6.</span> <span class="toc-text">Q6、如何冷启动NER任务？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Q7%E3%80%81%E5%A6%82%E4%BD%95%E6%9C%89%E6%95%88%E8%A7%A3%E5%86%B3%E4%BD%8E%E8%B5%84%E6%BA%90NER%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-number">3.7.</span> <span class="toc-text">Q7、如何有效解决低资源NER问题？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Q8%E3%80%81%E5%A6%82%E4%BD%95%E7%BC%93%E8%A7%A3NER%E6%A0%87%E6%B3%A8%E6%95%B0%E6%8D%AE%E7%9A%84%E5%99%AA%E5%A3%B0%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-number">3.8.</span> <span class="toc-text">Q8、如何缓解NER标注数据的噪声问题？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Q9%E3%80%81%E5%A6%82%E4%BD%95%E5%85%8B%E6%9C%8DNER%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%88%AB%E4%B8%8D%E5%B9%B3%E8%A1%A1%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-number">3.9.</span> <span class="toc-text">Q9、如何克服NER中的类别不平衡问题？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Q10%E3%80%81%E5%A6%82%E4%BD%95%E5%AF%B9NER%E4%BB%BB%E5%8A%A1%E8%BF%9B%E8%A1%8C%E9%A2%86%E5%9F%9F%E8%BF%81%E7%A7%BB%EF%BC%9F"><span class="toc-number">3.10.</span> <span class="toc-text">Q10、如何对NER任务进行领域迁移？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Q11%E3%80%81%E5%A6%82%E4%BD%95%E8%AE%A9NER%E7%B3%BB%E7%BB%9F%E5%8F%98%E5%BE%97%E2%80%9C%E9%80%8F%E6%98%8E%E2%80%9D%E4%B8%94%E5%81%A5%E5%A3%AE%EF%BC%9F"><span class="toc-number">3.11.</span> <span class="toc-text">Q11、如何让NER系统变得“透明”且健壮？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Q12%E3%80%81%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E4%BD%8E%E8%80%97%E6%97%B6%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84NER%E4%BB%BB%E5%8A%A1%EF%BC%9F"><span class="toc-number">3.12.</span> <span class="toc-text">Q12、如何解决低耗时场景下的NER任务？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-27"/></a><div class="content"><a class="title" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27">Arxiv今日论文 | 2026-02-27</a><time datetime="2026-02-27T12:30:00.000Z" title="发表于 2026-02-27 12:30:00">2026-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-26"/></a><div class="content"><a class="title" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26">Arxiv今日论文 | 2026-02-26</a><time datetime="2026-02-26T12:30:00.000Z" title="发表于 2026-02-26 12:30:00">2026-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-25"/></a><div class="content"><a class="title" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25">Arxiv今日论文 | 2026-02-25</a><time datetime="2026-02-25T12:30:00.000Z" title="发表于 2026-02-25 12:30:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225222513891.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板">大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板</a><time datetime="2026-02-25T12:00:00.000Z" title="发表于 2026-02-25 12:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225123005910.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mid-training：构建预训练与后训练之间的分布式桥梁"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁">mid-training：构建预训练与后训练之间的分布式桥梁</a><time datetime="2026-02-25T00:00:00.000Z" title="发表于 2026-02-25 00:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-24"/></a><div class="content"><a class="title" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24">Arxiv今日论文 | 2026-02-24</a><time datetime="2026-02-24T12:30:00.000Z" title="发表于 2026-02-24 12:30:00">2026-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-23"/></a><div class="content"><a class="title" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23">Arxiv今日论文 | 2026-02-23</a><time datetime="2026-02-23T12:30:00.000Z" title="发表于 2026-02-23 12:30:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260223165943195.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用&quot;深度思考率&quot;精准度量LLM推理质量"/></a><div class="content"><a class="title" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量">用&quot;深度思考率&quot;精准度量LLM推理质量</a><time datetime="2026-02-23T12:00:00.000Z" title="发表于 2026-02-23 12:00:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-20"/></a><div class="content"><a class="title" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20">Arxiv今日论文 | 2026-02-20</a><time datetime="2026-02-20T12:30:00.000Z" title="发表于 2026-02-20 12:30:00">2026-02-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201606857.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前沿大模型训练方法：深度解析与实践指南"/></a><div class="content"><a class="title" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南">前沿大模型训练方法：深度解析与实践指南</a><time datetime="2026-02-20T10:30:00.000Z" title="发表于 2026-02-20 10:30:00">2026-02-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Weitang Liu</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.lonepatient.top/',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.lonepatient.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo@1.4.11/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (99)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/计算机视觉/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 计算机视觉 (16)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/知识图谱/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 知识图谱 (13)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">👩‍💻 深度学习 (139)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item" style="visibility: hidden"></div><a class="magnet_link_more"  href="http://lonepatient.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-18</span><a class="blog-slider__title" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">通向AGI之路：大型语言模型（LLM）技术精要</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/07/12/gaiic_2022_ner_top10.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220712181905.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-07-12</span><a class="blog-slider__title" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">GAIIC2022商品标题识别二等奖获奖解决思路</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230807190424.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-01-20</span><a class="blog-slider__title" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">2025-03|高质量中文预训练模型集合</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

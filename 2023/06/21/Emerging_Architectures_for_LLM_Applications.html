@@ -1,0 +1,419 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LLM应用开发的架构参考 | 闲记算法</title><meta name="keywords" content="NLP,大型语言模型,LLM,应用开发,架构设计"><meta name="author" content="Weitang Liu"><meta name="copyright" content="Weitang Liu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="大型语言模型是构建软件的强大新工具。但由于它们是如此之新，而且行为方式与普通计算资源如此不同，因此如何使用它们并不总是显而易见的。 在这篇文章中，我们将分享新兴 LLM 应用程序栈的参考架构。它展示了我们所见过的人工智能初创公司和尖端科技公司所使用的最常见的系统、工具和设计模式。这个堆栈仍处于早期阶段，可能会随着底层技术的发展而发生重大变化，但我们希望它能为现在使用 LLM 的开发人员提供有用的参">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LLM应用开发的架构参考">
+<meta property="og:url" content="http://lonepatient.top/2023/06/21/Emerging_Architectures_for_LLM_Applications.html">
+<meta property="og:site_name" content="闲记算法">
+<meta property="og:description" content="大型语言模型是构建软件的强大新工具。但由于它们是如此之新，而且行为方式与普通计算资源如此不同，因此如何使用它们并不总是显而易见的。 在这篇文章中，我们将分享新兴 LLM 应用程序栈的参考架构。它展示了我们所见过的人工智能初创公司和尖端科技公司所使用的最常见的系统、工具和设计模式。这个堆栈仍处于早期阶段，可能会随着底层技术的发展而发生重大变化，但我们希望它能为现在使用 LLM 的开发人员提供有用的参">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230821211525.webp">
+<meta property="article:published_time" content="2023-06-21T23:20:08.000Z">
+<meta property="article:modified_time" content="2026-02-27T07:52:12.657Z">
+<meta property="article:author" content="Weitang Liu">
+<meta property="article:tag" content="NLP">
+<meta property="article:tag" content="大型语言模型">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="应用开发">
+<meta property="article:tag" content="架构设计">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230821211525.webp"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lonepatient.top/2023/06/21/Emerging_Architectures_for_LLM_Applications"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//s4.cnzz.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" data-pjax="data-pjax" src="https://s4.cnzz.com/z_stat.php?id=1273275888&amp;web_id=1273275888"></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-02-27 07:52:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/backgroud.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><script src="https://at.alicdn.com/t/c/font_3570527_dthoqrrv2tv.css"></script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JwRQtLKZggvJH4sJ",ck:"JwRQtLKZggvJH4sJ"})</script><link rel="stylesheet" href="/css/universe.css"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536467946304280" crossorigin="anonymous"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230821211525.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">闲记算法</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">LLM应用开发的架构参考<a class="post-edit-link" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts/Emerging_Architectures_for_LLM_Applications.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-06-21T23:20:08.000Z" title="发表于 2023-06-21 23:20:08">2023-06-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-27T07:52:12.657Z" title="更新于 2026-02-27 07:52:12">2026-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/">自然语言处理</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/">大型语言模型</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2023/06/21/Emerging_Architectures_for_LLM_Applications.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>大型语言模型是构建软件的强大新工具。但由于它们是如此之新，而且行为方式与普通计算资源如此不同，因此如何使用它们并不总是显而易见的。</p>
+<p>在这篇文章中，我们将分享新兴 LLM 应用程序栈的参考架构。它展示了我们所见过的人工智能初创公司和尖端科技公司所使用的最常见的系统、工具和设计模式。这个堆栈仍处于早期阶段，可能会随着底层技术的发展而发生重大变化，但我们希望它能为现在使用 LLM 的开发人员提供有用的参考。</p>
+<h2 id="1、LLM-App技术栈">1、LLM App技术栈</h2>
+<p>这是我们当前的 LLM 应用程序栈视图：</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230821211525.webp" alt=""></p>
+<p>以下是每个项目的链接列表，以供快速参考：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Data pipelines</strong></th>
+<th><strong>Embedding model</strong></th>
+<th><strong>Vector database</strong></th>
+<th><strong>Playground</strong></th>
+<th><strong>Orchestration</strong></th>
+<th><strong>APIs/plugins</strong></th>
+<th><strong>LLM cache</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.databricks.com/product/machine-learning/large-language-models">Databricks</a></td>
+<td><a target="_blank" rel="noopener" href="https://openai.com/">OpenAI</a></td>
+<td><a target="_blank" rel="noopener" href="https://www.pinecone.io/">Pinecone</a></td>
+<td><a target="_blank" rel="noopener" href="https://openai.com/">OpenAI</a></td>
+<td><a target="_blank" rel="noopener" href="https://github.com/hwchase17/langchain">Langchain</a></td>
+<td><a target="_blank" rel="noopener" href="https://serpapi.com/">Serp</a></td>
+<td><a target="_blank" rel="noopener" href="https://redis.io/">Redis</a></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://airflow.apache.org/">Airflow</a></td>
+<td><a target="_blank" rel="noopener" href="https://cohere.com/">Cohere</a></td>
+<td><a target="_blank" rel="noopener" href="https://weaviate.io/">Weaviate</a></td>
+<td><a target="_blank" rel="noopener" href="https://nat.dev/">nat.dev</a></td>
+<td><a target="_blank" rel="noopener" href="https://github.com/jerryjliu/llama_index">LlamaIndex</a></td>
+<td><a target="_blank" rel="noopener" href="https://www.wolfram.com/wolfram-plugin-chatgpt/">Wolfram</a></td>
+<td><a target="_blank" rel="noopener" href="https://www.sqlite.org/">SQLite</a></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.unstructured.io/">Unstructured</a></td>
+<td><a target="_blank" rel="noopener" href="https://huggingface.co/">Hugging Face</a></td>
+<td><a target="_blank" rel="noopener" href="https://www.trychroma.com/">ChromaDB</a></td>
+<td><a target="_blank" rel="noopener" href="https://humanloop.com/">Humanloop</a></td>
+<td><a target="_blank" rel="noopener" href="https://chat.openai.com/">ChatGPT</a></td>
+<td><a target="_blank" rel="noopener" href="https://zapier.com/blog/announcing-zapier-chatgpt-plugin/">Zapier</a></td>
+<td><a target="_blank" rel="noopener" href="https://github.com/zilliztech/GPTCache">GPTCache</a></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td><a target="_blank" rel="noopener" href="https://github.com/pgvector/pgvector">pgvector</a></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th><strong>Logging / LLMops</strong></th>
+<th><strong>Validation</strong></th>
+<th><strong>App hosting</strong></th>
+<th><strong>LLM APIs (proprietary)</strong></th>
+<th><strong>LLM APIs (open)</strong></th>
+<th><strong>Cloud providers</strong></th>
+<th><strong>Opinionated clouds</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://wandb.ai/site/solutions/llmops">Weights &amp; Biases</a></td>
+<td><a target="_blank" rel="noopener" href="https://shreyar.github.io/guardrails/">Guardrails</a></td>
+<td><a target="_blank" rel="noopener" href="https://vercel.com/">Vercel</a></td>
+<td><a target="_blank" rel="noopener" href="https://openai.com/">OpenAI</a></td>
+<td><a target="_blank" rel="noopener" href="https://huggingface.co/">Hugging Face</a></td>
+<td><a target="_blank" rel="noopener" href="https://aws.amazon.com/">AWS</a></td>
+<td><a target="_blank" rel="noopener" href="https://www.databricks.com/product/machine-learning">Databricks</a></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://mlflow.org/docs/latest/llm-tracking.html">MLflow</a></td>
+<td><a target="_blank" rel="noopener" href="https://github.com/woop/rebuff">Rebuff</a></td>
+<td><a target="_blank" rel="noopener" href="https://www.steamship.com/">Steamship</a></td>
+<td><a target="_blank" rel="noopener" href="https://www.anthropic.com/">Anthropic</a></td>
+<td><a target="_blank" rel="noopener" href="https://replicate.com/">Replicate</a></td>
+<td><a target="_blank" rel="noopener" href="https://cloud.google.com/">GCP</a></td>
+<td><a target="_blank" rel="noopener" href="https://www.anyscale.com/">Anyscale</a></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://promptlayer.com/">PromptLayer</a></td>
+<td><a target="_blank" rel="noopener" href="https://github.com/microsoft/guidance">Microsoft Guidance</a></td>
+<td><a target="_blank" rel="noopener" href="https://streamlit.io/">Streamlit</a></td>
+<td></td>
+<td></td>
+<td><a target="_blank" rel="noopener" href="https://azure.microsoft.com/en-us">Azure</a></td>
+<td><a target="_blank" rel="noopener" href="https://www.mosaicml.com/">Mosaic</a></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.helicone.ai/">Helicone</a></td>
+<td><a target="_blank" rel="noopener" href="https://lmql.ai/">LMQL</a></td>
+<td><a target="_blank" rel="noopener" href="https://modal.com/">Modal</a></td>
+<td></td>
+<td></td>
+<td><a target="_blank" rel="noopener" href="https://www.coreweave.com/">CoreWeave</a></td>
+<td><a target="_blank" rel="noopener" href="https://modal.com/">Modal</a></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><a target="_blank" rel="noopener" href="https://www.runpod.io/">RunPod</a></td>
+</tr>
+</tbody>
+</table>
+<p>使用 LLM 进行构建的方法有很多种，包括从头开始训练模型、微调开源模型或使用托管 API。 我们在这里展示的技术栈基于上下文学习（in-context learning），这是我们看到大多数开发人员开始使用的设计模式（并且现在只能通过基础模型实现）。</p>
+<p>下一节将简要解释此模式； 有经验的 LLM 开发人员可以跳过此部分。</p>
+<h2 id="2、LLM-App设计模式：上下文学习">2、LLM App设计模式：上下文学习</h2>
+<p>上下文学习（in-context learning）的核心思想是使用现成的LLM（即无需任何微调），然后通过巧妙的提示和对私人“情境”数据的调节来控制他们的行为。</p>
+<p>例如，假设你正在构建一个聊天机器人来回答有关一组法律文件的问题。 采用一种简单的方法，你可以将所有文档粘贴到 ChatGPT 或 GPT-4 提示中，然后在最后询问有关它们的问题。 这可能适用于非常小的数据集，但无法扩展。 最大的 GPT-4 模型只能处理约 50 页的输入文本，当接近这个称为上下文窗口的限制时，性能（通过推理时间和准确性来衡量）会严重下降。</p>
+<p>上下文学习通过一个巧妙的技巧解决了这个问题：它不是在每个 LLM 提示时发送所有文档，而是只发送少数最相关的文档。 最相关的文档是在 … 的帮助下确定的… 你猜到了 …LLM。</p>
+<p>在非常高的层面上，工作流程可以分为三个阶段：</p>
+<ul>
+<li>数据预处理/嵌入：此阶段涉及存储私有数据（在我们的示例中为法律文档）以便稍后检索。 通常，文档被分成块，通过嵌入模型，然后存储在称为矢量数据库的专用数据库中。</li>
+<li>提示构造/检索：当用户提交查询（在本例中为法律问题）时，应用程序会构造一系列提示以提交给语言模型。 编译的提示通常结合了开发人员硬编码的提示模板； 有效输出的示例称为少样本示例； 从外部 API 检索的任何必要信息； 以及从矢量数据库检索到的一组相关文档。</li>
+<li>提示执行/推理：编译提示后，它们将被提交给预先训练的 LLM 进行推理，包括专有模型 API 和开源或自训练模型。 一些开发人员还在这个阶段添加了日志记录、缓存和验证等操作系统。</li>
+</ul>
+<p>这看起来工作量很大，但通常比其他选择更容易：培训或微调LLM本身。 你不需要专门的 ML 工程师团队来进行上下文学习，也不需要托管自己的基础设施或从 OpenAI 购买昂贵的专用实例。 这种模式有效地将人工智能问题简化为大多数初创公司和大公司已经知道如何解决的数据工程问题。 对于相对较小的数据集，它的表现也往往优于微调——因为在LLM通过微调记住它之前，一条特定的信息需要在训练集中出现至少约 10 次——并且可以近乎真实地合并新数据 时间。</p>
+<p>上下文学习的最大问题之一是：如果我们只是改变底层模型来增加上下文窗口，会发生什么？ 这确实是可能的，并且这是一个活跃的研究领域（例如，参见<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2302.10866">Heyna论文</a>或最近的这篇文章）。 但这需要一些权衡——主要是推理的成本和时间与提示的长度呈二次方关系。 如今，即使是线性缩放（最好的理论结果）对于许多应用来说成本也过高。 按照当前的 API 费率，超过 10,000 个页面的单个 GPT-4 查询将花费数百美元。 因此，我们预计不会基于扩展的上下文窗口对技术栈进行大规模更改，但我们将在帖子正文中对此进行更多评论。</p>
+<p>如果你想更深入地了解情境学习，人工智能经典中有许多很棒的资源（尤其是“LLM构建实用指南”部分）。 在本文的其余部分中，我们将使用上面的工作流程作为指导来浏览参考堆栈。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230821211901.webp" alt=""></p>
+<p>LLM 应用程序的上下文数据包括文本文档、PDF，甚至是 CSV 或 SQL 表等结构化格式。 我们采访的开发人员之间的数据加载和转换解决方案差异很大。 大多数使用传统的 ETL 工具，例如 Databricks 或 Airflow。 有些还使用编排框架中内置的文档加载器，例如 LangChain（由 Unstructed 提供支持）和 LlamaIndex（由 Llama Hub 提供支持）。 不过，我们认为技术栈栈的这一部分相对不发达，并且有机会专门为 LLM 应用程序构建数据复制解决方案。</p>
+<p>对于嵌入，大多数开发人员使用 OpenAI API，特别是 text-embedding-ada-002 模型。 它易于使用（特别是如果你已经在使用其他 OpenAI API），可以提供相当不错的结果，并且变得越来越便宜。 一些较大的企业也在探索Cohere，其产品工作更集中于嵌入，并且在某些场景下具有更好的性能。 对于喜欢开源的开发人员来说，Hugging Face 的 Sentence Transformers 库是一个标准。 还可以根据不同的用例创建不同类型的嵌入； 这是当今的一种小众实践，但却是一个有前途的研究领域。</p>
+<p>从系统的角度来看，预处理管道中最重要的部分是矢量数据库。 它负责高效存储、比较和检索多达数十亿个嵌入（即向量）。 我们在市场上看到的最常见的选择是Pinecode。 它是默认设置，因为它完全由云托管，因此很容易上手，并且具有大型企业在生产中所需的许多功能（例如，良好的规模性能、SSO 和正常运行时间 SLA）。</p>
+<p>不过，有大量可用的矢量数据库。 尤其：</p>
+<ul>
+<li>Weaviate、Vespa 和 Qdrant 等开源系统：它们通常具有出色的单节点性能，并且可以针对特定应用进行定制，因此受到喜欢构建定制平台的经验丰富的 AI 团队的欢迎。</li>
+<li>Chroma 和 Faiss 等本地矢量管理库：它们拥有丰富的开发人员经验，并且易于启动小型应用程序和开发实验。 它们不一定能大规模替代完整的数据库。<br>
+诸如 pgvector 之类的 OLTP 扩展：对于看到每个数据库形状的漏洞并尝试插入</li>
+<li>Postgres 的开发人员，或者从单个云提供商购买大部分数据基础设施的企业来说，这是一个很好的矢量支持解决方案。 从长远来看，尚不清楚紧密耦合向量和标量工作负载是否有意义。</li>
+</ul>
+<p>展望未来，大多数开源矢量数据库公司都在开发云产品。 我们的研究表明，在可能用例的广泛设计空间中，在云中实现强大的性能是一个非常困难的问题。 因此，可选项在短期内可能不会发生巨大变化，但从长远来看可能会发生变化。 关键问题是矢量数据库是否会类似于 OLTP 和 OLAP 数据库，围绕一两个流行系统进行整合。</p>
+<p>另一个悬而未决的问题是，随着大多数模型可用上下文窗口的增长，嵌入和向量数据库将如何发展。 人们很容易说嵌入将变得不那么相关，因为上下文数据可以直接放入提示中。 然而，专家对此主题的反馈表明了相反的情况——随着时间的推移，嵌入管道可能会变得更加重要。 大上下文窗口是一个强大的工具，但它们也需要大量的计算成本。 因此，有效利用它们成为当务之急。 我们可能会开始看到不同类型的嵌入模型变得流行，直接针对模型相关性进行训练，以及旨在实现和利用这一点的向量数据库。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230821211928.webp" alt=""></p>
+<p>促进LLM学习和整合上下文数据的策略变得越来越复杂，并且作为产品差异化的来源也越来越重要。 大多数开发人员通过尝试简单的提示来开始新项目，这些提示包括直接指令（零样本提示）或可能的一些示例输出（少样本提示）。 这些提示通常会产生良好的结果，但达不到生产部署所需的准确性水平。</p>
+<p>下一级别的柔术提示旨在使模型响应基于某种事实来源，并提供模型未受过训练的外部背景。 <a target="_blank" rel="noopener" href="https://www.promptingguide.ai/techniques">《提示工程指南》</a>列出了不少于 12 (!) 种更高级的提示策略，包括思想链、自洽、生成知识、思想树、定向刺激等等。 这些策略还可以结合使用来支持不同的 LLM 用例，例如文档问答、聊天机器人等。</p>
+<p>这就是像 LangChain 和 LlamaIndex 这样的编排框架的闪光点。 他们抽象了提示链的许多细节； 与外部 API 接口（包括确定何时需要 API 调用）； 从矢量数据库检索上下文数据； 并在多个 LLM 调用中维护内存。 他们还为上述许多常见应用程序提供模板。 它们的输出是提交给语言模型的一个提示或一系列提示。 这些框架被业余爱好者和希望开发应用程序的初创公司广泛使用，其中 LangChain 是领先者。</p>
+<p>LangChain 仍然是一个相对较新的项目（目前版本为 0.0.201），但我们已经开始看到用它构建的应用程序投入生产。 一些开发人员，尤其是LLM的早期采用者，更喜欢在生产中切换到原始 Python，以消除额外的依赖性。 但我们预计，对于大多数用例来说，这种 DIY 方法会随着时间的推移而下降，就像传统的 Web 应用程序堆栈一样。</p>
+<p>眼尖的读者会注意到编排框中有一个看似奇怪的条目：ChatGPT。 在正常情况下，ChatGPT 是一个应用程序，而不是开发人员工具。 但它也可以作为 API 进行访问。 而且，如果你仔细观察，它会执行一些与其他编排框架相同的功能，例如：抽象出对定制提示的需求； 维持状态； 通过插件、API 或其他来源检索上下文数据。 虽然 ChatGPT 不是此处列出的其他工具的直接竞争对手，但可以将其视为替代解决方案，并且它最终可能成为即时构建的可行、简单的替代方案。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230821211953.png" alt=""></p>
+<p>如今，OpenAI 已成为语言模型领域的领导者。 几乎我们采访过的每个开发人员都使用 OpenAI API 启动新的 LLM 应用程序，通常使用 gpt-4 或 gpt-4-32k 模型。 这为应用程序性能提供了最佳情况，并且易于使用，因为它可以在广泛的输入域上运行，并且通常不需要微调或自托管。</p>
+<p>当项目投入生产并开始规模化时，更广泛的选择就会发挥作用。 我们听到的一些常见问题包括：</p>
+<ul>
+<li>切换到 gpt-3.5-turbo：它比 GPT-4 便宜约 50 倍，而且速度明显更快。 许多应用程序不需要 GPT-4 级别的准确性，但确实需要低延迟推理和为免费用户提供经济有效的支持。</li>
+<li>其他专有供应商（尤其是 Anthropic 的 Claude 模型）进行实验：Claude 提供快速推理、GPT-3.5 级别的准确性、针对大客户的更多定制选项以及高达 100k 的上下文窗口（尽管我们发现准确性会随着时间长度的增加而降低） 输入）。</li>
+<li>对开源模型的一些请求进行分类：这在搜索或聊天等大容量 B2C 用例中尤其有效，这些用例的查询复杂性存在很大差异，并且需要以低廉的成本为免费用户提供服务。</li>
+<li>这通常与微调开源基础模型结合起来最有意义。 我们不会在本文中深入讨论该工具堆栈，但越来越多的工程团队正在使用 Databricks、Anyscale、Mosaic、Modal 和 RunPod 等平台。</li>
+<li>开源模型可以使用多种推理选项，包括 Hugging Face 和 Replicate 的简单 API 接口； 来自主要云提供商的原始计算资源； 以及像上面列出的更多固执己见的云产品。</li>
+</ul>
+<p>目前，开源模型落后于专有产品，但差距正在开始缩小。 Meta 的 LLaMa 模型为开源准确性设定了新的标准，并引发了一系列变体。 由于 LLaMa 只被授权用于研究用途，许多新的提供商已经介入训练替代基础模型（例如 Together、Mosaic、Falcon、Mistral）。 Meta 还在讨论 LLaMa 2 的真正开源版本。</p>
+<p>当（不是如果）开LLM达到与 GPT-3.5 相当的准确度水平时，我们预计会看到文本的稳定扩散时刻，包括大规模实验、共享和微调模型的生产。 像 Replicate 这样的托管公司已经在添加工具，以使软件开发人员更容易使用这些模型。 开发人员越来越相信，更小的、经过微调的模型可以在狭窄的用例中达到最先进的精度。</p>
+<p>我们采访过的大多数开发人员还没有深入了解LLM的操作工具。 缓存相对常见（通常基于 Redis），因为它可以缩短应用程序响应时间并降低成本。 Weights &amp; Biases 和 MLflow（从传统机器学习移植）或 PromptLayer 和 Helicone（专为LLM构建）等工具也得到相当广泛的使用。 他们可以记录、跟踪和评估 LLM 输出，通常是为了改进提示构建、调整管道或选择模型。 还有许多新工具正在开发中，用于验证 LLM 输出（例如 Guardrails）或检测即时注入攻击（例如 Rebuff）。 大多数这些操作工具都鼓励使用自己的 Python 客户端进行 LLM 调用，因此了解这些解决方案如何随着时间的推移共存将会很有趣。</p>
+<p>最后，LLM 应用程序的静态部分（即模型以外的所有内容）也需要托管在某个地方。 到目前为止，我们看到的最常见的解决方案是 Vercel 或主要云提供商等标准选项。 然而，两个新类别正在出现。 像 Steamship 这样的初创公司为 LLM 应用程序提供端到端托管，包括编排 (LangChain)、多租户数据上下文、异步任务、矢量存储和密钥管理。 Anyscale 和 Modal 等公司允许开发人员将模型和 Python 代码托管在一个地方。</p>
+<h2 id="3、关于Agent代理">3、关于Agent代理</h2>
+<p>该参考架构中缺少的最重要组件是人工智能代理框架。 AutoGPT 被描述为“使 GPT-4 完全自治的一项实验性开源尝试”，是今年春天历史上增长最快的 Github 存储库，几乎当今的每个人工智能项目或初创公司都包含某种形式的代理。</p>
+<p>与我们交谈的大多数开发人员都对代理的潜力感到非常兴奋。 我们在这篇文章中描述的上下文学习模式可以有效解决幻觉和数据新鲜度问题，以便更好地支持内容生成任务。 另一方面，代理为人工智能应用程序提供了一组全新的功能：解决复杂的问题，对外部世界采取行动，以及从部署后的经验中学习。 他们通过结合高级推理/规划、工具使用和记忆/递归/自我反思来做到这一点。</p>
+<p>因此，代理有潜力成为 LLM 应用程序架构的核心部分（或者甚至接管整个堆栈，如果你相信递归自我改进）。 像 LangChain 这样的现有框架已经融入了一些代理概念。 只有一个问题：代理还没有真正发挥作用。 如今，大多数代理框架都处于概念验证阶段，能够进行令人难以置信的演示，但尚未完成可靠、可重复的任务。 我们正在密切关注他们在不久的将来如何发展。</p>
+<h2 id="4、展望未来">4、展望未来</h2>
+<p>预训练的人工智能模型代表了自互联网以来最重要的软件架构变化。 它们使个人开发人员能够在几天内构建出令人难以置信的人工智能应用程序，超越大型团队需要数月才能构建的监督机器学习项目。</p>
+<p>我们在这里列出的工具和模式可能是整合LLM的起点，而不是最终状态。 我们将在发生重大变化时更新此内容（例如，转向模型训练），并在有意义的地方发布新的参考架构。 如果你有任何反馈或建议，请联系我们。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Weitang Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lonepatient.top/2023/06/21/Emerging_Architectures_for_LLM_Applications.html">http://lonepatient.top/2023/06/21/Emerging_Architectures_for_LLM_Applications.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lonepatient.top" target="_blank">闲记算法</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/NLP/">NLP</a><a class="post-meta__tags" href="/tags/%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/">大型语言模型</a><a class="post-meta__tags" href="/tags/LLM/">LLM</a><a class="post-meta__tags" href="/tags/%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/">应用开发</a><a class="post-meta__tags" href="/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/">架构设计</a></div><div class="post_share"><div class="social-share" data-image="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230821211525.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/06/23/The_Secret_Sauce_behind_100K_context%20window_in_LLMs_all_tricks_in_one_place.html"><img class="prev-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230625113610.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">大语言模型100K上下文窗口的秘诀</div></div></a></div><div class="next-post pull-right"><a href="/2023/06/16/BLIP.html"><img class="next-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20231017163401.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">BLIP：Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/03/02/8-bit_Matrix_Multiplication_transformers_Hugging_Face_Transformers.html" title="用于大型Transformer的8-bit矩阵乘法介绍"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230324140620.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-02</div><div class="title">用于大型Transformer的8-bit矩阵乘法介绍</div></div></a></div><div><a href="/2023/04/18/A_Survey_of_Large_Language_Models.html" title="A Survey of Large Language Models"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230419195449.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-18</div><div class="title">A Survey of Large Language Models</div></div></a></div><div><a href="/2023/03/23/Big_Language_Model_BLOOM_Reasoning_Tool_Test.html" title="大语言模型BLOOM推理工具测试"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230323163716.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-23</div><div class="title">大语言模型BLOOM推理工具测试</div></div></a></div><div><a href="/2023/03/10/ChatGPT_Research_Report.html" title="ChatGPT 调研报告"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230310095306.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">ChatGPT 调研报告</div></div></a></div><div><a href="/2023/09/25/Colossal_LLaMA_2.html" title="Colossal-LLaMA-2：千元预算半天训练，效果媲美主流大模型，开源可商用中文LLaMA-2"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230925215750.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-25</div><div class="title">Colossal-LLaMA-2：千元预算半天训练，效果媲美主流大模型，开源可商用中文LLaMA-2</div></div></a></div><div><a href="/2023/04/12/Emergent_capacity_of_LLM_phenomena_explanations.html" title="大语言模型的涌现能力：现象与解释"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230413215813.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-12</div><div class="title">大语言模型的涌现能力：现象与解释</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Weitang Liu</div><div class="author-info__description">一个致力于记录技术的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lonePatient"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/lonePatient" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liuweitangmath@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/277974397" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有任何问题可通过留言板或者微信公众号给我留言，谢谢！<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201201102.jpg"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81LLM-App%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-number">1.</span> <span class="toc-text">1、LLM App技术栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81LLM-App%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%9A%E4%B8%8A%E4%B8%8B%E6%96%87%E5%AD%A6%E4%B9%A0"><span class="toc-number">2.</span> <span class="toc-text">2、LLM App设计模式：上下文学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%85%B3%E4%BA%8EAgent%E4%BB%A3%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text">3、关于Agent代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E5%B1%95%E6%9C%9B%E6%9C%AA%E6%9D%A5"><span class="toc-number">4.</span> <span class="toc-text">4、展望未来</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-27"/></a><div class="content"><a class="title" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27">Arxiv今日论文 | 2026-02-27</a><time datetime="2026-02-27T12:30:00.000Z" title="发表于 2026-02-27 12:30:00">2026-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-26"/></a><div class="content"><a class="title" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26">Arxiv今日论文 | 2026-02-26</a><time datetime="2026-02-26T12:30:00.000Z" title="发表于 2026-02-26 12:30:00">2026-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-25"/></a><div class="content"><a class="title" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25">Arxiv今日论文 | 2026-02-25</a><time datetime="2026-02-25T12:30:00.000Z" title="发表于 2026-02-25 12:30:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225222513891.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板">大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板</a><time datetime="2026-02-25T12:00:00.000Z" title="发表于 2026-02-25 12:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225123005910.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mid-training：构建预训练与后训练之间的分布式桥梁"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁">mid-training：构建预训练与后训练之间的分布式桥梁</a><time datetime="2026-02-25T00:00:00.000Z" title="发表于 2026-02-25 00:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-24"/></a><div class="content"><a class="title" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24">Arxiv今日论文 | 2026-02-24</a><time datetime="2026-02-24T12:30:00.000Z" title="发表于 2026-02-24 12:30:00">2026-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-23"/></a><div class="content"><a class="title" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23">Arxiv今日论文 | 2026-02-23</a><time datetime="2026-02-23T12:30:00.000Z" title="发表于 2026-02-23 12:30:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260223165943195.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用&quot;深度思考率&quot;精准度量LLM推理质量"/></a><div class="content"><a class="title" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量">用&quot;深度思考率&quot;精准度量LLM推理质量</a><time datetime="2026-02-23T12:00:00.000Z" title="发表于 2026-02-23 12:00:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-20"/></a><div class="content"><a class="title" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20">Arxiv今日论文 | 2026-02-20</a><time datetime="2026-02-20T12:30:00.000Z" title="发表于 2026-02-20 12:30:00">2026-02-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201606857.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前沿大模型训练方法：深度解析与实践指南"/></a><div class="content"><a class="title" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南">前沿大模型训练方法：深度解析与实践指南</a><time datetime="2026-02-20T10:30:00.000Z" title="发表于 2026-02-20 10:30:00">2026-02-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Weitang Liu</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.lonepatient.top/',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.lonepatient.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo@1.4.11/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (99)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/计算机视觉/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 计算机视觉 (16)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/知识图谱/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 知识图谱 (13)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">👩‍💻 深度学习 (139)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item" style="visibility: hidden"></div><a class="magnet_link_more"  href="http://lonepatient.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-18</span><a class="blog-slider__title" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">通向AGI之路：大型语言模型（LLM）技术精要</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/07/12/gaiic_2022_ner_top10.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220712181905.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-07-12</span><a class="blog-slider__title" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">GAIIC2022商品标题识别二等奖获奖解决思路</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230807190424.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-01-20</span><a class="blog-slider__title" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">2025-03|高质量中文预训练模型集合</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

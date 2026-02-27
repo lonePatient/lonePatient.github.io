@@ -1,0 +1,391 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pytorch深度学习入门 | 闲记算法</title><meta name="keywords" content="深度学习,PyTorch"><meta name="author" content="Weitang Liu"><meta name="copyright" content="Weitang Liu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="在本教程中，将使用Pytorch框架介绍深度学习，并通过一个简单案例进行实验，通过本教程，你将可以轻松地使用Pytorch框架构建深度学习模型。（我也刚刚接触Pytorch）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pytorch深度学习入门">
+<meta property="og:url" content="http://lonepatient.top/2018/12/06/Pytorch-deep-learning.html">
+<meta property="og:site_name" content="闲记算法">
+<meta property="og:description" content="在本教程中，将使用Pytorch框架介绍深度学习，并通过一个简单案例进行实验，通过本教程，你将可以轻松地使用Pytorch框架构建深度学习模型。（我也刚刚接触Pytorch）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2018-12-06T12:34:12.000Z">
+<meta property="article:modified_time" content="2026-02-27T07:52:12.661Z">
+<meta property="article:author" content="Weitang Liu">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="PyTorch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lonepatient.top/2018/12/06/Pytorch-deep-learning"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//s4.cnzz.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" data-pjax="data-pjax" src="https://s4.cnzz.com/z_stat.php?id=1273275888&amp;web_id=1273275888"></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-02-27 07:52:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/backgroud.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><script src="https://at.alicdn.com/t/c/font_3570527_dthoqrrv2tv.css"></script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JwRQtLKZggvJH4sJ",ck:"JwRQtLKZggvJH4sJ"})</script><link rel="stylesheet" href="/css/universe.css"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536467946304280" crossorigin="anonymous"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">闲记算法</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Pytorch深度学习入门<a class="post-edit-link" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts/Pytorch-deep-learning.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-12-06T12:34:12.000Z" title="发表于 2018-12-06 12:34:12">2018-12-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-27T07:52:12.661Z" title="更新于 2026-02-27 07:52:12">2026-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2018/12/06/Pytorch-deep-learning.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>在本教程中，将使用Pytorch框架介绍深度学习，并通过一个简单案例进行实验，通过本教程，你将可以轻松地使用Pytorch框架构建深度学习模型。（我也刚刚接触Pytorch）</p>
+<span id="more"></span>
+<h2 id="Pytorch-简介">Pytorch 简介</h2>
+<p>Pytorch 是一个基于 Torch 的 Python 机器学习包，而 Torch 则是一个基于编程语言 Lua 的开源机器学习包。Pytorch 有两个主要的特点：</p>
+<ul>
+<li>利用强大的 GPU 加速进行张量计算（如 NumPy）</li>
+<li>用于构建和训练神经网络的自动微分机制</li>
+</ul>
+<p>相比其它深度学习库，Pytorch 具有以下两点优势：</p>
+<ul>
+<li>与 TensorFlow 等其它在运行模型之前必须先定义整个计算图的库不同，Pytorch 允许动态定义图。</li>
+<li>Pytorch 也非常适合深度学习研究，提供了最大的灵活性和运行速度。</li>
+</ul>
+<h3 id="Tensors">Tensors</h3>
+<p>Pytorch 张量与 NumPy 数组非常相似，而且它们可以在 GPU 上运行。这一点很重要，因为它有助于加速数值计算，从而可以将神经网络的速度提高 50 倍甚至更多。为了使用 Pytorch，你需要先访问其官网并安装 Pytorch。如果你正在使用 Conda，你可以通过运行以下简单命令来安装Pytorch：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install PyTorch torchvision -c PyTorch</span><br></pre></td></tr></table></figure>
+<p>为了定义 Pytorch 张量，首先需要导入 torch 包。PyTorch 允许你定义两种类型的张量，即 CPU 和 GPU 张量。在本教程中，假设你运行的是使用 CPU 进行深度学习运算的机器，但我也会向你展示如何在 GPU 中定义张量：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br></pre></td></tr></table></figure>
+<p>Pytorch 的默认张量类型是一个浮点型张量，定义为<code>torch.FloatTensor</code>。例如，你可以根据 Python 的 list 数据结构创建张量：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.FloatTensor([[<span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>], [<span class="number">90</span>, <span class="number">60</span>, <span class="number">70</span>]])</span><br></pre></td></tr></table></figure>
+<p>如果你使用的是支持 GPU 的机器，你可以通过以下方法定义张量：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.cuda.FloatTensor([[<span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>], [<span class="number">90</span>, <span class="number">60</span>, <span class="number">70</span>]])</span><br></pre></td></tr></table></figure>
+<p>你也可以使用 Pytorch 张量执行加法和减法等数学运算：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = torch.FloatTensor([<span class="number">25</span>])</span><br><span class="line">y = torch.FloatTensor([<span class="number">30</span>])</span><br><span class="line">x + y</span><br></pre></td></tr></table></figure>
+<p>你还可以定义矩阵并执行矩阵运算。我们来看看如何定义一个矩阵然后将其转置：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">matrix = torch.randn(<span class="number">4</span>, <span class="number">5</span>)</span><br><span class="line">matrix</span><br><span class="line">matrix.t()</span><br></pre></td></tr></table></figure>
+<h3 id="Autograd-机制">Autograd 机制</h3>
+<p>Pytorch 使用了一种叫做<code>自动微分</code>的技术，它可以对函数的导数进行数值估计。自动微分在神经网络中计算反向传递（backward pass）。在训练过程中，神经网络的权重被随机初始化为接近零但不是零的数。<code>反向传递</code>是指从右到左调整权重的过程，而正向传递则是从左到右调整权重的过程。</p>
+<p><code>torch.autograd</code>是 Pytorch 中支持自动微分的库。这个包的核心类是<code>torch.Tensor</code>。如果你想要跟踪这个类的所有操作，请将<code>.requires_grad</code>设置为 True。如果要计算所有的梯度，请调用<code>.backward()</code>。这个张量的梯度将在<code>.grad</code>属性中积累。</p>
+<p>如果你想要从计算历史中分离出一个张量，请调用<code>.detach()</code>函数。这也可以防止将来对张量的计算被跟踪。另一种防止历史跟踪的方法是用<code>torch.no_grad()</code>方法封装代码。</p>
+<p>你可以将张量<code>Tensor</code>和函数<code>Function</code>类相连接，构建一个编码了完整计算历史的无环图。张量的<code>.grad_fn</code>属性会引用创建了这个张量的<code>Function</code>。如果你要计算导数，可以调用张量的<code>.backward()</code>。如果该张量包含一个元素，你不需要为<code>backward()</code>函数指定任何参数。如果张量包含多个元素，你需要指定一个规模（shape）相匹配的张量的梯度。</p>
+<p>例如，你可以创建两个张量，将其中一个张量的<code>requires_grad</code>设定为 True，将另一个的设定为 False。接着你可以用这两个张量来执行加法和求和运算。然后你可以计算其中一个张量的梯度。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">3.0</span>, <span class="number">2.0</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">4.0</span>, <span class="number">7.0</span>])</span><br><span class="line">ab_sum = a + b</span><br><span class="line">ab_sum</span><br><span class="line">ab_res = (ab_sum*<span class="number">8</span>).<span class="built_in">sum</span>()</span><br><span class="line">ab_res.backward()</span><br><span class="line">ab_res</span><br><span class="line">a.grad</span><br></pre></td></tr></table></figure>
+<p>在<code>b</code>上调用<code>.grad</code>的返回值为空，因为你没有将它的<code>requires_grad</code>设置为 True。</p>
+<h3 id="nn-模块">nn 模块</h3>
+<p>这是在 Pytorch 中构建神经网络的模块。<code>nn</code>模块依赖于<code>autograd</code>来定义模型并对其进行微分处理。首先，定义训练一个神经网络的过程：</p>
+<ul>
+<li>用一些可学习的参数（即权重）定义神经网络</li>
+<li>在输入的数据集上进行迭代</li>
+<li>通过网络处理输入</li>
+<li>将预测结果和实际值进行比较，并测量误差</li>
+<li>将梯度传播回网络的参数中</li>
+<li>使用简单的更新规则更新网络的权重：weight = weight - learning_rate * gradient</li>
+</ul>
+<p>现在，你可以使用<code>nn</code>模块创建一个双层的神经网络：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">N, D_in, H, D_out = <span class="number">64</span>, <span class="number">1000</span>, <span class="number">100</span>, <span class="number">10</span></span><br><span class="line">x = torch.randn(N, D_in)</span><br><span class="line">y = torch.randn(N, D_out)</span><br><span class="line">model = torch.nn.Sequential(</span><br><span class="line">torch.nn.Linear(D_in, H),</span><br><span class="line">torch.nn.ReLU(),</span><br><span class="line">torch.nn.Linear(H, D_out),</span><br><span class="line">)</span><br><span class="line">loss_fn = torch.nn.MSELoss()</span><br><span class="line">learning_rate = <span class="number">1e-4</span></span><br></pre></td></tr></table></figure>
+<p>在这里我们将解释一下上面用到的参数：</p>
+<ul>
+<li>
+<p>N 是批处理大小。批处理大小是观测数据的数量，观测之后权重将被更新。</p>
+</li>
+<li>
+<p>D_in: 是输入的维度</p>
+</li>
+<li>
+<p>H: 是隐藏层的维度</p>
+</li>
+<li>
+<p>D_out: 是输出层的维度</p>
+</li>
+<li>
+<p>torch.randn: 定义了指定维度的矩阵</p>
+</li>
+<li>
+<p>torch.nn.Sequential :初始化了神经网络层的线性堆栈</p>
+</li>
+<li>
+<p>torch.nn.Linear: 对输入数据应用了线性变换</p>
+</li>
+<li>
+<p>torch.nn.ReLU:  在元素层级上应用了ReLU激活函数</p>
+</li>
+<li>
+<p>torch.nn.MSELoss: 创建了一个标准来度量输入 x 和目标 y 中 n 个元素的均方误差</p>
+</li>
+</ul>
+<h3 id="optim-模块">optim 模块</h3>
+<p>接下来，你要使用 optim 包来定义一个优化器，该优化器将为你更新权重。optim 包抽象出了优化算法的思想，并提供了常用优化算法（如 AdaGrad、RMSProp 和 Adam）的实现。我们将使用 Adam 优化器，它是最流行的优化器之一。</p>
+<p>该优化器接受的第一个参数是张量，这些张量需要更新。在正向传递中，你要通过向模型传递 x 来计算出预测的 y。然后，计算并显示出损失。在运行反向传递之前，你要将使用优化器更新的所有变量的梯度设置为零。这样做的原因是，默认情况下，在调用<code>.backward()</code>方法时，梯度不会被重写。然后，你需要在优化器上调用<code>step</code>函数，该步骤会更新其参数。具体的实现代码如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)</span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">500</span>):</span><br><span class="line">  y_pred = model(x)</span><br><span class="line">  loss = loss_fn(y_pred, y)</span><br><span class="line">  <span class="built_in">print</span>(t, loss.item())</span><br><span class="line">  optimizer.zero_grad()</span><br><span class="line">  loss.backward()</span><br><span class="line">  optimizer.step()</span><br></pre></td></tr></table></figure>
+<h3 id="自定义的-nn-模块">自定义的 nn 模块</h3>
+<p>有时你需要构建自己的自定义模块。这种情况下，你需要创建<code>nn.Module</code>的子类，然后定义一个接收输入张量并产生输出张量的 forward。使用<code>nn.Module</code>实现双层网络的方法如下图所示。这个模型与上面的模型非常相似，但不同之处在于你要使用<code>torch.nn.Module</code>创建神经网络。另一个区别是这个模型会使用 stochastic gradient descent optimizer 而不是 Adam。你可以使用下面的代码实现一个自定义的 nn 模块：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TwoLayerNet</span>(torch.nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, D_in, H, D_out</span>):</span><br><span class="line">        <span class="built_in">super</span>(TwoLayerNet, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.linear1 = torch.nn.Linear(D_in, H)</span><br><span class="line">        <span class="variable language_">self</span>.linear2 = torch.nn.Linear(H, D_out)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        h_relu = <span class="variable language_">self</span>.linear1(x).clamp(<span class="built_in">min</span>=<span class="number">0</span>)</span><br><span class="line">        y_pred = <span class="variable language_">self</span>.linear2(h_relu)</span><br><span class="line">        <span class="keyword">return</span> y_pred</span><br><span class="line">N, D_in, H, D_out = <span class="number">64</span>, <span class="number">1000</span>, <span class="number">100</span>, <span class="number">10</span></span><br><span class="line">x = torch.randn(N, D_in)</span><br><span class="line">y = torch.randn(N, D_out)</span><br><span class="line">model = TwoLayerNet(D_in, H, D_out)</span><br><span class="line">criterion = torch.nn.MSELoss()</span><br><span class="line">optimizer = torch.optim.SGD(model.parameters(), lr=<span class="number">1e-4</span>)</span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">500</span>):</span><br><span class="line">    y_pred = model(x)</span><br><span class="line">    loss = criterion(y_pred, y)</span><br><span class="line">    <span class="built_in">print</span>(t, loss.item())</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br></pre></td></tr></table></figure>
+<h2 id="案例">案例</h2>
+<p>上面介绍完一些Pytorch的基础之后，接下来，我们将通过一个完整地案例进一步加深对Pytorch的认识。</p>
+<p>我们将按照下列目录进行实验:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">--- pytorchFashion</span><br><span class="line">| |--- __init__.py</span><br><span class="line">| |--- callback</span><br><span class="line">| |--- config</span><br><span class="line">| |--- dataset</span><br><span class="line">| |--- output</span><br><span class="line">| |--- test</span><br><span class="line">| |--- train</span><br><span class="line">| |--- io</span><br><span class="line">| |--- model</span><br><span class="line">| | |--- __init__.py</span><br><span class="line">| | |--- cnn</span><br><span class="line">| | | |--- __init__.py</span><br><span class="line">| | | |--- alexnet.py</span><br><span class="line">| |--- preprocessing</span><br><span class="line">| |--- utils</span><br></pre></td></tr></table></figure>
+<p>简单地对每个目录进行说明，其中:</p>
+<ul>
+<li>callback: 我们自定义的callback</li>
+<li>config: 整个实验的配置文件目录</li>
+<li>dataset: 数据集目录</li>
+<li>output:实验输出目录</li>
+<li>test: 预测器目录</li>
+<li>train:训练器目录</li>
+<li>io: 数据交互目录</li>
+<li>model: 模型目录</li>
+<li>preprocessing: 数据预处理目录</li>
+<li>utils: 常用工具目录</li>
+</ul>
+<p>我们主要以常见的FashionMNIST数据集进行实验。</p>
+<h3 id="FashionMNIST">FashionMNIST</h3>
+<p>FashionMNIST 是一个替代 MNIST 手写数字集 的图像数据集。 它是由 Zalando（一家德国的时尚科技公司）旗下的研究部门提供。其涵盖了来自 10 种类别的共 7 万个不同商品的正面图片。</p>
+<p>FashionMNIST 的大小、格式和训练集/测试集划分与原始的 MNIST 完全一致。60000/10000 的训练测试数据划分，28x28 的灰度图片。你可以直接用它来测试你的机器学习和深度学习算法性能，且不需要改动任何的代码。说白了就是手写数字没有衣服鞋子之类的更复杂。</p>
+<p>数据案例如下所示：<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/20181207234542.png" alt=""></p>
+<p><strong>备注</strong>: 该数据集可以从<a target="_blank" rel="noopener" href="https://github.com/zalandoresearch/fashion-mnist">地址</a>进行下载。</p>
+<p>实际上，Pytorch模块中已经包含了下载以及处理FashionMNIST数据的脚本，我们只需运行:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">transform = transforms.Compose([transforms.ToTensor(),</span><br><span class="line">                                transforms.Normalize((<span class="number">0.5</span>, <span class="number">0.5</span>, <span class="number">0.5</span>), (<span class="number">0.5</span>, <span class="number">0.5</span>, <span class="number">0.5</span>))])</span><br><span class="line">train_dataset = datasets.FashionMNIST(root=<span class="string">&#x27;./dataset/fashion&#x27;</span>,</span><br><span class="line">                                      train=<span class="literal">True</span>,</span><br><span class="line">                                      download=<span class="literal">False</span>,</span><br><span class="line">                                      transform=transform)</span><br><span class="line">test_dataset = datasets.FashionMNIST(root=<span class="string">&#x27;./dataset/fashion&#x27;</span>,</span><br><span class="line">                                     train=<span class="literal">False</span>,</span><br><span class="line">                                     download=<span class="literal">False</span>,</span><br><span class="line">                                     transform=transform)</span><br><span class="line"><span class="comment"># Loading dataset into dataloader</span></span><br><span class="line">trainIter = torch.utils.data.DataLoader(dataset=train_dataset,</span><br><span class="line">                                           batch_size=batch_size,</span><br><span class="line">                                           shuffle=<span class="literal">True</span>)</span><br><span class="line">valIter = torch.utils.data.DataLoader(dataset=test_dataset,</span><br><span class="line">                                          batch_size=batch_size,</span><br><span class="line">                                          shuffle=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<p>之后会在./dataset/fashion目录中生成一份数据集，之后，我们就可以使用torch.utils.data.DataLoader进行加载。</p>
+<p>各个模块的代码可以从<a target="_blank" rel="noopener" href="https://github.com/lonePatient/pytorch_fashionMNIST_practice">github</a>上获取，这里将不详细描述。</p>
+<p>我们主要实现run.py脚本文件，详细代码可看源文件。在pytorchFashion同目录下新建一个run.py文件，并写入以下代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#encoding:utf-8</span></span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> torch.optim <span class="keyword">import</span> Adam</span><br><span class="line"><span class="keyword">import</span> torchvision.transforms <span class="keyword">as</span> transforms</span><br><span class="line"><span class="keyword">import</span> torchvision.datasets <span class="keyword">as</span> datasets</span><br><span class="line"><span class="keyword">from</span> pytorchFashion.train.trainer <span class="keyword">import</span> Trainer</span><br><span class="line"><span class="keyword">from</span> pytorchFashion.utils.logginger <span class="keyword">import</span> init_logger</span><br><span class="line"><span class="keyword">from</span> pytorchFashion.config <span class="keyword">import</span> alexnet_config <span class="keyword">as</span> config</span><br><span class="line"><span class="keyword">from</span> pytorchFashion.train.losses <span class="keyword">import</span> CrossEntropy</span><br><span class="line"><span class="keyword">from</span> pytorchFashion.train.metrics <span class="keyword">import</span> Accuracy</span><br><span class="line"><span class="keyword">from</span> pytorchFashion.callback.lrscheduler <span class="keyword">import</span> StepLr</span><br><span class="line"><span class="keyword">from</span> pytorchFashion.io.data_loader <span class="keyword">import</span> ImageDataIter</span><br><span class="line"><span class="keyword">from</span> pytorchFashion.model.cnn.alexnet <span class="keyword">import</span> AlexNet</span><br><span class="line"><span class="keyword">from</span> pytorchFashion.callback.earlystopping <span class="keyword">import</span> EarlyStopping</span><br><span class="line"><span class="keyword">from</span> pytorchFashion.callback.modelcheckpoint <span class="keyword">import</span> ModelCheckpoint</span><br><span class="line"><span class="keyword">from</span> pytorchFashion.callback.trainingmonitor <span class="keyword">import</span> TrainingMonitor</span><br><span class="line"><span class="keyword">from</span> pytorchFashion.callback.writetensorboard <span class="keyword">import</span> WriterTensorboardX</span><br></pre></td></tr></table></figure>
+<p>首先，我们加载所需模块，可以看到大部分都是我们自定义的模块。接下里，我们定义一个执行的主函数main()，如下:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="comment"># 路径变量</span></span><br><span class="line">    checkpoint_dir = config.CHECKPOINT_PATH <span class="comment"># checkpoint路径</span></span><br><span class="line">    fig_path = config.FIG_PATH</span><br><span class="line">    json_path = config.JSON_PATH</span><br><span class="line">    <span class="comment"># 初始化日志</span></span><br><span class="line">    logger = init_logger(log_name=config.ARCH,</span><br><span class="line">                         log_path=config.LOG_PATH)</span><br><span class="line">    <span class="keyword">if</span> args[<span class="string">&#x27;seed&#x27;</span>] <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        logger.info(<span class="string">&quot;seed is %d&quot;</span>%args[<span class="string">&#x27;seed&#x27;</span>])</span><br><span class="line">        np.random.seed(args[<span class="string">&#x27;seed&#x27;</span>])</span><br><span class="line">        torch.manual_seed(args[<span class="string">&#x27;seed&#x27;</span>])</span><br></pre></td></tr></table></figure>
+<p>其中 :</p>
+<ul>
+<li>checkpoint_dir：模型保存路径</li>
+<li>fig_path：训练结果可视化保存路径</li>
+<li>json_path：训练指标变化保存路径</li>
+</ul>
+<p>另外，我们还初始化一个日志记录器logger，记录整个实验过程。以及一个固定的随机种子变量seed（保证结果可复现）。</p>
+<p>接着，加载数据，即:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 加载数据集</span></span><br><span class="line">logger.info(<span class="string">&#x27;starting load train data from disk&#x27;</span>)</span><br><span class="line">transform = transforms.Compose([transforms.ToTensor(),</span><br><span class="line">                                transforms.Normalize((<span class="number">0.5</span>, <span class="number">0.5</span>, <span class="number">0.5</span>), (<span class="number">0.5</span>, <span class="number">0.5</span>, <span class="number">0.5</span>))])</span><br><span class="line">train_dataset = datasets.FashionMNIST(root=<span class="string">&#x27;./dataset/fashion&#x27;</span>,</span><br><span class="line">                                      train=<span class="literal">True</span>,</span><br><span class="line">                                      download=<span class="literal">True</span>,</span><br><span class="line">                                      transform=transform)</span><br><span class="line">test_dataset = datasets.FashionMNIST(root=<span class="string">&#x27;./dataset/fashion&#x27;</span>,</span><br><span class="line">                                     train=<span class="literal">False</span>,</span><br><span class="line">                                     download=<span class="literal">True</span>,</span><br><span class="line">                                     transform=transform)</span><br><span class="line"><span class="comment"># Loading dataset into dataloader</span></span><br><span class="line">trainIter = torch.utils.data.DataLoader(dataset=train_dataset,</span><br><span class="line">                                           batch_size=config.BATCH_SIZE,</span><br><span class="line">                                           shuffle=<span class="literal">True</span>)</span><br><span class="line">valIter = torch.utils.data.DataLoader(dataset=test_dataset,</span><br><span class="line">                                          batch_size=config.BATCH_SIZE,</span><br><span class="line">                                          shuffle=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<p>其中，transform负责整个数据转换过程，需要注意的是transforms.ToTensor()将变量转化为张量时，默对每张图片像素除以256操作，所以，你会看到我们在进行归一化时，传入的各个通道均值位于0到1之间。</p>
+<p>定义好数据之后，接下来，初始化模型和优化器，即：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 初始化模型和优化器</span></span><br><span class="line">logger.info(<span class="string">&quot;initializing model&quot;</span>)</span><br><span class="line">model = SimpleNet(num_classes = config.NUM_CLASSES)</span><br><span class="line">optimizer = Adam(params = model.parameters(),</span><br><span class="line">                 lr = config.LEARNING_RATE,</span><br><span class="line">                 weight_decay=config.WEIGHT_DECAY,</span><br><span class="line">                )</span><br></pre></td></tr></table></figure>
+<p>其中，SimpleNet是我们自定义的一个简单卷积神经网络，并且使用Adam优化器进行训练。</p>
+<p>下面，初始化callback模块:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 写入TensorBoard</span></span><br><span class="line">   logger.info(<span class="string">&quot;initializing callbacks&quot;</span>)</span><br><span class="line">   write_summary = WriterTensorboardX(writer_dir=config.WRITER_PATH,</span><br><span class="line">                                      logger = logger,</span><br><span class="line">                                      enable=<span class="literal">True</span>)</span><br><span class="line">   <span class="comment"># 模型保存</span></span><br><span class="line">   model_checkpoint = ModelCheckpoint(checkpoint_dir=checkpoint_dir,</span><br><span class="line">                                      mode= config.MODE,</span><br><span class="line">                                      monitor=config.MONITOR,</span><br><span class="line">                                      save_best_only= config.SAVE_BEST_ONLY,</span><br><span class="line">                                      arch = config.ARCH,</span><br><span class="line">                                      logger = logger)</span><br><span class="line">   <span class="comment"># eraly_stopping功能</span></span><br><span class="line">   early_stop = EarlyStopping(mode = config.MODE,</span><br><span class="line">                              patience = config.PATIENCE,</span><br><span class="line">                              monitor = config.MONITOR)</span><br><span class="line">   <span class="comment"># 监控训练过程</span></span><br><span class="line">   train_monitor = TrainingMonitor(fig_path = fig_path,</span><br><span class="line">                                   json_path = json_path,</span><br><span class="line">                                   arch = config.ARCH)</span><br><span class="line">   lr_scheduler = StepLr(optimizer=optimizer,lr = config.LEARNING_RATE)</span><br></pre></td></tr></table></figure>
+<p>其中:</p>
+<ul>
+<li>write_summary: 主要是负责将数据写入文件中，以便于使用tensorboard工具进行可视化。</li>
+<li>model_checkpoint： 保存模型，这里默认是保存最佳模型，当然也可以指定epoch频率保存模型。</li>
+<li>early_stop：当模型在训练过程中，如果模型持续一段时间不再学习，那么使用该功能可以自动停止训练模型。</li>
+<li>train_monitor：模型训练过程中的监控器，主要记录各个指标变化情况。</li>
+<li>lr_scheduler：学习率变化模式，我们知道一般刚开始训练模型时，应设置一个大的学习率，当模型不断接近最小值时，应设置一个小的学习率。</li>
+</ul>
+<p>初始化模型训练器:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">logger.info(<span class="string">&#x27;training model....&#x27;</span>)</span><br><span class="line">trainer = Trainer(model = model,</span><br><span class="line">                  train_data = trainIter,</span><br><span class="line">                  val_data = valIter,</span><br><span class="line">                  optimizer = optimizer,</span><br><span class="line">                  criterion=CrossEntropy(),</span><br><span class="line">                  metric = Accuracy(topK=config.TOPK),</span><br><span class="line">                  logger = logger,</span><br><span class="line">                  config = config,</span><br><span class="line">                  model_checkpoint = model_checkpoint,</span><br><span class="line">                  training_monitor = train_monitor,</span><br><span class="line">                  early_stopping = early_stop,</span><br><span class="line">                  writer= write_summary,</span><br><span class="line">                  train_from_scratch=config.RESUME,</span><br><span class="line">                  lr_scheduler=lr_scheduler</span><br><span class="line">                  )</span><br></pre></td></tr></table></figure>
+<p>开始训练模型:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment"># 查看模型结构</span></span><br><span class="line">    trainer.summary()</span><br><span class="line">    <span class="comment"># 拟合模型</span></span><br><span class="line">    trainer.train()</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    ap = argparse.ArgumentParser(description=<span class="string">&#x27;PyTorch model training&#x27;</span>)</span><br><span class="line">    ap.add_argument(<span class="string">&#x27;-s&#x27;</span>,<span class="string">&#x27;--seed&#x27;</span>,default=<span class="number">1024</span>,<span class="built_in">type</span> = <span class="built_in">int</span>,</span><br><span class="line">                        <span class="built_in">help</span> = <span class="string">&#x27;seed for initializing training.&#x27;</span>)</span><br><span class="line">    args = <span class="built_in">vars</span>(ap.parse_args())</span><br><span class="line">    main()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>以上，我们完成了整个训练模型脚本，接下来运行下列命令进行模型训练:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python run.py</span><br></pre></td></tr></table></figure>
+<p>在训练结束之后，在output目录，你可以看到两个文件，分别记录了loss和accuracy的变化情况，即:<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/20181226212043.png" alt="训练结果"></p>
+<p><strong>备注</strong>：完整代码可从:<a target="_blank" rel="noopener" href="https://github.com/lonePatient/pytorch_fashionMNIST_practice">github</a>下载</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Weitang Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lonepatient.top/2018/12/06/Pytorch-deep-learning.html">http://lonepatient.top/2018/12/06/Pytorch-deep-learning.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lonepatient.top" target="_blank">闲记算法</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><a class="post-meta__tags" href="/tags/PyTorch/">PyTorch</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2018/12/20/BERT-Pre-training-of-Deep-Bidirectional-Transformers-for-Language-Understanding.html"><img class="prev-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/20190121221353.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">BERT-Pre-training of Deep Bidirectional Transformers for Language Understanding</div></div></a></div><div class="next-post pull-right"><a href="/2018/09/28/How_Do_You_Find_A_Good_Learning_Rate.html"><img class="next-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/art2_explode.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">如何找到一个好的学习率</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/07/30/Fine_Tuning_LLaMA_2_Models_using_a_single_GPU.html" title="在单个GPU上基于QLoRA微调LLaMA2模型"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230803102655.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-30</div><div class="title">在单个GPU上基于QLoRA微调LLaMA2模型</div></div></a></div><div><a href="/2023/08/03/MHA_MQA_GQA.html" title="为什么现在大家都在用 MQA 和 GQA？"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230803195647.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-03</div><div class="title">为什么现在大家都在用 MQA 和 GQA？</div></div></a></div><div><a href="/2019/01/18/Pytorch-word2vec.html" title="基于PyTorch实现word2vec模型"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/20190303191557.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-01-18</div><div class="title">基于PyTorch实现word2vec模型</div></div></a></div><div><a href="/2023/03/02/8-bit_Matrix_Multiplication_transformers_Hugging_Face_Transformers.html" title="用于大型Transformer的8-bit矩阵乘法介绍"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230324140620.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-02</div><div class="title">用于大型Transformer的8-bit矩阵乘法介绍</div></div></a></div><div><a href="/2019/04/30/A-Recipe-for-Training-Neural-Networks.html" title="训练神经网络不得不看的33个技巧"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-04-30</div><div class="title">训练神经网络不得不看的33个技巧</div></div></a></div><div><a href="/2023/05/16/ALBEF.html" title="Align before Fuse：Vision and Language Representation Learning with Momentum Distillation"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20231013155249.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-16</div><div class="title">Align before Fuse：Vision and Language Representation Learning with Momentum Distillation</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Weitang Liu</div><div class="author-info__description">一个致力于记录技术的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lonePatient"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/lonePatient" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liuweitangmath@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/277974397" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有任何问题可通过留言板或者微信公众号给我留言，谢谢！<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201201102.jpg"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Pytorch-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">Pytorch 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Tensors"><span class="toc-number">1.1.</span> <span class="toc-text">Tensors</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Autograd-%E6%9C%BA%E5%88%B6"><span class="toc-number">1.2.</span> <span class="toc-text">Autograd 机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nn-%E6%A8%A1%E5%9D%97"><span class="toc-number">1.3.</span> <span class="toc-text">nn 模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#optim-%E6%A8%A1%E5%9D%97"><span class="toc-number">1.4.</span> <span class="toc-text">optim 模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84-nn-%E6%A8%A1%E5%9D%97"><span class="toc-number">1.5.</span> <span class="toc-text">自定义的 nn 模块</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B"><span class="toc-number">2.</span> <span class="toc-text">案例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FashionMNIST"><span class="toc-number">2.1.</span> <span class="toc-text">FashionMNIST</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-27"/></a><div class="content"><a class="title" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27">Arxiv今日论文 | 2026-02-27</a><time datetime="2026-02-27T12:30:00.000Z" title="发表于 2026-02-27 12:30:00">2026-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-26"/></a><div class="content"><a class="title" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26">Arxiv今日论文 | 2026-02-26</a><time datetime="2026-02-26T12:30:00.000Z" title="发表于 2026-02-26 12:30:00">2026-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-25"/></a><div class="content"><a class="title" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25">Arxiv今日论文 | 2026-02-25</a><time datetime="2026-02-25T12:30:00.000Z" title="发表于 2026-02-25 12:30:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225222513891.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板">大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板</a><time datetime="2026-02-25T12:00:00.000Z" title="发表于 2026-02-25 12:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225123005910.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mid-training：构建预训练与后训练之间的分布式桥梁"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁">mid-training：构建预训练与后训练之间的分布式桥梁</a><time datetime="2026-02-25T00:00:00.000Z" title="发表于 2026-02-25 00:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-24"/></a><div class="content"><a class="title" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24">Arxiv今日论文 | 2026-02-24</a><time datetime="2026-02-24T12:30:00.000Z" title="发表于 2026-02-24 12:30:00">2026-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-23"/></a><div class="content"><a class="title" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23">Arxiv今日论文 | 2026-02-23</a><time datetime="2026-02-23T12:30:00.000Z" title="发表于 2026-02-23 12:30:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260223165943195.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用&quot;深度思考率&quot;精准度量LLM推理质量"/></a><div class="content"><a class="title" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量">用&quot;深度思考率&quot;精准度量LLM推理质量</a><time datetime="2026-02-23T12:00:00.000Z" title="发表于 2026-02-23 12:00:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-20"/></a><div class="content"><a class="title" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20">Arxiv今日论文 | 2026-02-20</a><time datetime="2026-02-20T12:30:00.000Z" title="发表于 2026-02-20 12:30:00">2026-02-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201606857.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前沿大模型训练方法：深度解析与实践指南"/></a><div class="content"><a class="title" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南">前沿大模型训练方法：深度解析与实践指南</a><time datetime="2026-02-20T10:30:00.000Z" title="发表于 2026-02-20 10:30:00">2026-02-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Weitang Liu</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.lonepatient.top/',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.lonepatient.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo@1.4.11/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (99)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/计算机视觉/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 计算机视觉 (16)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/知识图谱/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 知识图谱 (13)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">👩‍💻 深度学习 (139)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item" style="visibility: hidden"></div><a class="magnet_link_more"  href="http://lonepatient.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-18</span><a class="blog-slider__title" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">通向AGI之路：大型语言模型（LLM）技术精要</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/07/12/gaiic_2022_ner_top10.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220712181905.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-07-12</span><a class="blog-slider__title" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">GAIIC2022商品标题识别二等奖获奖解决思路</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230807190424.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-01-20</span><a class="blog-slider__title" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">2025-03|高质量中文预训练模型集合</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

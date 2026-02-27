@@ -1,0 +1,496 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>数据探索的综合指南 | 闲记算法</title><meta name="keywords" content="Kaggle,EDA"><meta name="author" content="Weitang Liu"><meta name="copyright" content="Weitang Liu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="没有任何捷径能一步掌握数据探索．如果你想要提高模型的准确性，你会发现数据探索会极大地帮助你提高模型的准确度. 我可以很自信地说，因为我经历过很多这样的情况。 本教程帮助您理解数据挖掘的底层技术。和往常一样，我尽力用最简单的方式来解释这些概念。为了更好的理解，我举了几个例子来演示复杂的概念。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据探索的综合指南">
+<meta property="og:url" content="http://lonepatient.top/2017/01/04/guide-data-exploration.html">
+<meta property="og:site_name" content="闲记算法">
+<meta property="og:description" content="没有任何捷径能一步掌握数据探索．如果你想要提高模型的准确性，你会发现数据探索会极大地帮助你提高模型的准确度. 我可以很自信地说，因为我经历过很多这样的情况。 本教程帮助您理解数据挖掘的底层技术。和往常一样，我尽力用最简单的方式来解释这些概念。为了更好的理解，我举了几个例子来演示复杂的概念。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/44457865.jpg">
+<meta property="article:published_time" content="2017-01-04T09:56:29.000Z">
+<meta property="article:modified_time" content="2026-02-27T07:52:12.937Z">
+<meta property="article:author" content="Weitang Liu">
+<meta property="article:tag" content="Kaggle">
+<meta property="article:tag" content="EDA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/44457865.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lonepatient.top/2017/01/04/guide-data-exploration"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//s4.cnzz.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" data-pjax="data-pjax" src="https://s4.cnzz.com/z_stat.php?id=1273275888&amp;web_id=1273275888"></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-02-27 07:52:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/backgroud.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><script src="https://at.alicdn.com/t/c/font_3570527_dthoqrrv2tv.css"></script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JwRQtLKZggvJH4sJ",ck:"JwRQtLKZggvJH4sJ"})</script><link rel="stylesheet" href="/css/universe.css"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536467946304280" crossorigin="anonymous"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/44457865.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">闲记算法</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">数据探索的综合指南<a class="post-edit-link" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts/guide-data-exploration.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2017-01-04T09:56:29.000Z" title="发表于 2017-01-04 09:56:29">2017-01-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-27T07:52:12.937Z" title="更新于 2026-02-27 07:52:12">2026-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/">特征工程</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">5.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2017/01/04/guide-data-exploration.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>没有任何捷径能一步掌握数据探索．如果你想要提高模型的准确性，你会发现数据探索会极大地帮助你提高模型的准确度.</p>
+<p>我可以很自信地说，因为我经历过很多这样的情况。</p>
+<p>本教程帮助您理解数据挖掘的底层技术。和往常一样，我尽力用最简单的方式来解释这些概念。为了更好的理解，我举了几个例子来演示复杂的概念。</p>
+<span id="more"></span>
+<h2 id="数据准备">数据准备</h2>
+<p>记住一点，我们输入的数据的质量决定了我们输出的质量，因此，一旦你拿到了你的业务准备，是值得花费时间和精力在这上面的。根据我个人的经验而言，数据探索、清洗和准备能耗费整个项目的70%的时间。下面是为建立你的预测性模型所做的数据理解、清洗和准备工作：</p>
+<ul>
+<li>
+<p>变量识别</p>
+</li>
+<li>
+<p>单变量分析</p>
+</li>
+<li>
+<p>双变量分析</p>
+</li>
+<li>
+<p>缺失值处理</p>
+</li>
+<li>
+<p>异常值检测</p>
+</li>
+<li>
+<p>变量转换</p>
+</li>
+<li>
+<p>变量创造</p>
+</li>
+</ul>
+<p>最终，我们将需要在提出我们的模型之前重复前面步骤4-7多次</p>
+<p>现在让我们从每个步骤的细节学起</p>
+<h3 id="变量识别">变量识别</h3>
+<p>首先，搞明白自变量（predictor（input））和因变量（target（output））。下一步，清楚数据类型和变量类别.</p>
+<p>让我们通过一个例子更清楚的理解这个步骤：</p>
+<p><code>Example</code>：-假设，我们要预测学生是否将会打板球（参考下面的数据集），这里你将需要识别自变量、因变量、变量的数据类型和变量类别（连续还是离散）</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/98307471.jpg" alt=""></p>
+<p>下面，变量从不同的类别区分</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/44457865.jpg" alt=""></p>
+<h4 id="单变量分析">单变量分析</h4>
+<p>这个阶段，我们一个一个的探索变量，表现单变量分析的方法取决于变量类型是离散的还是连续的。分别介绍下表现离散和连续变量的技术和统计方法.</p>
+<p><code>连续变量</code> : 对于连续变量，我们需要理解数据的中心趋势以及变量的分布．可以使用各种统计指标可视化方法进行测量，如下图所示:</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/32446986.jpg" alt=""><br>
+<code>Note</code>:单变量分析也需要注意到缺失值和异常值情况。在本系列的后续部分中，我们将讨论如何处理缺失值和异常值的方法。</p>
+<p><code>分类变量</code>:-对于类别变量，我们将使用频率表来理解每个类别变量的分布。我们可以看到每一个类别的数值出现百分比。针对每一个类别变量，可以使用计数或者百分比来度量。也可以使用柱状图可视化每一个类别变量。</p>
+<h4 id="双变量分析">双变量分析</h4>
+<p>双变量分析主要发现两个变量之间的关系。在这里，我们寻找在一个预定义的显著水平上的变量之间的关联和分离。我们可以对任何分类和连续变量的组合进行双变量分析。比如:分类和分类，分类和连续，连续和连续。在分析过程中使用不同的方法来处理这些组合。</p>
+<p>让我们详细了解每一种组合:</p>
+<p><code>Continuous &amp; Continuous</code>: 可以使用散点图在两个连续变量之间进行双变量分析，这是找出两个变量之间关系的一个好方法，散点图表明了两个变量之间的关系，线性关系还是非线性关系.</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/27617421.jpg" alt=""></p>
+<p>散点图虽然可以找到两个变量之间的关系，但是无法衡量两个变量之间的关系强度，可以使用相关性度量方法表示两个变量之间的关系强度，一般相关性值只要在-1和1之间变化.</p>
+<ul>
+<li>-1:完全负线性相关</li>
+<li>+1:完全正线性相关</li>
+<li>0: 不相关</li>
+</ul>
+<p>相关性可以用以下公式推导出来:</p>
+<p>Correlation = Covariance(X,Y) / SQRT( Var(X)* Var(Y))</p>
+<p>各种工都具有识别变量之间的相关性的功能。在<code>Excel</code>中，函数<code>CORREL()</code>用于返回两个变量之间的相关性，<code>SAS</code>使用过程<code>PROC CORR</code>来识别相关性。这些函数返回<code>Pearson</code>相关值来确定两个变量之间的关系:</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/69199642.jpg" alt=""></p>
+<p><code>Categorical &amp; Categorical</code>:　对于离散与离散变量之间的双变量分析，可以使用下面方法:</p>
+<ul>
+<li>1.Two-way table: 我们可以通过count和count%的双向表来分析关系。行表示一个变量的类别，列表示另一个变量的类别。双向表显示了每个行和列类别组合中的值的百分比或count%。</li>
+<li>2.Stacked Column Chart:　可以说是双向表的可视化展示</li>
+<li>3.Chi-Square Test: 卡方检验主要是衡量两个变量之间关系的重要程度，两个变量之间的偏离程度决定了卡方值的大小，卡方值越大，越不符合；卡方值越小，偏差越小，越趋于符合，若两个值完全相等时，卡方值就为0，给定自由度下返回卡方分布的概率；当概率为０时候，表明两个变量相关；当概率为１是，表明两个变量相互独立．当概率小于0.05时，表明两个类别变量在95%置信水平上是相关的．两个分类变量独立检验的卡方检验统计量为：</li>
+</ul>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/70580976.jpg" alt=""></p>
+<p>其中O是观测值的频率，E是期望值的频率，计算方式为:</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/78479883.jpg" alt=""></p>
+<p><code>Categorical &amp; Continuous</code>: 探索离散变量跟连续变量之间的关系，可以绘制箱线图进行可视化，如果数值较小，则无统计意义，为了查看变量之间的统计意义，可以使用<code>Z-test</code>, <code>T-test</code>,或<code>ANOVA</code>等方法．</p>
+<ul>
+<li><code>Z-Test/ T-Test</code>: 平均值差异性检验的方法。它是用标准正态分布的理论来推断差异发生的概率，从而比较两个平均数的差异是否显著.</li>
+</ul>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/12675212.jpg" alt=""></p>
+<p>当Z值越小，说明两个平均值的差异越大，T检验跟Z检验相似．</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/82059405.jpg" alt=""></p>
+<ul>
+<li><code>ANOVA</code> : 方差分析，用于两个及两个以上样本均数差别的显著性检验。 由于各种因素的影响，研究所得的数据呈现波动状。造成波动的原因可分成两类，一是不可控的随机因素，另一是研究中施加的对结果形成影响的可控因素。</li>
+</ul>
+<p><code>Example</code>: 假设，我们想测试五个不同锻炼的效果。为此，我们招募了20名男性，并将一种锻炼方式分配给4名男性(5组)。几周之后，记录他们的体重。我们需要弄清楚这些锻炼对他们的影响是否显著不同。这可以通过比较5组中每4人的重量来完成。</p>
+<p>在此之前，我们已经了解了数据挖掘的前三个阶段，即变量识别、单变量和双变量分析。我们还研究了各种统计和可视化方法来确定变量之间的关系。</p>
+<p>现在，我们来看看缺失值处理的方法。更重要的是，我们还将研究为什么我们的数据中会出现缺失值，以及为什么要对它们进行处理。</p>
+<h2 id="缺失值处理">缺失值处理</h2>
+<p>若在训练数据集中存在缺失值，若不处理，则会影响到模型的性能或者产生一个有偏差的模型，因为我们没有正确地分析缺失变量与其他变量的关系，有可能会导致错误的预测或者分类．</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/99284708.jpg" alt=""></p>
+<p>上图中:左图，我们没有对缺失值进行处理。可以看到男性大板球的概率要高于女性。另一方面，右图中，对缺失值(基于性别)的处理后的数据，我们可以看到，与男性相比，女性更有可能打板球。</p>
+<p>可以看到在数据集中处理缺失值的重要性。现在，让我们找出这些缺失值出现的原因。它们可能发生于:</p>
+<ul>
+<li>
+<p>1.数据提取:可能发生于提取过程中。在这种情况下，我们应该验证下数据的正确性。数据提取阶段的错误通常很容易找到，也可以很容易地纠正。</p>
+</li>
+<li>
+<p>2.数据收集:发生在数据收集的时候，很难纠正。</p>
+<ul>
+<li>
+<p>2.1完全随机丢失:对于所有数据而言，缺失变量的概率相同.</p>
+</li>
+<li>
+<p>2.2随机缺失:对所有数据而言，缺失变量概率不一样，比如女性的缺失概率比男性高．</p>
+</li>
+<li>
+<p>2.3依赖于未观察到的预测值:当缺失值不是随机的，并且与未观察到的输入变量相关，例如:在医学研究中，如果某一特定的诊断引起不适，那么从研究中退出的机会就会增加。这个缺失值不是随机的，除非我们将“不适”作为所有患者的输入变量。</p>
+</li>
+<li>
+<p>2.4依赖于缺失值本身:当缺失值的概率与缺失值本身直接相关,例如:收入较高或收入较低的人很可能对自己的收入不作反应。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="如何处理">如何处理</h3>
+<ul>
+<li>删除:它有两种类型:<code>List Wise Deletion</code>和<code>Pair Wise Deletion</code>。</li>
+</ul>
+<p><code>List Wise Deletion</code>: 如果一个样本出现缺失值，则直接删除该样本．虽然简单，但是可能因为减少样本量造成模型的不稳定．</p>
+<p><code>Pair Wise Deletio</code>: 对感兴趣的变量进行分析。虽然保留了许多样本，但是对不同的变量使用不同的样本大小。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/78293875.jpg" alt=""></p>
+<ul>
+<li>填充: 使用均值/众数/中位数等进行填充。主要分为两种模式：</li>
+</ul>
+<ul>
+<li>直接使用全局数据的均值/众数/中位数等直接进行填充．</li>
+<li>使用相似的变量的统计特征进行填充</li>
+</ul>
+<ul>
+<li>模型预测: 使用模型预测值进行填充是一种较为复杂的方法．一般将数据集分成两组:一组没有缺失值，另一组为缺失值。第一个数据集作为模型的训练数据集，而包含缺少值的第二个数据集是测试数据集，缺失值的变量被当作目标变量。接下来，我们建立一个模型，根据训练数据集的其他属性来预测目标变量，并填充测试数据的缺失值。我们可以使用回归、方差分析、逻辑回归和各种建模技术来实现这一点。这种方法有两个缺点:</li>
+<li></li>
+</ul>
+<ul>
+<li>模型估计的值通常比真正的值表现得更好。</li>
+<li>如果数据集和缺少值的属性之间没有关系，那么模型就不会精确地估计缺失值。</li>
+</ul>
+<ul>
+<li><code>KNN</code>方法:　通过相似的样本值来填充缺失值。利用距离函数确定两个属性的相似度。它也有一定的优点和缺点。</li>
+</ul>
+<ul>
+<li>
+<p>优点: k近邻可以预测定性和定量属性; 不需要为每个具有缺失数据的属性创建预测模型;具有多个缺失值的属性可以很容易地处理;将数据的相关结构考虑在内。</p>
+</li>
+<li>
+<p>缺点: :KNN算法在大型数据分析中非常耗时。它在所有数据集中搜索最相似的实例；k值的选择非常关键。较高的k值将包含显著的属性，而较低的k值意味着缺少重要的属性。</p>
+</li>
+</ul>
+<p>处理缺失值后，接下来需要处理离群值。通常，我们在构建模型时往往忽略了异常值。异常值会使你的数据不平衡，并且会降低模型的准确性。</p>
+<h2 id="异常值处理">异常值处理</h2>
+<p>在对数据进行分析时，需要密切关注异常值，否则可能导致严重错误的估计。简单地说，异常值往往偏离样本，用图可视化的话，一般异常值都是一些孤立的点。</p>
+<p>举个例子，我们做客户分析，发现客户的平均年收入是80万美元。但是，有两个客户的年收入是4美元和420万美元。这两个客户的年收入比其他人高得多。显然这两个客户的年收入将被视为异常值。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/82212889.jpg" alt=""></p>
+<p>异常值有两种类型:单变量和多变量。上面，我们讨论了单变量离群的例子，当我们观察单个变量的分布时，就可以发现这些异常值。在n维空间中，为了发现多变量的异常值，你必须考虑多变量的分布。</p>
+<p>让我们以一个例子来理解这一点。观察身高和体重之间的关系。使用单变量和双变量分布分析身高跟体重。由箱线图可以看到不存在异常值(超过1.5*IQR，最常用的方法)。再看看散点图，很明显存在异常值．</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/60323561.jpg" alt=""></p>
+<p>异常值的存在会极大地影响到数据分析和统计建模的结果。若数据集中存在异常值有，则:</p>
+<ul>
+<li>
+<p>增加了误差方差，降低了统计测试的能力。</p>
+</li>
+<li>
+<p>如果异常值是非随机分布的，会降低正态性。</p>
+</li>
+<li>
+<p>可能会造成偏差或影响估计。</p>
+</li>
+<li>
+<p>影响回归、方差分析和其他统计模型假设的基本假设。</p>
+</li>
+</ul>
+<p>简单的以一个例子说明，有无异常值的数据情况．</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/28209279.jpg" alt=""></p>
+<p>如图所示，具有异常值的数据集很明显平均值和标准偏差存在问题。左图平均值是5，右图平均值是45，随着离群值的增加，平均值上升到30，这将完全改变估计。</p>
+<h3 id="如何处理-2">如何处理</h3>
+<p>最常用的检测异常值的方法是可视化。我们使用各种可视化方法，如箱形图、直方图、散点图(上图，我们用了箱线图和散点图来可视化)。一些分析师也用不同的经验法则来检测异常值。一般常用的是:</p>
+<ul>
+<li>
+<p>超出-1.5 x IQR到1.5 x IQR的范围的值认为是异常值。</p>
+</li>
+<li>
+<p>超出5%和95%的值都认为是异常值。</p>
+</li>
+<li>
+<p>超过平均值的３倍标准偏差则认为是异常值。</p>
+</li>
+<li>
+<p>异常值检测仅仅是对有影响的数据点进行数据检查的一种特殊情况，它还取决于业务理解。</p>
+</li>
+<li>
+<p>双变量和多变量异常值检测还可以通过距离等指标来衡量。像Mahalanobis ’ distance和Cook ’ s D指标经常被用来检测异常值。</p>
+</li>
+</ul>
+<p>大多数处理异常值的方法类似于缺失值的方法，比如删除，变换，分箱，将它们作为一个单独的组，估算值和其他统计方法。我们将讨论用于处理异常值的常用技术:</p>
+<p><code>删除</code>:如果由于数据输入错误、数据处理错误等造成异常值，可以直接删除异常值。还可以在两端进行修剪以去除异常值。</p>
+<p><code>转换和分箱</code>:转换变量也可以消除异常值。比如数值的取对数(log)也可以消除两端的影响。分箱也是变量转换的一种形式。由于进行变量的分箱,所以决策树算法也可以很好地处理异常值。还可以针对不同的数值分配不同权重</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/65207138.jpg" alt=""></p>
+<p><code>填充</code>: 像处理缺失值一样,我们同样也可以使用数据的中位数/众数/均值等对异常值进行替换处理.<br>
+分割: 如果存在大量的异常值,则可以将异常值作为单独的一个组进行分析.</p>
+<p>在此之前，我们已经了解了数据挖掘的步骤、缺失值的处理以及异常值检测和处理的技术。这三个阶段将使您的原始数据在信息可用性和准确性方面更好。现在让我们进入数据探索的最后阶段-特征工程。</p>
+<h2 id="特征工程">特征工程</h2>
+<p>特征工程是从现有数据中提取更多信息的科学(和艺术)。没有添加任何新数据，但是实际上您已经在使数据变得更有用了。</p>
+<p>举个例子，假设你正试图预测一个基于日期的购物中心的人流量。如果您尝试直接使用日期，您可能无法从数据中提取有意义的见解。因为人流量的大小更多的受周几的影响而不是一个月的第几天。而关于周几的信息是隐含在你的数据中。你需要挖掘出来，让你的模型更好。</p>
+<p>这是一种从数据中提取信息的操作，称为特征工程。</p>
+<p>一旦你完成了数据挖掘中的前5个步骤——变量识别、单变量、双变量分析、缺失值处理和异常值处理，你就会执行特征工程。特征工程本身可以分为两步:</p>
+<ul>
+<li>
+<p>变量变换。</p>
+</li>
+<li>
+<p>变量/特征功能。</p>
+</li>
+</ul>
+<p>这两种技术在数据探索中是至关重要的，对预测能力有显著的影响。让我们更详细地了解这一步。</p>
+<h3 id="变量转换">变量转换</h3>
+<p>在数据建模中，转换是指用函数替换变量。例如，用方根/立方根或对数替换变量x是一个变换。换句话说，转换是一个过程，它改变变量与其他变量的分布或关系。</p>
+<p>常见的变量变换方法:</p>
+<ul>
+<li>
+<p>当我们想要改变变量的大小时可以对变量进行标准化，以便更好地理解。如果数据的各个变量大小不同时,有必要进行标准化处理,这个转换不会改变变量的分布。</p>
+</li>
+<li>
+<p>当我们想把复杂的非线性关系转化成线性关系时。与非线性或曲线关系相比，变量之间存在线性关系更容易理解。转换帮助我们将非线性关系转换成线性关系。散点图可以用来发现两个连续变量之间的关系。这些转换还可以改进预测。<code>log</code>转换是常用的转换技术之一。</p>
+</li>
+</ul>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/51777870.jpg" alt=""></p>
+<ul>
+<li>对称分布优于有偏分布，因为它更容易解释和产生推论。一些建模技术要求变量分布满足正态分布。因此，当我们有一个偏态分布时，我们可以使用转换来降低有偏的影响。对于右偏分布，我们取<code>square/cube root</code>或<code>log</code>，对于左偏态，我们取<code>square/cube</code>或<code>exp</code>。</li>
+</ul>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/47237293.jpg" alt=""></p>
+<ul>
+<li>分箱也是变换转换的一种常用方法,比如对于年龄字段,一般对其进行分箱处理。</li>
+</ul>
+<p>有各种方法用于转换变量。如前所述，其中一些包括平方根、立方根、对数、分箱、倒数等。让我们详细了解这些方法。</p>
+<ul>
+<li>
+<p>log: 取对数是一种常用的变换方法，用来改变分布曲线上变量的分布形状。它通常用于减小变量的右偏度。但是，它也不能被应用到零或负值。</p>
+</li>
+<li>
+<p>Square / Cube root: 对变量取方根或立方根会对变量分布有良好的影响。然而，它并不像对数变换那样重要。立方根有它自己的优势。它可以应用于负值，包括零。平方根可以应用于正值，包括零。</p>
+</li>
+<li>
+<p>Binning:用于对变量进行分箱。常用频率或者百分比进行分箱。往往分箱的结果一部分取决于业务理解,一部分取决数据本身</p>
+</li>
+</ul>
+<h3 id="特征构造">特征构造</h3>
+<p>特性/变量构造是一个基于现有变量生成新的变量/特性的过程。例如，我们将日期(dd-mm-yy)作为数据集中的输入变量，我们可以生成新的变量，比如日期、月、年、周、工作日，这些变量可能与目标变量有更好的关系。此步骤用于强调变量中隐藏的关系:</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/29161561.jpg" alt=""></p>
+<p>有各种各样的技术来创建新特征。让我们来看看一些常用的方法:</p>
+<ul>
+<li>
+<p>衍生变量: 从现有变量中创建新变量。让我们通过“泰坦尼克号- Kaggle竞赛”来看看它。在这个数据集中，年龄变量有缺失值。为了预测缺失值，我们使用了称呼(Master, Mr, Miss, Mrs)作为一个新变量。我们如何决定构造哪些变量?坦白地说，这取决于对分析师的商业理解，他的好奇心以及他可能对这个问题的假设。比如取变量的log，binning变量和其他变量变换的方法也可以用来创建新的变量。</p>
+</li>
+<li>
+<p>哑变量:哑变量是将分类变量转换为数值变量最常见的应用之一。通过将类别变量映射为0值或者1值。</p>
+</li>
+</ul>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/77395082.jpg" alt=""></p>
+<p>原文地址: <a target="_blank" rel="noopener" href="https://www.analyticsvidhya.com/blog/2016/01/guide-data-exploration/">https://www.analyticsvidhya.com/blog/2016/01/guide-data-exploration/</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Weitang Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lonepatient.top/2017/01/04/guide-data-exploration.html">http://lonepatient.top/2017/01/04/guide-data-exploration.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lonepatient.top" target="_blank">闲记算法</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Kaggle/">Kaggle</a><a class="post-meta__tags" href="/tags/EDA/">EDA</a></div><div class="post_share"><div class="social-share" data-image="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/44457865.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2017/03/18/boosting.html"><img class="prev-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/54907153.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">XGBoost-LightGBM和CatBoost的同与不同</div></div></a></div><div class="next-post pull-right"><a href="/2016/05/19/hyperopt.html"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">hyperopt-调参模块</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2018/07/10/Adversarial validation.html" title="Adversarial validation"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/20210206210559.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-07-10</div><div class="title">Adversarial validation</div></div></a></div><div><a href="/2018/04/19/Deep_Learning_For_Computer_Vision_With_Python_PB_10.html" title="深度学习与计算机视觉(PB-10)-Kaggle之猫狗比赛"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/9655360.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-04-19</div><div class="title">深度学习与计算机视觉(PB-10)-Kaggle之猫狗比赛</div></div></a></div><div><a href="/2018/01/29/Instacart-Market-Basket-Analysis.html" title="Instacart Market Basket Analysis(2nd place)"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-26/30142479.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-01-29</div><div class="title">Instacart Market Basket Analysis(2nd place)</div></div></a></div><div><a href="/2017/04/22/Kaggle predict consumer credit default.html" title="Kaggle债务违约预测冠军经验分享"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/74899786.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2017-04-22</div><div class="title">Kaggle债务违约预测冠军经验分享</div></div></a></div><div><a href="/2018/03/29/Plot-Python-XGBoost-feature-importances.html" title="Plot Python XGBoost feature importances"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-03-29</div><div class="title">Plot Python XGBoost feature importances</div></div></a></div><div><a href="/2017/05/12/Summary of kaggle competition experience.html" title="Summary of kaggle competition experience"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/40951416.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2017-05-12</div><div class="title">Summary of kaggle competition experience</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Weitang Liu</div><div class="author-info__description">一个致力于记录技术的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lonePatient"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/lonePatient" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liuweitangmath@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/277974397" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有任何问题可通过留言板或者微信公众号给我留言，谢谢！<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201201102.jpg"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%87%86%E5%A4%87"><span class="toc-number">1.</span> <span class="toc-text">数据准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%E8%AF%86%E5%88%AB"><span class="toc-number">1.1.</span> <span class="toc-text">变量识别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%95%E5%8F%98%E9%87%8F%E5%88%86%E6%9E%90"><span class="toc-number">1.1.1.</span> <span class="toc-text">单变量分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8C%E5%8F%98%E9%87%8F%E5%88%86%E6%9E%90"><span class="toc-number">1.1.2.</span> <span class="toc-text">双变量分析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%BA%E5%A4%B1%E5%80%BC%E5%A4%84%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">缺失值处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86"><span class="toc-number">2.1.</span> <span class="toc-text">如何处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%80%BC%E5%A4%84%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text">异常值处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86-2"><span class="toc-number">3.1.</span> <span class="toc-text">如何处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B"><span class="toc-number">4.</span> <span class="toc-text">特征工程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%E8%BD%AC%E6%8D%A2"><span class="toc-number">4.1.</span> <span class="toc-text">变量转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E5%BE%81%E6%9E%84%E9%80%A0"><span class="toc-number">4.2.</span> <span class="toc-text">特征构造</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-27"/></a><div class="content"><a class="title" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27">Arxiv今日论文 | 2026-02-27</a><time datetime="2026-02-27T12:30:00.000Z" title="发表于 2026-02-27 12:30:00">2026-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-26"/></a><div class="content"><a class="title" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26">Arxiv今日论文 | 2026-02-26</a><time datetime="2026-02-26T12:30:00.000Z" title="发表于 2026-02-26 12:30:00">2026-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-25"/></a><div class="content"><a class="title" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25">Arxiv今日论文 | 2026-02-25</a><time datetime="2026-02-25T12:30:00.000Z" title="发表于 2026-02-25 12:30:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225222513891.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板">大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板</a><time datetime="2026-02-25T12:00:00.000Z" title="发表于 2026-02-25 12:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225123005910.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mid-training：构建预训练与后训练之间的分布式桥梁"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁">mid-training：构建预训练与后训练之间的分布式桥梁</a><time datetime="2026-02-25T00:00:00.000Z" title="发表于 2026-02-25 00:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-24"/></a><div class="content"><a class="title" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24">Arxiv今日论文 | 2026-02-24</a><time datetime="2026-02-24T12:30:00.000Z" title="发表于 2026-02-24 12:30:00">2026-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-23"/></a><div class="content"><a class="title" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23">Arxiv今日论文 | 2026-02-23</a><time datetime="2026-02-23T12:30:00.000Z" title="发表于 2026-02-23 12:30:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260223165943195.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用&quot;深度思考率&quot;精准度量LLM推理质量"/></a><div class="content"><a class="title" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量">用&quot;深度思考率&quot;精准度量LLM推理质量</a><time datetime="2026-02-23T12:00:00.000Z" title="发表于 2026-02-23 12:00:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-20"/></a><div class="content"><a class="title" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20">Arxiv今日论文 | 2026-02-20</a><time datetime="2026-02-20T12:30:00.000Z" title="发表于 2026-02-20 12:30:00">2026-02-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201606857.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前沿大模型训练方法：深度解析与实践指南"/></a><div class="content"><a class="title" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南">前沿大模型训练方法：深度解析与实践指南</a><time datetime="2026-02-20T10:30:00.000Z" title="发表于 2026-02-20 10:30:00">2026-02-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Weitang Liu</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.lonepatient.top/',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.lonepatient.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo@1.4.11/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (99)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/计算机视觉/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 计算机视觉 (16)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/知识图谱/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 知识图谱 (13)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">👩‍💻 深度学习 (139)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item" style="visibility: hidden"></div><a class="magnet_link_more"  href="http://lonepatient.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-18</span><a class="blog-slider__title" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">通向AGI之路：大型语言模型（LLM）技术精要</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/07/12/gaiic_2022_ner_top10.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220712181905.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-07-12</span><a class="blog-slider__title" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">GAIIC2022商品标题识别二等奖获奖解决思路</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230807190424.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-01-20</span><a class="blog-slider__title" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">2025-03|高质量中文预训练模型集合</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

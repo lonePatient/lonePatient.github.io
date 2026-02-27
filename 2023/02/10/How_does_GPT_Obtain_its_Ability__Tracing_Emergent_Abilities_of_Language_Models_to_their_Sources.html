@@ -1,0 +1,748 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>万字拆解,追溯ChatGPT各项能力的起源 | 闲记算法</title><meta name="keywords" content="NLP,大型语言模型,深度学习,Prompt,Few-Shot,ChatGPT"><meta name="author" content="Weitang Liu"><meta name="copyright" content="Weitang Liu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="最近，OpenAI的预训练模型ChatGPT给人工智能领域的研究人员留下了深刻的印象和启发。毫无疑问，它又强又聪明，且跟它说话很好玩，还会写代码。它在多个方面的能力远远超过了自然语言处理研究者们的预期。于是我们自然就有一个问题：ChatGPT 是怎么变得这么强的？它的各种强大的能力到底从何而来？ 在这篇文章中，我们试图剖析 ChatGPT 的突现能力（Emergent Ability），追溯这些能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="万字拆解,追溯ChatGPT各项能力的起源">
+<meta property="og:url" content="http://lonepatient.top/2023/02/10/How_does_GPT_Obtain_its_Ability__Tracing_Emergent_Abilities_of_Language_Models_to_their_Sources.html">
+<meta property="og:site_name" content="闲记算法">
+<meta property="og:description" content="最近，OpenAI的预训练模型ChatGPT给人工智能领域的研究人员留下了深刻的印象和启发。毫无疑问，它又强又聪明，且跟它说话很好玩，还会写代码。它在多个方面的能力远远超过了自然语言处理研究者们的预期。于是我们自然就有一个问题：ChatGPT 是怎么变得这么强的？它的各种强大的能力到底从何而来？ 在这篇文章中，我们试图剖析 ChatGPT 的突现能力（Emergent Ability），追溯这些能">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230221220609.jpeg">
+<meta property="article:published_time" content="2023-02-10T23:20:08.000Z">
+<meta property="article:modified_time" content="2026-02-27T07:52:12.658Z">
+<meta property="article:author" content="Weitang Liu">
+<meta property="article:tag" content="NLP">
+<meta property="article:tag" content="大型语言模型">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="Prompt">
+<meta property="article:tag" content="Few-Shot">
+<meta property="article:tag" content="ChatGPT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230221220609.jpeg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lonepatient.top/2023/02/10/How_does_GPT_Obtain_its_Ability__Tracing_Emergent_Abilities_of_Language_Models_to_their_Sources"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//s4.cnzz.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" data-pjax="data-pjax" src="https://s4.cnzz.com/z_stat.php?id=1273275888&amp;web_id=1273275888"></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-02-27 07:52:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/backgroud.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><script src="https://at.alicdn.com/t/c/font_3570527_dthoqrrv2tv.css"></script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JwRQtLKZggvJH4sJ",ck:"JwRQtLKZggvJH4sJ"})</script><link rel="stylesheet" href="/css/universe.css"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536467946304280" crossorigin="anonymous"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230221220609.jpeg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">闲记算法</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">万字拆解,追溯ChatGPT各项能力的起源<a class="post-edit-link" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts/How_does_GPT_Obtain_its_Ability__Tracing_Emergent_Abilities_of_Language_Models_to_their_Sources.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-10T23:20:08.000Z" title="发表于 2023-02-10 23:20:08">2023-02-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-27T07:52:12.658Z" title="更新于 2026-02-27 07:52:12">2026-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/">自然语言处理</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/">大型语言模型</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">8.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>28分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2023/02/10/How_does_GPT_Obtain_its_Ability__Tracing_Emergent_Abilities_of_Language_Models_to_their_Sources.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>最近，OpenAI的预训练模型ChatGPT给人工智能领域的研究人员留下了深刻的印象和启发。毫无疑问，它又强又聪明，且跟它说话很好玩，还会写代码。它在多个方面的能力远远超过了自然语言处理研究者们的预期。于是我们自然就有一个问题：ChatGPT 是怎么变得这么强的？它的<strong>各种强大的能力到底从何而来？</strong> 在这篇文章中，我们试图剖析 ChatGPT 的突现能力（Emergent Ability），<strong>追溯这些能力的来源</strong>，希望能够给出一个全面的技术路线图，来说明 GPT-3.5 模型系列以及相关的大型语言模型是如何一步步进化成目前的强大形态。</p>
+<blockquote>
+<p>Emergent Ability: 突现能力，表示小模型没有，只在模型大到一定程度才会出现的能力</p>
+</blockquote>
+<p>我们希望这篇文章能够促进大型语言模型的透明度，成为开源社区共同努力复现 GPT-3.5 的路线图。</p>
+<p>致国内的同胞们：</p>
+<ul>
+<li>
+<p>在国际学术界看来，<code>ChatGPT / GPT-3.5</code> 是一种划时代的产物，它与之前常见的语言模型 (<code>Bert/ Bart/ T5</code>) 的区别，几乎是导弹与弓箭的区别，一定要引起最高程度的重视。</p>
+</li>
+<li>
+<p>在我跟国际同行的交流中，国际上的主流学术机构 (如斯坦福大学，伯克利加州大学) 和主流业界研究院（如谷歌大脑，微软研究院）都已经<strong>全面拥抱大模型</strong>。</p>
+</li>
+<li>
+<p>在当前这个阶段，国内的技术水准，学术视野，治学理念和国际前沿的差距似乎并没有减少，反而正在扩大，如果现状持续下去，极有可能出现技术断代。</p>
+</li>
+<li>
+<p>此诚危急存亡之秋。</p>
+</li>
+</ul>
+<blockquote>
+<p>多年以后，面对行刑队，奥雷里亚诺·布恩迪亚上校将会回想起父亲带他去见识冰块的那个遥远的下午。—— 《百年孤独》 加西亚·马尔克斯</p>
+</blockquote>
+<h2 id="2020版初代GPT-3与大规模训练">2020版初代GPT-3与大规模训练</h2>
+<p>初代GPT-3展示了三个重要能力：</p>
+<ul>
+<li>
+<p>语言生成：遵循提示词（prompt），然后生成补全提示词的句子。这也是今天人类与语言模型最普遍的交互方式。</p>
+</li>
+<li>
+<p>上下文学习 (in-context learning):  遵循给定任务的几个示例，然后为新的测试用例生成解决方案。很重要的一点是，<code>GPT-3</code>虽然是个语言模型，但它的论文几乎没有谈到“语言建模” (language modeling) —— 作者将他们全部的写作精力都投入到了对上下文学习的愿景上，这才是 <code>GPT-3</code>的真正重点。</p>
+</li>
+<li>
+<p>世界知识：包括事实性知识 (factual knowledge) 和常识 (commonsense)。</p>
+</li>
+</ul>
+<p>那么这些能力从何而来呢？</p>
+<p>基本上，以上三种能力都来自于<strong>大规模预训练</strong>：在有3000亿单词的语料上预训练拥有1750亿参数的模型（ 训练语料的60%来自于 2016 - 2019 的 C4 + 22% 来自于 WebText2 + 16% 来自于Books + 3%来自于Wikipedia）。其中：</p>
+<ul>
+<li>
+<p><strong>语言生成</strong>的能力来自于语言建模的<strong>训练目标</strong> (language modeling)。</p>
+</li>
+<li>
+<p><strong>世界知识</strong>来自 3000 亿单词的<strong>训练语料库</strong>（不然还能是哪儿呢）。</p>
+</li>
+<li>
+<p><strong>模型的 1750 亿参数</strong>是为了<strong>存储知识</strong>，Liang et al. (2022) 的文章进一步证明了这一点。他们的结论是，知识密集型任务的性能与模型大小息息相关。</p>
+</li>
+<li>
+<p>上下文学习的能力来源及为什么上下文学习可以泛化，仍然难以溯源。 直觉上，这种能力可能来自于同一个任务的数据点在训练时按顺序排列在同一个 batch 中。然而，很少有人研究为什么语言模型预训练会促使上下文学习，以及为什么上下文学习的行为与微调 (fine-tuning) 如此不同。</p>
+</li>
+</ul>
+<p>令人好奇的是，初代的<code>GPT-3</code>有多强。其实比较难确定初代<code> GPT-3</code>（在 OpenAI API 中被称为davinci）到底是“强”还是“弱”。一方面，它合理地回应了某些特定的查询，并在许多数据集中达到了还不错的性能；另一方面，它在许多任务上的<strong>表现还不如 T5 这样的小模型</strong>（参见其原始论文）。在今天（2022 年 12 月）<code>ChatGPT</code> 的标准下，很难说初代的 <code>GPT-3</code> 是“智能的”。Meta 开源的 <code>OPT</code> 模型试图复现初代 <code>GPT-3</code>，但它的能力与当今的标准也形成了尖锐的对比。许多测试过 <code>OPT</code> 的人也认为与现在的<code>text-davinci-002</code>相比，该模型确实 “不咋地”。尽管如此，<code>OPT</code> 可能是初代 <code>GPT-3</code> 的一个足够好的开源的近似模型了（根据 <code>OPT</code> 论文和斯坦福大学的 HELM 评估）。</p>
+<p>虽然初代的 <code>GPT-3</code> 可能表面上看起来很弱，但后来的实验证明，初代<code> GPT-3</code> 有着非常强的潜力。这些潜力后来被代码训练、指令微调 (<code>instruction tuning</code>) 和基于人类反馈的强化学习 (<code>reinforcement learning with human feedback</code>, <code>RLHF</code>) 解锁，最终体展示出极为强大的突现能力。</p>
+<h2 id="从-2020-版-GPT-3-到-2022-版-ChatGPT">从 2020 版 GPT-3 到 2022 版 ChatGPT</h2>
+<p>从最初的 <code>GPT-3</code> 开始，为了展示 OpenAI 是如何发展到<code>ChatGPT</code>的，我们看一下 <code>GPT-3.5</code> 的进化树：</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230221213843.png" alt=""></p>
+<ol>
+<li>
+<p><strong>2020 年 7 月</strong>，OpenAI 发布了模型索引为的 davinci 的初代 <code>GPT-3</code> 论文，从此它就开始不断进化。</p>
+</li>
+<li>
+<p><strong>在 2021 年 7 月</strong>，<code>Codex</code> 的论文发布，其中初始的 <code>Codex</code> 是根据（可能是内部的）120 亿参数的 <code>GPT-3</code> 变体进行微调的。后来这个 120 亿参数的模型演变成 OpenAI API 中的<code>code-cushman-001</code>。</p>
+</li>
+<li>
+<p><strong>2022 年 3 月</strong>，OpenAI 发布了指令微调 (<code>instruction tuning</code>) 的论文，其监督微调 (supervised instruction tuning) 的部分对应了<code>davinci-instruct-beta</code>和<code>text-davinci-001</code>。</p>
+</li>
+<li>
+<p><strong>2022 年 4 月至 7 月的</strong>，OpenAI 开始对<code>code-davinci-002</code>模型进行 Beta 测试，也称其为 Codex。然后<code>code-davinci-002</code>、<code>text-davinci-003</code>和<code>ChatGPT</code> 都是从<code>code-davinci-002</code>进行指令微调得到的。详细信息请参阅 OpenAI的模型索引文档。尽管 Codex 听着像是一个只管代码的模型，但<code>code-davinci-002</code>可能是最强大的针对自然语言的<code>GPT-3.5</code> 变体（优于 text-davinci-002和 -003）。code-davinci-002很可能在文本和代码上都经过训练，然后根据指令进行调整（将在下面解释）。</p>
+</li>
+<li>
+<p><strong>2022 年 5-6 月</strong>发布的<code>text-davinci-002</code>是一个基于<code>code-davinci-002</code>的有监督指令微调 (supervised instruction tuned) 模型。在text-davinci-002上面进行指令微调很可能降低了模型的上下文学习能力，但是增强了模型的零样本能力（将在下面解释）。</p>
+</li>
+<li>
+<p><strong>2022 年 11 月</strong>发布<code>text-davinci-003</code>和 <code>ChatGPT</code>，是使用的基于人类反馈的强化学习的版本指令微调 (instruction tuning with reinforcement learning from human feedback) 模型的两种不同变体。<code>text-davinci-003</code> 恢复了（但仍然比code-davinci-002差）一些在text-davinci-002 中丢失的部分上下文学习能力（大概是因为它在微调的时候混入了语言建模） 并进一步改进了零样本能力（得益于RLHF）。另一方面，<code>ChatGPT</code> 似乎牺牲了几乎所有的上下文学习的能力来换取建模对话历史的能力。</p>
+</li>
+</ol>
+<p>总的来说，在 2020 - 2021 年期间，在code-davinci-002之前，OpenAI 已经投入了大量的精力通过代码训练和指令微调来增强GPT-3。当他们完成code-davinci-002时，所有的能力都已经存在了。很可能后续的指令微调，无论是通过有监督的版本还是强化学习的版本，都会做以下事情（稍后会详细说明）：</p>
+<ul>
+<li>
+<p><code>指令微调</code><strong>不会为模型注入新的能力</strong> —— 所有的能力都已经存在了。指令微调的作用是解锁 / 激发这些能力。这主要是因为指令微调的数据量比预训练数据量少几个数量级（基础的能力是通过预训练注入的）。</p>
+</li>
+<li>
+<p><code>指令微调</code>将 GPT-3.5 的分化到不同的技能树。有些更擅长上下文学习，如text-davinci-003，有些更擅长对话，如ChatGPT。</p>
+</li>
+<li>
+<p><code>指令微调</code>通过牺牲性能换取与人类的对齐（alignment）。OpenAI 的作者在他们的指令微调论文中称其为 “对齐税” (alignment tax)。许多论文都报道了<code>code-davinci-002</code>在基准测试中实现了最佳性能（但模型不一定符合人类期望）。在<code>code-davinci-002</code>上进行指令微调后，模型可以生成更加符合人类期待的反馈（或者说模型与人类对齐），例如：零样本问答、生成安全和公正的对话回复、拒绝超出模型它知识范围的问题。</p>
+</li>
+</ul>
+<blockquote>
+<p>Alignment: 与人类对齐，表示让机器生成复合人类期望的，复合人类价值观的句子</p>
+</blockquote>
+<h2 id="Code-Davinci-002和-Text-Davinci-002，在代码上训练，在指令上微调">Code-Davinci-002和 Text-Davinci-002，在代码上训练，在指令上微调</h2>
+<p>在<code>code-davinci-002</code>和<code>text-davinci-002</code>之前，有两个中间模型，分别是 <code>davinci-instruct-beta</code> 和<code> text-davinci-001</code>。两者在很多方面都比上述的两个-002模型差（例如，<code>text-davinci-001</code> 链式思维推理能力不强）。所以我们在本节中重点介绍 -002 型号。</p>
+<h3 id="复杂推理能力的来源和泛化到新任务的能力">复杂推理能力的来源和泛化到新任务的能力</h3>
+<p>我们关注<code>code-davinci-002</code>和<code>text-davinci-002</code>，这两兄弟是第一版的 GPT3.5 模型，一个用于代码，另一个用于文本。它们表现出了三种重要能力与初代 GPT-3 不同的能力：</p>
+<ul>
+<li>
+<p><strong>响应人类指令</strong>：以前，GPT-3 的输出主要训练集中常见的句子。现在的模型会针对指令 / 提示词生成更合理的答案（而不是相关但无用的句子）。</p>
+</li>
+<li>
+<p><strong>泛化到没有见过的任务</strong>：当用于调整模型的指令数量超过一定的规模时，模型就可以自动在从没见过的新指令上也能生成有效的回答。这种能力对于上线部署至关重要，因为用户总会提新的问题，模型得答得出来才行。</p>
+</li>
+<li>
+<p><strong>代码生成和代码理解</strong>：这个能力很显然，因为模型用代码训练过。</p>
+</li>
+<li>
+<p>利用<strong>思维链 (chain-of-thought) 进行复杂推理</strong>：初代 GPT3 的模型思维链推理的能力很弱甚至没有。code-davinci-002 和 text-davinci-002 是两个拥有足够强的思维链推理能力的模型。</p>
+</li>
+</ul>
+<blockquote>
+<p>Chain-of-Thought：思维链，表示在写 prompt 的时候，不仅给出结果，还要一步一步地写结果是怎么推出来的</p>
+</blockquote>
+<p>思维链推理之所以重要，是因为思维链可能是解锁突现能力和超越缩放法则 (scaling laws) 的关键。请参阅上一篇博文。</p>
+<blockquote>
+<p>Scaling Laws: 缩放法则，表示模型的效果的线性增长要求模型的大小指数增长</p>
+</blockquote>
+<p>这些能力从何而来？</p>
+<p>与之前的模型相比，两个主要区别是<strong>指令微调</strong>和<strong>代码训练</strong>。具体来说</p>
+<ul>
+<li>
+<p>能够<strong>响应人类指令</strong>的能力是<strong>指令微调</strong>的直接产物。</p>
+</li>
+<li>
+<p><strong>对没有见过的指令做出反馈</strong>的泛化能力是在指令数量超过一定程度之后自动出现的，T0、Flan 和 FlanPaLM 论文进一步证明了这一点</p>
+</li>
+<li>
+<p>使用<strong>思维链</strong>进行<strong>复杂推理</strong>的能力很可能是代码训练的一个神奇的副产物。对此，我们有以下的事实作为一些支持：</p>
+<ul>
+<li>
+<p>最初的 GPT-3 没有接受过代码训练，它不能做<strong>思维链</strong>。</p>
+</li>
+<li>
+<p>text-davinci-001 模型，虽然经过了指令微调，但第一版思维链论文报告说，它的它思维链推理的能力非常弱 —— 所以<strong>指令微调可能不是思维链存在的原因，代码训练才是模型能做思维链推理的最可能原因</strong>。</p>
+</li>
+<li>
+<p>PaLM 有 5% 的代码训练数据，可以做思维链。</p>
+</li>
+<li>
+<p>Codex论文中的代码数据量为 159G ，大约是初代 GPT-3 5700 亿训练数据的28%。code-davinci-002 及其后续变体可以做思维链推理。</p>
+</li>
+<li>
+<p>在 HELM 测试中，Liang et al. (2022) 对不同模型进行了大规模评估。他们发现了针对代码训练的模型具有很强的语言推理能力，包括 120亿参数的code-cushman-001.。</p>
+</li>
+<li>
+<p>我们在 AI2 的工作也表明，当配备复杂的思维链时，code-davinci-002 在 GSM8K 等重要数学基准上是目前表现最好的模型</p>
+</li>
+<li>
+<p>直觉来说，<strong>面向过程的编程 <strong>(procedure-oriented programming) 跟人类</strong>逐步解决任务</strong>的过程很类似，<strong>面向对象编程</strong> (object-oriented programming) 跟人类将复杂任务<strong>分解为多个简单任务</strong>的过程很类似。</p>
+</li>
+<li>
+<p>以上所有观察结果都是代码与推理能力 / 思维链之间的相关性。代码和推理能力 / 思维链之间的这种相关性对研究社区来说是一个非常有趣的问题，但目前仍未得到很好的理解。然而，仍然没有确凿的证据表明代码训练就是CoT和复杂推理的原因。 思维链的来源仍然是一个开放性的研究问题。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>此外， <strong>代码训练</strong>另一个可能的副产品是<strong>长距离依赖</strong>，正如Peter Liu所指出：“语言中的下个词语预测通常是非常局部的，而代码通常需要更长的依赖关系来做一些事情，比如前后括号的匹配或引用远处的函数定义”。这里我想进一步补充的是：由于面向对象编程中的类继承，代码也可能有助于模型建立编码层次结构的能力。我们将对这一假设的检验留给未来的工作。</p>
+</li>
+</ul>
+<p>另外还要注意一些细节差异：</p>
+<ul>
+<li>
+<p>text-davinci-002 与 code-davinci-002</p>
+<ul>
+<li>
+<p>Code-davinci-002 是基础模型，text-davinci-002 是指令微调 code-davinci-002 的产物（见 OpenAI 的文档）。它在以下数据上作了微调：（一）人工标注的指令和期待的输出；（二）由人工标注者选择的模型输出。</p>
+</li>
+<li>
+<p>当有上下文示例 (in-context example) 的时候， Code-davinci-002 更擅长上下文学习；当没有上下文示例 / 零样本的时候， text-davinci-002 在零样本任务完成方面表现更好。从这个意义上说，text-davinci-002 更符合人类的期待（因为对一个任务写上下文示例可能会比较麻烦）。</p>
+</li>
+<li>
+<p>OpenAI 不太可能故意牺牲了上下文学习的能力换取零样本能力 —— 上下文学习能力的降低更多是指令学习的一个副作用，OpenAI 管这叫对齐税。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>001 模型（code-cushman-001 和 text-davinci-001）v.s. 002 模型（code-davinci-002 和 text-davinci-002）</p>
+<ul>
+<li>
+<p>001 模型主要是为了做纯代码 / 纯文本任务；002 模型则深度融合了代码训练和指令微调，代码和文本都行。</p>
+</li>
+<li>
+<p>Code-davinci-002 可能是第一个深度融合了代码训练和指令微调的模型。证据有：code-cushman-001 可以进行推理但在纯文本上表现不佳，text-davinci-001 在纯文本上表现不错但在推理上不大行。code-davinci-002 则可以同时做到这两点。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="这些能力是在预训练之后已经存在还是在之后通过微调注入？">这些能力是在预训练之后已经存在还是在之后通过微调注入？</h3>
+<p>在这个阶段，我们已经确定了指令微调和代码训练的关键作用。一个重要的问题是如何进一步分析代码训练和指令微调的影响？具体来说：上述三种能力是否已经存在于初代的GPT-3中，只是**通过指令和代码训练触发 / 解锁？**或者这些能力在初代的 GPT-3 中并不存在，是通过指令和代码训练注入？如果答案已经在初代的 GPT-3 中，<strong>那么这些能力也应该在 OPT 中。因此，要复现这些能力，或许可以直接通过指令和代码调整 OPT。</strong> 但是，code-davinci-002 也可能不是基于最初的 GPT-3 davinci，而是基于比初代 GPT-3 更大的模型。如果是这种情况，可能就没办法通过调整 OPT 来复现了。研究社区需要进一步弄清楚 OpenAI 训练了什么样的模型作为 code-davinci-002 的基础模型。</p>
+<p>我们有以下的假设和证据：</p>
+<ul>
+<li>
+<p>code-davinci-002的<strong>基础模型可能不是初代GPT-3 davinci 模型</strong>。以下是证据：</p>
+<ul>
+<li>
+<p>初代的GPT-3在数据集 C4 2016 - 2019 上训练，而 code-davinci-002 训练集则在延长到2021年才结束。因此 code-davinci-002 有可能在 C4 的 2019-2021 版本上训练。</p>
+</li>
+<li>
+<p>初代的 GPT-3 有一个大小为 2048 个词的上下文窗口。code-davinci-002 的上下文窗口则为 8192。GPT 系列使用<code>绝对位置嵌入</code> (absolute positional embedding)，直接对绝对位置嵌入进行外推而不经过训练是比较难的，并且会严重损害模型的性能（参考 Press et al., 2022）。如果 code-davinci-002 是基于初代GPT-3，那OpenAI 是如何扩展上下文窗口的？</p>
+</li>
+</ul>
+</li>
+<li>
+<p>另一方面，无论基础模型是初代的 GPT-3 还是后来训练的模型， <strong>遵循指令和零样本泛化的能力都可能已经存在于基础模型中，<strong>后来才通过指令微调来</strong>解锁 （而不是注入）</strong></p>
+<ul>
+<li>
+<p>这主要是因为 OpenAI 的论文报告的指令数据量大小只有 77K，比预训练数据少了几个数量级。</p>
+</li>
+<li>
+<p>其他指令微调论文进一步证明了数据集大小对模型性能的对比，例如 Chung et al. (2022) 的工作中， Flan-PaLM 的指令微调仅为预训练计算的 0.4%。一般来说，指令数据会显著少于预训练数据。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>然而 ，<strong>模型的复杂推理能力可能是在预训练阶段通过代码数据注入</strong></p>
+<ul>
+<li>
+<p>代码数据集的规模与上述指令微调的情况不同。这里的代码数据量足够大，可以占据训练数据的重要部分（例如，PaLM 有 8% 的代码训练数据）</p>
+</li>
+<li>
+<p>如上所述，在 code-davinci-002 之前的模型 text-davinci-001 大概没有在代码数据上面微调过，所以它的推理 / 思维链能力是非常差的，正如第一版思维链论文中所报告的那样，有时甚至比参数量更小的 code-cushman-001 还差。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>区分<strong>代码训练和指令微调效果的最好方法</strong>可能是比较 code-cushman-001、T5 和 FlanT5</p>
+<ul>
+<li>
+<p>因为它们具有相似的模型大小（110亿 和 120亿），相似的训练数据集 (C4)，它们最大的区别就是有没有在代码上训练过 / 有没有做过指令微调。</p>
+</li>
+<li>
+<p>目前还没有这样的比较。我们把这个留给未来的研究。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="text-davinci-003-和-ChatGPT，基于人类反馈的强化学习-Reinforcement-Learning-from-Human-Feedback-RLHF-的威力">text-davinci-003 和 ChatGPT，基于人类反馈的强化学习(Reinforcement Learning from Human Feedback, RLHF) 的威力</h2>
+<p>在当前阶段（2022 年 12 月）， text-davinci-002、text-davinci-003 和 ChatGPT之间几乎没有严格的统计上的比较 ，主要是因为</p>
+<ul>
+<li>
+<p>text-davinci-003 和 ChatGPT 在撰写本文时才发布不到一个月。</p>
+</li>
+<li>
+<p><code>ChatGPT</code> 不能通过 OpenAI API 被调用，所以想要在标准基准上测试它很麻烦。<br>
+所以在这些模型之间的比较更多是基于研究社区的集体经验 （统计上不是很严格）。不过，我们相信初步的描述性比较仍然可以揭示模型的机制。</p>
+</li>
+</ul>
+<p>我们首先注意到以下 text-davinci-002，text-davinci-003 和 ChatGPT 之间的比较：</p>
+<ul>
+<li>
+<p>所有三个模型都经过<strong>指令微调</strong>。</p>
+</li>
+<li>
+<p>text-davinci-002 是一个经过**监督学习指令微调 (supervised instruction tuning) **的模型</p>
+</li>
+<li>
+<p>text-davinci-003 和 ChatGPT 是<strong>基于人类反馈的强化学习的指令微调</strong> (Instruction tuning with Reinforcement Learning from Human Feedback RLHF)。这是它们之间最显着的区别。</p>
+</li>
+</ul>
+<p>这意味着大多数新模型的行为都是** RLHF 的产物。**</p>
+<p>那么让我们看看 RLHF 触发的能力：</p>
+<ul>
+<li>
+<p><strong>翔实的回应</strong>：text-davinci-003 的生成通常比 text-davinci-002长。ChatGPT 的回应则更加冗长，以至于用户必须明确要求“用一句话回答我”，才能得到更加简洁的回答。这是 RLHF 的直接产物。</p>
+</li>
+<li>
+<p><strong>公正的回应</strong>：ChatGPT 通常对涉及多个实体利益的事件（例如政治事件）给出非常平衡的回答。这也是RLHF的产物。</p>
+</li>
+<li>
+<p><strong>拒绝不当问题</strong>：这是内容过滤器和由 RLHF 触发的模型自身能力的结合，过滤器过滤掉一部分，然后模型再拒绝一部分。</p>
+</li>
+<li>
+<p><strong>拒绝其知识范围之外的问题</strong>：例如，拒绝在2021 年 6 月之后发生的新事件（因为它没在这之后的数据上训练过）。这是 RLHF 最神奇的部分，因为它使模型能够隐式地区分哪些问题在其知识范围内，哪些问题不在其知识范围内。</p>
+</li>
+</ul>
+<p>有两件事情值得注意：</p>
+<ul>
+<li>
+<p>所有的能力都是模型本来就有的， <strong>而不是通过RLHF 注入的</strong>。RLHF 的作用是<strong>触发 / 解锁突现能力</strong>。这个论点主要来自于数据量大小的比较：因为与预训练的数据量相比，RLHF 占用的计算量 / 数据量要少得多。</p>
+</li>
+<li>
+<p>模型<strong>知道它不知道什么不是通过编写规则来实现的</strong>， 而是通过RLHF解锁的。这是一个非常令人惊讶的发现，因为 RLHF 的最初目标是让模型生成复合人类期望的回答，这更多是让模型生成安全的句子，而不是让模型知道它不知道的内容。</p>
+</li>
+</ul>
+<p>幕后发生的事情可能是：</p>
+<ul>
+<li>
+<p>ChatGPT: 通过<strong>牺牲上下文学习</strong>的能力<strong>换取建模对话历史的能力</strong>。这是一个基于经验的观测结果，因为 ChatGPT 似乎不像 text-davinci-003 那样受到上下文演示的强烈影响。</p>
+</li>
+<li>
+<p>text-davinci-003：恢复了 text-davinci-002 所牺牲的上下文学习能力， <strong>提高零样本的能力</strong>。我们不确定这是否也是 RLHF 或其他东西的副产品。 根据instructGPT的论文，这是来自于强化学习调整阶段混入了语言建模的目标（而不是 RLHF 本身）。</p>
+</li>
+</ul>
+<h2 id="总结当前阶段GPT-3-5的进化历程">总结当前阶段GPT-3.5的进化历程</h2>
+<p>到目前为止，我们已经仔细检查了沿着进化树出现的所有能力，下表总结了演化路径：</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230221215512.jpeg" alt=""></p>
+<p>我们可以得出结论：</p>
+<ul>
+<li>
+<p>语言生成能力 + 基础世界知识 + 上下文学习都是来自于预训练（davinci）</p>
+</li>
+<li>
+<p>存储大量知识的能力来自 1750 亿的参数量。</p>
+</li>
+<li>
+<p>遵循指令和泛化到新任务的能力来自于扩大指令学习中指令的数量（Davinci-instruct-beta)</p>
+</li>
+<li>
+<p>执行复杂推理的能力很可能来自于代码训练（code-davinci-002）</p>
+</li>
+<li>
+<p>生成中立、客观的能力、安全和翔实的答案来自与人类的对齐。具体来说：</p>
+<ul>
+<li>
+<p>如果是监督学习版，得到的模型是text-davinci-002</p>
+</li>
+<li>
+<p>如果是强化学习版 (RLHF) ，得到的模型是text-davinci-003</p>
+</li>
+<li>
+<p>无论是有监督还是 RLHF ，模型在很多任务的性能都无法超过 code-davinci-002 ，这种因为对齐而造成性能衰退的现象叫做对齐税。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>对话能力也来自于 RLHF（ChatGPT），具体来说它牺牲了上下文学习的能力，来换取：</p>
+<ul>
+<li>
+<p>建模对话历史</p>
+</li>
+<li>
+<p>增加对话信息量</p>
+</li>
+<li>
+<p>拒绝模型知识范围之外的问题</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="GPT-3-5目前不能做什么">GPT-3.5目前不能做什么</h2>
+<p>虽然GPT-3.5是自然语言处理研究中的重要一步，但它并没有完全包含许多研究人员（包括 AI2）设想的所有理想属性。以下是GPT-3.5不具备的某些重要属性：</p>
+<ul>
+<li>
+<p><strong>实时改写模型的信念</strong>：当模型表达对某事的信念时，如果该信念是错误的，我们可能很难纠正它：</p>
+<ul>
+<li>
+<p>我最近遇到的一个例子是：ChatGPT 坚持认为<code> 3599</code> 是一个质数，尽管它承认 3599 = 59 * 61。另外，请参阅Reddit上关于游得最快的海洋哺乳动物的例子。</p>
+</li>
+<li>
+<p>然而，模型信念的强度似乎存在不同的层次。一个例子是即使我告诉它达斯·维达（星球大战电影中的人物）赢得了2020年大选，模型依旧会认为美国现任总统是拜登。但是如果我将选举年份改为 2024 年，它就会认为总统是达斯·维达是 2026 年的总统。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>形式推理</strong>：GPT-3.5系列不能在数学或一阶逻辑等形式严格的系统中进行推理：</p>
+<ul>
+<li>
+<p>一个例子是严格的数学证明，要求中间步骤中不能跳，不能模糊，不能错。</p>
+</li>
+<li>
+<p>但这种严格推理到底是应该让语言模型做还是让符号系统做还有待讨论。一个例子是，与其努力让 GPT 做三位数加法，不如直接调 Python。</p>
+</li>
+<li>
+<p>生成如何做豆腐脑的方法。做豆腐脑的时候，中间很多步骤模糊一点是可以接受的，比如到底是做咸的还是做甜的。只要整体步骤大致正确，做出来的豆腐脑儿就能吃。</p>
+</li>
+<li>
+<p>数学定理的证明思路。证明思路是用语言表达的非正式的逐步解法，其中每一步的严格推导可以不用太具体。证明思路经常被用到数学教学：只要老师给一个大致正确的整体步骤，学生就可以大概明白。然后老师把具体的证明细节作为作业布置给学生，答案略。</p>
+</li>
+<li>
+<p>在自然语言处理的文献中， “推理” 一词的定义很多时候不太明确。但如果我们从模糊性的角度来看，例如一些问题 (a) 非常模棱两可，没有推理；(b) 有点儿逻辑在里面，但有些地方也可以模糊；© 非常严谨，不能有任何歧义。那么，</p>
+</li>
+<li>
+<p>模型可以很好地进行 (b) 类的带模糊性的推理，例子有：</p>
+</li>
+<li>
+<p>GPT-3.5 不能进行类型 © 的推理（推理不能容忍歧义）。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>从互联网进行检索</strong>：GPT-3.5 系列（暂时）不能直接搜索互联网</p>
+<ul>
+<li>
+<p>模型的内部知识总是在某个时间被切断。模型始终需要最新的知识来回答最新的问题。</p>
+</li>
+<li>
+<p>回想一下，我们已经讨论过 1750 亿的参数大量用于存储知识。如果我们可以将知识卸载到模型之外，那么模型参数可能会大大减少，最终它甚至可以在手机上运行（疯狂的想法，但 ChatGPT 已经足够科幻了，谁知道未来会怎样呢).</p>
+</li>
+<li>
+<p>但是有一篇 WebGPT 论文发表于2021年12月，里面就让 GPT 调用了搜索引擎。所以检索的能力已经在 OpenAI 内部进行了测试。</p>
+</li>
+<li>
+<p>这里需要区分的一点是，GPT-3.5 的两个重要但不同的能力是 知识 和 推理。一般来说，如果我们能够 将知识部分卸载到外部的检索系统，让语言模型只专注于推理，这就很不错了。 因为：</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="结论">结论</h2>
+<p>在这篇博文中，我们仔细检查了<code>GPT-3.5</code>系列的能力范围，并追溯了它们所有突现能力的来源。初代GPT-3模型通过预训练获得生成能力、世界知识和<code>in-context learning</code>。然后通过<code>instruction tuning</code>的模型分支获得了遵循指令和能泛化到没有见过的任务的能力。经过代码训练的分支模型则获得了代码理解的能力，作为代码训练的副产品，模型同时潜在地获得了复杂推理的能力。结合这两个分支，code-davinci-002似乎是具有所有强大能力的最强GPT-3.5模型。接下来通过有监督的instruction tuning和 RLHF通过牺牲模型能力换取与人类对齐，即对齐税。RLHF 使模型能够生成更翔实和公正的答案，同时拒绝其知识范围之外的问题。</p>
+<p>我们希望这篇文章能够帮助提供一个清晰的GPT评估图，并引发一些关于语言模型、instruction tuning和code tuning的讨论。最重要的是， 我们希望这篇文章可以作为在开源社区内复现GPT-3.5的路线图。</p>
+<blockquote>
+<p>“因为山就在那里。”——乔治·马洛里，珠穆朗玛峰探险先驱</p>
+</blockquote>
+<h2 id="常见问题">常见问题</h2>
+<p>这篇文章中的这些说法更像是假设 (hypothesis) 还是结论 (conclusion)？</p>
+<ul>
+<li>
+<p>复杂推理的能力来自于代码训练是我们倾向于相信的假设</p>
+</li>
+<li>
+<p>对没有见过的任务泛化能力来自大规模指令学习 是至少 4 篇论文的结论</p>
+</li>
+<li>
+<p>GPT-3.5来自于其他大型基础模型，而不是1750亿参数的GPT-3 是有根据的猜测。</p>
+</li>
+<li>
+<p>所有这些能力都已经存在了，通过instruction tuning，无论是有监督学习或强化学习的方式来解锁而不是注入这些能力 是一个强有力的假设，强到你不敢不信。主要是因为instruction tuning数据量比预训练数据量少了几个数量级</p>
+</li>
+<li>
+<p>结论 = 许多证据支持这些说法的正确性；假设 = 有正面证据但不够有力；有根据的猜测 = 没有确凿的证据，但某些因素会指向这个方向</p>
+</li>
+</ul>
+<p>为什么其他模型（如 OPT 和 BLOOM）没有那么强大？</p>
+<ul>
+<li>
+<p>OPT大概是因为训练过程太不稳定</p>
+</li>
+<li>
+<p>BLOOM的情况则未知。如果您有更多意见，请与我联系</p>
+</li>
+</ul>
+<h2 id="参考文献">参考文献</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://crfm.stanford.edu/helm/v1.0/?group=knowledge">https://crfm.stanford.edu/helm/v1.0/?group=knowledge</a></li>
+<li>Xie et. al. 2021. An Explanation of In-context Learning as Implicit Bayesian Inference</li>
+<li>Min et. al. 2022. Rethinking the Role of Demonstrations: What Makes In-Context Learning Work?</li>
+<li>一个很有趣的但是还在审稿中的工作: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2211.15661">https://arxiv.org/abs/2211.15661</a></li>
+<li>Brown. et. al. 2020. Language Models are Few-Shot Learners</li>
+<li>Chen et. al. 2021. Evaluating Large Language Models Trained on Code</li>
+<li>Ouyang et. al. 2022. Training language models to follow instructions with human feedback</li>
+<li>Instruction tuning 有两个版本，一个是 supervised tuning，另一个是 reinforcement learning from human feedback (RLHF). ChatGPT 就是通过 RLHF 得来的</li>
+<li><a target="_blank" rel="noopener" href="https://beta.openai.com/docs/model-index-for-researchers">https://beta.openai.com/docs/model-index-for-researchers</a></li>
+<li>Suzgun et. al. 2022. Challenging BIG-Bench tasks and whether chain-of-thought can solve them</li>
+<li>Chung et. al. 2022. Scaling Instruction-Finetuned Language Models</li>
+<li>Fu et. al. 2022. Complexity-based Prompting for Multi-Step Reasoning</li>
+<li>Madaan et. al. 2022. Language Models of Code are Few-Shot Commonsense Learners</li>
+<li>Ouyang et. al. 2022. Training language models to follow instructions with human feedback</li>
+<li>Suzgun et. al. 2022. Challenging BIG-Bench tasks and whether chain-of-thought can solve them</li>
+<li>Chung et. al. 2022. Scaling Instruction-Finetuned Language Models</li>
+<li>Fu et. al. 2022. Complexity-based Prompting for Multi-Step Reasoning</li>
+<li>Madaan et. al. 2022. Language Models of Code are Few-Shot Commonsense Learners</li>
+<li>参见附录中的图8 <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2201.11903v1.pdf">https://arxiv.org/pdf/2201.11903v1.pdf</a></li>
+<li><a target="_blank" rel="noopener" href="https://yaofu.notion.site/A-Closer-Look-at-Large-Language-Models-Emergent-Abilities-493876b55df5479d80686f68a1abd72f">https://yaofu.notion.site/A-Closer-Look-at-Large-Language-Models-Emergent-Abilities-493876b55df5479d80686f68a1abd72f</a></li>
+<li>Sanh. et. al. Oct 2021. Multitask Prompted Training Enables Zero-Shot Task Generalization</li>
+<li>Wei et. al. Sep 2021. Finetuned Language Models Are Zero-Shot Learners</li>
+<li>Chung et. al. Oct 2022. Scaling Instruction-Finetuned Language Models</li>
+<li>第一个版本(<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2201.11903v1.pdf">https://arxiv.org/pdf/2201.11903v1.pdf</a>) 报告了davinci在GSM8K上的准确率 12.4</li>
+<li>第五个版本 (<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2201.11903v5.pdf">https://arxiv.org/pdf/2201.11903v5.pdf</a>) 报告了 code-davinci-002 准确率为 63.1</li>
+<li>Chowdhery et. al. Apr. 2022. PaLM: Scaling Language Modeling with Pathways</li>
+<li>Chen et. al. Jul 2021. Evaluating Large Language Models Trained on Code</li>
+<li>Brown. et. al. May 2020. Language Models are Few-Shot Learners</li>
+<li>Liang et. al. Nov 2022. Holistic Evaluation of Language Models</li>
+<li>Fu et. al. Oct 2022. Complexity-based Prompting for Multi-Step Reasoning.</li>
+<li><a target="_blank" rel="noopener" href="https://openreview.net/forum?id=yf1icZHC-l9">https://openreview.net/forum?id=yf1icZHC-l9</a></li>
+<li><a target="_blank" rel="noopener" href="https://twitter.com/peterjliu/status/1603098202856722432?s=46&amp;t=Gw2wumo4l8kIRaGzXDXyRw">https://twitter.com/peterjliu/status/1603098202856722432?s=46&amp;t=Gw2wumo4l8kIRaGzXDXyRw</a></li>
+<li><a target="_blank" rel="noopener" href="https://beta.openai.com/docs/model-index-for-researchers">https://beta.openai.com/docs/model-index-for-researchers</a></li>
+<li>Press et. al. 2022. Train Short, Test Long: Attention with Linear Biases Enables Input Length Extrapolation</li>
+<li>Ouyang et. al. 2022. Training language models to follow instructions with human feedback</li>
+<li><a target="_blank" rel="noopener" href="https://help.openai.com/en/articles/6779149-how-do-text-davinci-002-and-text-davinci-003-differ">https://help.openai.com/en/articles/6779149-how-do-text-davinci-002-and-text-davinci-003-differ</a></li>
+<li>见https://arxiv.org/pdf/2210.11416.pdf的附录D</li>
+<li><a target="_blank" rel="noopener" href="https://help.openai.com/en/articles/6779149-how-do-text-davinci-002-and-text-davinci-003-differ">https://help.openai.com/en/articles/6779149-how-do-text-davinci-002-and-text-davinci-003-differ</a></li>
+<li><a target="_blank" rel="noopener" href="https://scale.com/blog/gpt-3-davinci-003-comparison">https://scale.com/blog/gpt-3-davinci-003-comparison</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.02155">https://arxiv.org/abs/2203.02155</a></li>
+<li>Brown et. al. May 2020. Language Models are Few-Shot Learners.</li>
+<li>Zhang et. al. 2022. OPT: Open Pre-trained Transformer Language Models</li>
+<li>Sanh. et. al. Oct 2021. Multitask Prompted Training Enables Zero-Shot Task Generalization</li>
+<li>Ouyang et. al. Mar 2022. Training language models to follow instructions with human feedback</li>
+<li>Wei. et. al. Sep 2021. Finetuned Language Models Are Zero-Shot Learners</li>
+<li>Chung. et. al. Oct 2022. Scaling Instruction-Finetuned Language Models</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/salesforce/CodeGen">https://github.com/salesforce/CodeGen</a></li>
+<li>Chen et. al. Jul 2021. Evaluating Large Language Models Trained on Code</li>
+<li><a target="_blank" rel="noopener" href="https://www.deepmind.com/blog/building-safer-dialogue-agents">https://www.deepmind.com/blog/building-safer-dialogue-agents</a></li>
+<li>Stiennon et. al. Sep. 2020. Learning to summarize from human feedback</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/allenai/RL4LMs">https://github.com/allenai/RL4LMs</a></li>
+<li>
+<pre><code>https://www.reddit.com/r/ChatGPT/comments/zd7l8t/nice/
+</code></pre>
+</li>
+<li>
+<pre><code> https://openai.com/blog/webgpt/
+</code></pre>
+</li>
+</ol>
+<p>原文地址：<a target="_blank" rel="noopener" href="https://franxyao.github.io/blog.html">https://franxyao.github.io/blog.html</a></p>
+<p>作者：符尧, <a href="mailto:yao.fu@ed.ac.uk">yao.fu@ed.ac.uk</a>，爱丁堡大学 (University of Edinburgh) 博士生，本科毕业于北京大学<br>
+与 彭昊，Tushar Khot<br>
+在 艾伦人工智能研究院 (Allen Institute for AI) 共同完成英文原稿<br>
+与 剑桥大学郭志江 共同翻译为中文<br>
+感谢 上海交通大学何俊贤，加州大学洛杉矶分校鲁盼，达特茅斯学院刘睿博 对初稿的讨论与建议。<br>
+感谢 Raj Ammanabrolu (Allen Institute for AI), Peter Liu (Google Brain), Brendan Dolan-Gavitt (New York University), Denny Zhou (Google Brain) 对终稿的讨论和建议，他们的建议极大程度上增加了本文的完整度</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Weitang Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lonepatient.top/2023/02/10/How_does_GPT_Obtain_its_Ability__Tracing_Emergent_Abilities_of_Language_Models_to_their_Sources.html">http://lonepatient.top/2023/02/10/How_does_GPT_Obtain_its_Ability__Tracing_Emergent_Abilities_of_Language_Models_to_their_Sources.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lonepatient.top" target="_blank">闲记算法</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/NLP/">NLP</a><a class="post-meta__tags" href="/tags/%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/">大型语言模型</a><a class="post-meta__tags" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><a class="post-meta__tags" href="/tags/Prompt/">Prompt</a><a class="post-meta__tags" href="/tags/Few-Shot/">Few-Shot</a><a class="post-meta__tags" href="/tags/ChatGPT/">ChatGPT</a></div><div class="post_share"><div class="social-share" data-image="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230221220609.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html"><img class="prev-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">通向AGI之路：大型语言模型（LLM）技术精要</div></div></a></div><div class="next-post pull-right"><a href="/2023/02/08/zwift.html"><img class="next-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230908212104.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Zwift单机版详细安装过程</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/03/10/ChatGPT_Research_Report.html" title="ChatGPT 调研报告"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230310095306.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-10</div><div class="title">ChatGPT 调研报告</div></div></a></div><div><a href="/2023/04/02/The-Art-of-Asking-ChatGPT-for-High-Quality-Answers-A-complete-Guide-to-Prompt-Engineering-Technique-main.html" title="Prompts技巧工程完全指南"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230410200141.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-02</div><div class="title">Prompts技巧工程完全指南</div></div></a></div><div><a href="/2023/03/16/chatIE.html" title="Zero-Shot Information Extraction via Chatting with ChatGPT"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230316193601.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-16</div><div class="title">Zero-Shot Information Extraction via Chatting with ChatGPT</div></div></a></div><div><a href="/2023/04/18/A_Survey_of_Large_Language_Models.html" title="A Survey of Large Language Models"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230419195449.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-18</div><div class="title">A Survey of Large Language Models</div></div></a></div><div><a href="/2022/12/30/Chain_of_Thought_Prompting_Elicits_Reasoning_in_Large_Language_Models.html" title="Chain of Thought Prompting Elicits Reasoning in Large Language Models"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230222150222.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-12-30</div><div class="title">Chain of Thought Prompting Elicits Reasoning in Large Language Models</div></div></a></div><div><a href="/2023/03/09/ChatGPT_Annotation_Guide_is_Here_Data_is_Key.html" title="ChatGPT 标注指南来了！数据是关键"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230309220444.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-09</div><div class="title">ChatGPT 标注指南来了！数据是关键</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Weitang Liu</div><div class="author-info__description">一个致力于记录技术的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lonePatient"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/lonePatient" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liuweitangmath@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/277974397" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有任何问题可通过留言板或者微信公众号给我留言，谢谢！<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201201102.jpg"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#2020%E7%89%88%E5%88%9D%E4%BB%A3GPT-3%E4%B8%8E%E5%A4%A7%E8%A7%84%E6%A8%A1%E8%AE%AD%E7%BB%83"><span class="toc-number">1.</span> <span class="toc-text">2020版初代GPT-3与大规模训练</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E-2020-%E7%89%88-GPT-3-%E5%88%B0-2022-%E7%89%88-ChatGPT"><span class="toc-number">2.</span> <span class="toc-text">从 2020 版 GPT-3 到 2022 版 ChatGPT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code-Davinci-002%E5%92%8C-Text-Davinci-002%EF%BC%8C%E5%9C%A8%E4%BB%A3%E7%A0%81%E4%B8%8A%E8%AE%AD%E7%BB%83%EF%BC%8C%E5%9C%A8%E6%8C%87%E4%BB%A4%E4%B8%8A%E5%BE%AE%E8%B0%83"><span class="toc-number">3.</span> <span class="toc-text">Code-Davinci-002和 Text-Davinci-002，在代码上训练，在指令上微调</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E6%9D%82%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E7%9A%84%E6%9D%A5%E6%BA%90%E5%92%8C%E6%B3%9B%E5%8C%96%E5%88%B0%E6%96%B0%E4%BB%BB%E5%8A%A1%E7%9A%84%E8%83%BD%E5%8A%9B"><span class="toc-number">3.1.</span> <span class="toc-text">复杂推理能力的来源和泛化到新任务的能力</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E4%BA%9B%E8%83%BD%E5%8A%9B%E6%98%AF%E5%9C%A8%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B9%8B%E5%90%8E%E5%B7%B2%E7%BB%8F%E5%AD%98%E5%9C%A8%E8%BF%98%E6%98%AF%E5%9C%A8%E4%B9%8B%E5%90%8E%E9%80%9A%E8%BF%87%E5%BE%AE%E8%B0%83%E6%B3%A8%E5%85%A5%EF%BC%9F"><span class="toc-number">3.2.</span> <span class="toc-text">这些能力是在预训练之后已经存在还是在之后通过微调注入？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#text-davinci-003-%E5%92%8C-ChatGPT%EF%BC%8C%E5%9F%BA%E4%BA%8E%E4%BA%BA%E7%B1%BB%E5%8F%8D%E9%A6%88%E7%9A%84%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0-Reinforcement-Learning-from-Human-Feedback-RLHF-%E7%9A%84%E5%A8%81%E5%8A%9B"><span class="toc-number">4.</span> <span class="toc-text">text-davinci-003 和 ChatGPT，基于人类反馈的强化学习(Reinforcement Learning from Human Feedback, RLHF) 的威力</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E5%BD%93%E5%89%8D%E9%98%B6%E6%AE%B5GPT-3-5%E7%9A%84%E8%BF%9B%E5%8C%96%E5%8E%86%E7%A8%8B"><span class="toc-number">5.</span> <span class="toc-text">总结当前阶段GPT-3.5的进化历程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GPT-3-5%E7%9B%AE%E5%89%8D%E4%B8%8D%E8%83%BD%E5%81%9A%E4%BB%80%E4%B9%88"><span class="toc-number">6.</span> <span class="toc-text">GPT-3.5目前不能做什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA"><span class="toc-number">7.</span> <span class="toc-text">结论</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">8.</span> <span class="toc-text">常见问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-number">9.</span> <span class="toc-text">参考文献</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-27"/></a><div class="content"><a class="title" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27">Arxiv今日论文 | 2026-02-27</a><time datetime="2026-02-27T12:30:00.000Z" title="发表于 2026-02-27 12:30:00">2026-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-26"/></a><div class="content"><a class="title" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26">Arxiv今日论文 | 2026-02-26</a><time datetime="2026-02-26T12:30:00.000Z" title="发表于 2026-02-26 12:30:00">2026-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-25"/></a><div class="content"><a class="title" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25">Arxiv今日论文 | 2026-02-25</a><time datetime="2026-02-25T12:30:00.000Z" title="发表于 2026-02-25 12:30:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225222513891.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板">大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板</a><time datetime="2026-02-25T12:00:00.000Z" title="发表于 2026-02-25 12:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225123005910.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mid-training：构建预训练与后训练之间的分布式桥梁"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁">mid-training：构建预训练与后训练之间的分布式桥梁</a><time datetime="2026-02-25T00:00:00.000Z" title="发表于 2026-02-25 00:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-24"/></a><div class="content"><a class="title" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24">Arxiv今日论文 | 2026-02-24</a><time datetime="2026-02-24T12:30:00.000Z" title="发表于 2026-02-24 12:30:00">2026-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-23"/></a><div class="content"><a class="title" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23">Arxiv今日论文 | 2026-02-23</a><time datetime="2026-02-23T12:30:00.000Z" title="发表于 2026-02-23 12:30:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260223165943195.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用&quot;深度思考率&quot;精准度量LLM推理质量"/></a><div class="content"><a class="title" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量">用&quot;深度思考率&quot;精准度量LLM推理质量</a><time datetime="2026-02-23T12:00:00.000Z" title="发表于 2026-02-23 12:00:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-20"/></a><div class="content"><a class="title" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20">Arxiv今日论文 | 2026-02-20</a><time datetime="2026-02-20T12:30:00.000Z" title="发表于 2026-02-20 12:30:00">2026-02-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201606857.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前沿大模型训练方法：深度解析与实践指南"/></a><div class="content"><a class="title" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南">前沿大模型训练方法：深度解析与实践指南</a><time datetime="2026-02-20T10:30:00.000Z" title="发表于 2026-02-20 10:30:00">2026-02-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Weitang Liu</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.lonepatient.top/',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.lonepatient.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo@1.4.11/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (99)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/计算机视觉/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 计算机视觉 (16)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/知识图谱/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 知识图谱 (13)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">👩‍💻 深度学习 (139)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item" style="visibility: hidden"></div><a class="magnet_link_more"  href="http://lonepatient.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-18</span><a class="blog-slider__title" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">通向AGI之路：大型语言模型（LLM）技术精要</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/07/12/gaiic_2022_ner_top10.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220712181905.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-07-12</span><a class="blog-slider__title" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">GAIIC2022商品标题识别二等奖获奖解决思路</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230807190424.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-01-20</span><a class="blog-slider__title" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">2025-03|高质量中文预训练模型集合</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

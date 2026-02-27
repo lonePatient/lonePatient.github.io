@@ -1,0 +1,723 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>知识抽取-实体及关系抽取 | 闲记算法</title><meta name="keywords" content="知识图谱,实体抽取,关系抽取"><meta name="author" content="Weitang Liu"><meta name="copyright" content="Weitang Liu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="知识抽取涉及的“知识”通常是 清楚的、事实性的信息，这些信息来自不同的来源和结构，而对不同数据源进行的知识抽取的方法各有不同，从结构化数据中获取知识用 D2R，其难点在于复杂表数据的处理，包括嵌套表、多列、外键关联等，从链接数据中获取知识用图映射，难点在于数据对齐，从半结构化数据中获取知识用包装器，难点在于 wrapper 的自动生成、更新和维护，这一篇主要讲从文本中获取知识，也就是我们广义上说的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="知识抽取-实体及关系抽取">
+<meta property="og:url" content="http://lonepatient.top/2018/09/16/knowledge-extraction-entity-and-relationshaip.html">
+<meta property="og:site_name" content="闲记算法">
+<meta property="og:description" content="知识抽取涉及的“知识”通常是 清楚的、事实性的信息，这些信息来自不同的来源和结构，而对不同数据源进行的知识抽取的方法各有不同，从结构化数据中获取知识用 D2R，其难点在于复杂表数据的处理，包括嵌套表、多列、外键关联等，从链接数据中获取知识用图映射，难点在于数据对齐，从半结构化数据中获取知识用包装器，难点在于 wrapper 的自动生成、更新和维护，这一篇主要讲从文本中获取知识，也就是我们广义上说的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/66325724.jpg">
+<meta property="article:published_time" content="2018-09-16T23:27:08.000Z">
+<meta property="article:modified_time" content="2026-02-27T07:52:12.938Z">
+<meta property="article:author" content="Weitang Liu">
+<meta property="article:tag" content="知识图谱">
+<meta property="article:tag" content="实体抽取">
+<meta property="article:tag" content="关系抽取">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/66325724.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lonepatient.top/2018/09/16/knowledge-extraction-entity-and-relationshaip"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//s4.cnzz.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" data-pjax="data-pjax" src="https://s4.cnzz.com/z_stat.php?id=1273275888&amp;web_id=1273275888"></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-02-27 07:52:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/backgroud.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><script src="https://at.alicdn.com/t/c/font_3570527_dthoqrrv2tv.css"></script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JwRQtLKZggvJH4sJ",ck:"JwRQtLKZggvJH4sJ"})</script><link rel="stylesheet" href="/css/universe.css"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536467946304280" crossorigin="anonymous"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/66325724.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">闲记算法</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">知识抽取-实体及关系抽取<a class="post-edit-link" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts/knowledge-extraction-entity-and-relationshaip.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-09-16T23:27:08.000Z" title="发表于 2018-09-16 23:27:08">2018-09-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-27T07:52:12.938Z" title="更新于 2026-02-27 07:52:12">2026-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/">知识图谱</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/%E5%9F%BA%E6%9C%AC%E6%8A%80%E6%9C%AF/">基本技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/%E5%9F%BA%E6%9C%AC%E6%8A%80%E6%9C%AF/%E7%9F%A5%E8%AF%86%E6%8A%BD%E5%8F%96/">知识抽取</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">8.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>29分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2018/09/16/knowledge-extraction-entity-and-relationshaip.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>知识抽取涉及的“知识”通常是 清楚的、事实性的信息，这些信息来自不同的来源和结构，而对不同数据源进行的知识抽取的方法各有不同，从结构化数据中获取知识用 D2R，其难点在于复杂表数据的处理，包括嵌套表、多列、外键关联等，从链接数据中获取知识用图映射，难点在于数据对齐，从半结构化数据中获取知识用包装器，难点在于 wrapper 的自动生成、更新和维护，这一篇主要讲从文本中获取知识，也就是我们广义上说的信息抽取。</p>
+<span id="more"></span>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/66325724.jpg" alt=""></p>
+<p>信息抽取三个最重要/最受关注的子任务：</p>
+<ul>
+<li>
+<p>实体抽取<br>
+也就是命名实体识别，包括实体的检测（find）和分类（classify）</p>
+</li>
+<li>
+<p>关系抽取<br>
+通常我们说的三元组（triple） 抽取，一个谓词（predicate）带 2 个形参（argument），如 Founding-location(IBM,New York)</p>
+</li>
+<li>
+<p>事件抽取<br>
+相当于一种多元关系的抽取</p>
+</li>
+</ul>
+<p>篇幅限制，这一篇主要整理实体抽取和关系抽取，下一篇再上事件抽取。</p>
+<h2 id="相关竞赛与数据集">相关竞赛与数据集</h2>
+<p>信息抽取相关的会议/数据集有 MUC、ACE、KBP、SemEval 等。其中，ACE(Automated Content Extraction) 对 MUC 定义的任务进行了融合、分类和细化，<a target="_blank" rel="noopener" href="https://tac.nist.gov/2017/KBP/">KBP(Knowledge Base Population)</a> 对 ACE 定义的任务进一步修订，分了四个独立任务和一个整合任务，包括:</p>
+<ul>
+<li>Cold Start KB (CSKB)<br>
+端到端的冷启动知识构建</li>
+<li>Entity Discovery and Linking (EDL)<br>
+实体发现与链接</li>
+<li>Slot Filling (SF)<br>
+槽填充</li>
+<li>Event<br>
+事件抽取</li>
+<li>Belief/Sentiment (BeSt)<br>
+信念和情感</li>
+</ul>
+<p>至于 SemEval 主要是词义消歧评测，目的是增加人们对词义、多义现象的理解。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/79824560.jpg" alt=""></p>
+<p>ACE 的 17 类关系<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/83622825.jpg" alt=""></p>
+<p>具体的应用实例<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/24692381.jpg" alt=""></p>
+<p>常用的 Freebase relations</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">people/person/nationality,</span><br><span class="line">people/person/profession,</span><br><span class="line">biology/organism_higher_classification,</span><br><span class="line">location/location/contains</span><br><span class="line">people/person/place-of-birth</span><br><span class="line">film/film/genre</span><br></pre></td></tr></table></figure>
+<p>还有的一些世界范围内知名的高质量大规模开放知识图谱，如包括 DBpedia、Yago、Wikidata、BabelNet、ConceptNet 以及 Microsoft Concept Graph等，中文的有开放知识图谱平台 OpenKG……</p>
+<h2 id="实体抽取">实体抽取</h2>
+<p>实体抽取或者说命名实体识别（NER）在信息抽取中扮演着重要角色，主要抽取的是文本中的原子信息元素，如人名、组织/机构名、地理位置、事件/日期、字符值、金额值等。实体抽取任务有两个关键词：find &amp; classify，找到命名实体，并进行分类。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/53550738.jpg" alt=""></p>
+<p>主要应用：</p>
+<ul>
+<li>命名实体作为索引和超链接</li>
+<li>情感分析的准备步骤，在情感分析的文本中需要识别公司和产品，才能进一步为情感词归类</li>
+<li>关系抽取（Relation Extraction）的准备步骤</li>
+<li>QA 系统，大多数答案都是命名实体</li>
+</ul>
+<h3 id="传统机器学习方法">传统机器学习方法</h3>
+<p>标准流程：<br>
+Training:</p>
+<ol>
+<li>收集代表性的训练文档</li>
+<li>为每个 token 标记命名实体(不属于任何实体就标 Others O)</li>
+<li>设计适合该文本和类别的特征提取方法</li>
+<li>训练一个 sequence classifier 来预测数据的 label</li>
+</ol>
+<p>Testing:</p>
+<ol>
+<li>收集测试文档</li>
+<li>运行 sequence classifier 给每个 token 做标记</li>
+<li>输出命名实体</li>
+</ol>
+<h3 id="编码方式">编码方式</h3>
+<p>看一下最常用的两种 sequence labeling 的编码方式，IO encoding 简单的为每个 token 标注，如果不是 NE 就标为 O(other)，所以一共需要 C+1 个类别(label)。而 IOB encoding 需要 2C+1 个类别(label)，因为它标了 NE boundary，B 代表 begining，NE 开始的位置，I 代表 continue，承接上一个 NE，如果连续出现两个 B，自然就表示上一个 B 已经结束了。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/88223678.jpg" alt=""></p>
+<p>在 Stanford NER 里，用的其实是 IO encoding，有两个原因，一是 IO encoding 运行速度更快，二是在实践中，两种编码方式的效果差不多。IO encoding 确定 boundary 的依据是，如果有连续的 token 类别不为 O，那么类别相同，同属一个 NE；类别不相同，就分割，相同的 sequence 属同一个 NE。而实际上，两个 NE 是相同类别这样的现象出现的很少，如上面的例子，Sue，Mengqiu Huang 两个同是 PER 类别，并不多见，更重要的是，在实践中，虽然 IOB encoding 能规定 boundary，而实际上它也很少能做对，它也会把 Sue Mengqiu Huang 分为同一个 PER，这主要是因为更多的类别会带来数据的稀疏。</p>
+<h3 id="特征选择">特征选择</h3>
+<p>序列标记任务一些常用的特征：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">• 词</span><br><span class="line">    当前词</span><br><span class="line">    上一个/下一个词</span><br><span class="line">• 其他可推断的语言特征</span><br><span class="line">    语音标签</span><br><span class="line">    语法依存关系</span><br><span class="line">• 标签内容</span><br><span class="line">    P上一个/下一个标签信息</span><br></pre></td></tr></table></figure>
+<p>再来看两个比较重要的 feature</p>
+<p>** Word substrings**</p>
+<p>Word substrings (包括前后缀)的作用是很大的，以下面的例子为例，NE 中间有 ‘oxa’ 的十有八九是 drug，NE 中间有 ‘:’ 的则大多都是 movie，而以 field 结尾的 NE 往往是 place。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/46626728.jpg" alt=""></p>
+<p>** Word shapes**<br>
+可以做一个 mapping，把 单词长度(length)、大写(capitalization)、数字(numerals)、希腊字母(Greek eltters)、单词内部标点(internal punctuation) 这些字本身的特征都考虑进去。<br>
+如下表，把所有大写字母映射为 X，小写字母映射为 x，数字映射为 d…</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/57163078.jpg" alt=""></p>
+<h3 id="序列模型">序列模型</h3>
+<p>NLP 的很多数据都是序列类型，像 sequence of characters, words, phrases, lines, sentences，我们可以把这些任务当做是给每一个 item 打标签，如下图：</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/21998617.jpg" alt=""></p>
+<p>常见的序列模型有 <em>有向图模型</em> 如 HMM，假设特征之间相互独立，找到使得 P(X,Y) 最大的参数，生成式模型；<em>无向图模型</em> 如 CRF，没有特征独立的假设，找到使得 P(Y|X) 最大的参数，判别式模型。相对而言，CRF 优化的是联合概率（整个序列，实际就是最终目标），而不是每个时刻最优点的拼接，一般而言性能比 CRF 要好，在小数据上拟合也会更好。</p>
+<p>整个流程如图所示：<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/958409.jpg" alt=""></p>
+<p>讨论下最后的 inference<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/658202.jpg" alt=""><br>
+最基础的是 “decide one sequence at a time and move on”，也就是一个 greedy inference，比如在词性标注中，可能模型在位置 2 的时候挑了当前最好的 PoS tag，但是到了位置 4 的时候，其实发现位置 2 应该有更好的选择，然而，greedy inference 并不会 care 这些。因为它是贪婪的，只要当前最好就行了。除了 greedy inference，比较常见的还有 beam inference 和 viterbi inference。</p>
+<h4 id="Greedy-Inference">Greedy Inference</h4>
+<p>优点:</p>
+<ol>
+<li>速度快，没有额外的内存要求</li>
+<li>非常易于实现</li>
+<li>有很丰富的特征，表现不错</li>
+</ol>
+<p>缺点:</p>
+<ol>
+<li>贪婪</li>
+</ol>
+<h4 id="Beam-Inference">Beam Inference</h4>
+<ol>
+<li>在每一个位置，都保留 top k 种可能(当前的完整序列)</li>
+<li>在每个状态下，考虑上一步保存的序列来进行推进</li>
+</ol>
+<p>优点:</p>
+<p>速度快，没有额外的内存要求<br>
+易于实现(不用动态规划)</p>
+<p>缺点:</p>
+<ol>
+<li>不精确，不能保证找到全局最优</li>
+</ol>
+<h4 id="Viterbi-Inference">Viterbi Inference</h4>
+<ul>
+<li>动态规划</li>
+<li>需要维护一个 fix small window</li>
+</ul>
+<p>优点:</p>
+<ol>
+<li>非常精确，能保证找到全局最优序列</li>
+</ol>
+<p>缺点:</p>
+<ol start="2">
+<li>难以实现远距离的 state-state interaction</li>
+</ol>
+<h3 id="深度学习方法">深度学习方法</h3>
+<h4 id="LSTM-CRF">LSTM+CRF</h4>
+<p>最经典的 LSTM+CRF]，端到端的判别式模型，LSTM 利用过去的输入特征，CRF 利用句子级的标注信息，可以有效地使用过去和未来的标注来预测当前的标注。<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/58816095.jpg" alt=""></p>
+<h4 id="评价指标">评价指标</h4>
+<p>评估 IR 系统或者文本分类的任务，我们通常会用到 precision，recall，F1 这种 set-based metrics，见信息检索评价的 Unranked Boolean Retrieval Model 部分，但是在这里对 NER 这种 sequence 类型任务的评估，如果用这些 metrics，可能出现 boundary error 之类的问题。因为 NER 的评估是按每个 entity 而不是每个 token 来计算的，我们需要看 entity 的 boundary。</p>
+<p>以下面一句话为例</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">First Bank of Chicago announced earnings...</span><br></pre></td></tr></table></figure>
+<p>正确的 NE 应该是 First Bank of Chicago，类别是 ORG，然而系统识别了 Bank of Chicago，类别 ORG，也就是说，右边界(right boundary)是对的，但是左边界(left boundary)是错误的，这其实是一个常见的错误。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">正确的标注：</span><br><span class="line">ORG - (1,4)</span><br><span class="line">系统：</span><br><span class="line">ORG - (2,4)</span><br></pre></td></tr></table></figure>
+<p>而计算 precision，recall 的时候，我们会发现，对 ORG - (1,4) 而言，系统产生了一个 false negative，对 ORG - (2,4) 而言，系统产生了一个 false positive！所以系统有了 2 个错误。F1 measure 对 precision，recall 进行加权平均，结果会更好一些，所以经常用来作为 NER 任务的评估手段。另外，专家提出了别的建议，比如说给出 partial credit，如 MUC scorer metric，然而，对哪种 case 给多少的 credit，也需要精心设计。</p>
+<h4 id="其他-实体链接">其他-实体链接</h4>
+<p>实体识别完成之后还需要进行归一化，比如万达集团、大连万达集团、万达集团有限公司这些实体其实是可以融合的。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/47568693.jpg" alt=""></p>
+<p>主要步骤如下：</p>
+<ol>
+<li>实体识别<br>
+命名实体识别，词典匹配</li>
+<li>候选实体生成<br>
+表层名字扩展，搜索引擎，查询实体引用表</li>
+<li>候选实体消歧<br>
+图方法，概率生成模型，主题模型，深度学习</li>
+</ol>
+<p>补充一些开源系统：</p>
+<p><a target="_blank" rel="noopener" href="http://acube.di.unipi.it/tagme">http://acube.di.unipi.it/tagme</a><br>
+<a target="_blank" rel="noopener" href="https://github.com/parthatalukdar/junto">https://github.com/parthatalukdar/junto</a><br>
+<a target="_blank" rel="noopener" href="http://orion.tw.rpi.edu/~zhengj3/wod/wikify.php">http://orion.tw.rpi.edu/~zhengj3/wod/wikify.php</a><br>
+<a target="_blank" rel="noopener" href="https://github.com/yahoo/FEL">https://github.com/yahoo/FEL</a><br>
+<a target="_blank" rel="noopener" href="https://github.com/yago-naga/aida">https://github.com/yago-naga/aida</a><br>
+<a target="_blank" rel="noopener" href="http://www.nzdl.org/wikification/about.html">http://www.nzdl.org/wikification/about.html</a><br>
+<a target="_blank" rel="noopener" href="http://aksw.org/Projects/AGDISTIS.html">http://aksw.org/Projects/AGDISTIS.html</a><br>
+<a target="_blank" rel="noopener" href="https://github.com/dalab/pboh-entity-linking">https://github.com/dalab/pboh-entity-linking</a></p>
+<h2 id="关系抽取">关系抽取</h2>
+<p>关系抽取 需要从文本中抽取两个或多个实体之间的语义关系，主要方法有下面几类：</p>
+<ul>
+<li>基于模板的方法(hand-written patterns)
+<ul>
+<li>基于触发词/字符串</li>
+<li>基于依存句法</li>
+</ul>
+</li>
+<li>监督学习(supervised machine learning)
+<ul>
+<li>机器学习</li>
+<li>深度学习（Pipeline vs Joint Model）</li>
+</ul>
+</li>
+<li>半监督/无监督学习(semi-supervised and unsupervised)
+<ul>
+<li>Bootstrapping</li>
+<li>Distant supervision</li>
+<li>Unsupervised learning from the web</li>
+</ul>
+</li>
+</ul>
+<h3 id="基于模板的方法">基于模板的方法</h3>
+<h4 id="基于触发词-字符串">基于触发词/字符串</h4>
+<p>首先是基于字符串的 pattern，举一个 IS-A 的关系</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Agar is a substance prepared from a mixture of red algae, **such as** Gelidium, for laboratory or industrial use</span><br></pre></td></tr></table></figure>
+<p>通过 such as 可以判断这是一种 IS-A 的关系，由此可以写的规则是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">“Y such as X ((, X)* (, and|or) X)”</span><br><span class="line">“such Y as X”</span><br><span class="line">“X or other Y”</span><br><span class="line">“X and other Y”</span><br><span class="line">“Y including X”</span><br><span class="line">“Y, especially X”</span><br></pre></td></tr></table></figure>
+<p>另一个直觉是，更多的关系是在特定实体之间的，所以可以用 NER 标签来帮助关系抽取，如</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">•  located-in (ORGANIZATION, LOCATION)</span><br><span class="line">•  founded (PERSON, ORGANIZATION)</span><br><span class="line">•  cures (DRUG, DISEASE)</span><br></pre></td></tr></table></figure>
+<p>也就是说我们可以把基于字符串的 pattern 和基于 NER 的 pattern 结合起来，就有了下面的例子。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/94029937.jpg" alt=""></p>
+<p>对应的工具有 Stanford CoreNLP 的 tokensRegex。</p>
+<h3 id="基于依存句法">基于依存句法</h3>
+<p>通常可以以动词为起点构建规则，对节点上的词性和边上的依存关系进行限定。流程为:</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/51124862.jpg" alt=""><br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/97964949.jpg" alt=""></p>
+<h3 id="小结">小结</h3>
+<p>手写规则的 优点 是：</p>
+<ul>
+<li>人工规则有高准确率(high-precision)</li>
+<li>可以为特定领域定制(tailor)</li>
+<li>在小规模数据集上容易实现，构建简单</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>低召回率(low-recall)</li>
+<li>特定领域的模板需要专家构建，要考虑周全所有可能的 pattern 很难，也很费时间精力</li>
+<li>需要为每条关系来定义 pattern</li>
+<li>难以维护</li>
+<li>可移植性差</li>
+</ul>
+<h3 id="监督学习-机器学习">监督学习-机器学习</h3>
+<h4 id="研究综述">研究综述</h4>
+<p>漆桂林,高桓,吴天星.知识图谱研究进展[J].情报工程,2017,3(1):004-025</p>
+<blockquote>
+<p>Zhou[13] 在 Kambhatla 的基础上加入了基本词组块信息和 WordNet，使用 SVM 作为分类器，在实体关系识别的准确率达到了 55.5%，实验表明实体类别信息的特征有助于提高关系抽取性能； Zelenko[14] 等人使用浅层句法分析树上最小公共子树来表达关系实例，计算两颗子树之间的核函数，通过训练例如 SVM 模型的分类器来对实例进行分。但基于核函数的方法的问题是召回率普遍较低，这是由于相似度计算过程匹配约束比较严格，因此在后续研究对基于核函数改进中，大部分是围绕改进召回率。但随着时间的推移，语料的增多、深度学习在图像和语音领域获得成功，信息抽取逐渐转向了基于神经模型的研究，相关的语料被提出作为测试标准，如 SemEval-2010 task 8[15]。基于神经网络方法的研究有，Hashimoto[16] 等人利用 Word Embedding 方法从标注语料中学习特定的名词对的上下文特征，然后将该特征加入到神经网络分类器中，在 SemEval-2010 task 8 上取得了 F1 值 82.8% 的效果。基于神经网络模型显著的特点是不需要加入太多的特征，一般可用的特征有词向量、位置等，因此有人提出利用基于联合抽取模型，这种模型可以同时抽取实体和其之间的关系。联合抽取模型的优点是可以避免流水线模型存在的错误累积[17-22]。其中比较有代表性的工作是[20]，该方法通过提出全新的全局特征作为算法的软约束，进而同时提高关系抽取和实体抽取的准确率，该方法在 ACE 语料上比传统的流水线方法 F1 提高了 1.5%，；另一项工作是 [22]，利用双层的 LSTM-RNN 模型训练分类模型，第一层 LSTM 输入的是词向量、位置特征和词性来识别实体的类型。训练得到的 LSTM 中隐藏层的分布式表达和实体的分类标签信息作为第二层 RNN 模型的输入，第二层的输入实体之间的依存路径，第二层训练对关系的分类，通过神经网络同时优化 LSTM 和 RNN 的模型参数，实验与另一个采用神经网络的联合抽取模型[21]相比在关系分类上有一定的提升。但无论是流水线方法还是联合抽取方法，都属于有监督学习，因此需要大量的训练语料，尤其是对基于神经网络的方法，需要大量的语料进行模型训练，因此这些方法都不适用于构建大规模的 Knowledge Base。</p>
+</blockquote>
+<p>[13] Guodong Z, Jian S, Jie Z, et al. ExploringVarious Knowledge in relation Extraction.[c]// acl2005, Meeting of the Association for ComputationalLinguistics, Proceedings of the Conference, 25-30 June, 2005, University of Michigan, USA. DBLP.2005:419-444.<br>
+[14] Zelenko D, Aone C, Richardella A. KernelMethods for relation Extraction[J]. the Journal ofMachine Learning Research, 2003, 1083-1106.<br>
+[15] Hendrickx I, Kim S N, Kozareva Z, et al.semEval-2010 task 8: Multi-way classification ofsemantic relations between Pairs of nominals[c]//the Workshop on semantic Evaluations: recentachievements and Future Directions. association forComputational Linguistics, 2009:94-99.<br>
+[16] Hashimoto K, Stenetorp P, Miwa M, et al. Task-oriented learning of Word Embeddings for semanticRelation Classification[J], Computer Science,2015:268-278.<br>
+[17] Singh S, Riedel S, Martin B, et al. JointInference of Entities, Relations, and Coreference[C]//the Workshop on automated Knowledge baseConstruction ,San Francisco, CA, USA, October27-november 1. 2013:1-6.<br>
+[18] Miwa M, Sasaki Y. Modeling Joint Entity andrelation Extraction with table representation[c]//conference on Empirical Methods in naturalLanguage Processing. 2014:944-948.<br>
+[19] Lu W, Dan R. Joint Mention Extraction andclassification with Mention Hypergraphs[c]//conference on Empirical Methods in naturallanguage Processing. 2015:857-867.<br>
+[20] Li Q, Ji H. Incremental Joint Extraction of EntityMentions and relations[c]// annual Meeting of theAssociation for Computational Linguistics. 2014:402-412.<br>
+[21] Kate R J, Mooney R J. Joint Entity andrelation Extraction using card-pyramid Parsing[c]//conference on computational natural languagelearning. 2010:203-212.<br>
+[22] Miwa M, Bansal M. End-to-End Relation Extraction using lstMs on sequences and tree structures[c]// annual Meeting of the association for computational linguistics. 2016:1105-1116.</p>
+<h3 id="分类器">分类器</h3>
+<p>标准流程：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">- 预先定义好想提取的关系集合</span><br><span class="line">- 选择相关的命名实体集合</span><br><span class="line">- 寻找并标注数据</span><br><span class="line">   选择有代表性的语料库</span><br><span class="line">    标记命名实体</span><br><span class="line">    人工标注实体间的关系</span><br><span class="line">    分成训练、开发、测试集</span><br><span class="line">- 设计特征</span><br><span class="line">- 选择并训练分类器</span><br><span class="line">- 评估结果</span><br></pre></td></tr></table></figure>
+<p>为了提高 efficiency，通常我们会训练两个分类器，第一个分类器是 yes/no 的二分类，判断命名实体间是否有关系，如果有关系，再送到第二个分类器，给实体分配关系类别。这样做的好处是通过排除大多数的实体对来加快分类器的训练过程，另一方面，对每个任务可以使用 task-specific feature-set。</p>
+<p>可以采用的分类器可以是 MaxEnt、Naive Bayes、SVM 等。</p>
+<h3 id="特征">特征</h3>
+<p>直接上例子：</p>
+<p>E.g., American Airlines, a unit of AMR, immediately matched the move, spokesman Tim Wagner said</p>
+<p>Mention 1: American Airlines<br>
+Mention 2: Tim Wagner</p>
+<p>用到的特征可以有：<br>
+Word features</p>
+<ul>
+<li>Headwords of M1 and M2, and combination<br>
+M1: Airlines, M2: Wagner, Combination: Airlines-Wagner</li>
+<li>Bag of words and bigrams in M1 and M2<br>
+{American, Airlines, Tim, Wagner, American Airlines, Tim Wagner}</li>
+<li>Words or bigrams in particular positions left and right of M1/M2<br>
+M2: -1 spokesman<br>
+M2: +1 said</li>
+<li>Bag of words or bigrams between the two entities<br>
+{a, AMR, of, immediately, matched, move, spokesman, the, unit}</li>
+</ul>
+<h4 id="Named-Entities-Type-and-Mention-Level-Features">Named Entities Type and Mention Level Features</h4>
+<ul>
+<li>Named-entities types<br>
+M1: ORG<br>
+M2: PERSON</li>
+<li>Concatenation of the two named-entities types<br>
+ORG-PERSON</li>
+<li>Entity Level of M1 and M2 (NAME, NOMINAL, PRONOUN)<br>
+M1: NAME [it or he would be PRONOUN]<br>
+M2: NAME [the company would be NOMINAL]</li>
+</ul>
+<h4 id="Parse-Features">Parse Features</h4>
+<ul>
+<li>Base syntactic chunk sequence from one to the other<br>
+NP NP PP VP NP NP</li>
+<li>Constituent path through the tree from one to the other<br>
+NP ↑ NP ↑ S ↑ S ↓ NP</li>
+<li>Dependency path<br>
+Airlines matched Wagner said</li>
+</ul>
+<h4 id="Gazetteer-and-trigger-word-features">Gazetteer and trigger word features</h4>
+<ul>
+<li>Trigger list for family: kinship terms<br>
+parent, wife, husband, grandparent, etc. [from WordNet]</li>
+<li>Gazetteer:<br>
+List of useful geo or geopolitical words<br>
+Country name list<br>
+Other sub-entities</li>
+</ul>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/37445086.jpg" alt=""></p>
+<p>或者从另一个角度考虑，可以分为</p>
+<ul>
+<li>轻量级<br>
+实体的特征，包括实体前后的词，实体类型，实体之间的距离等</li>
+<li>中等量级<br>
+考虑 chunk，如 NP，VP，PP 这类短语</li>
+<li>重量级<br>
+考虑实体间的依存关系，实体间树结构的距离，及其他特定的结构信息</li>
+</ul>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/43961106.jpg" alt=""></p>
+<h3 id="监督学习-深度学习">监督学习-深度学习</h3>
+<p>深度学习方法又分为两大类，pipeline 和 joint model</p>
+<ul>
+<li>Pipeline<br>
+把实体识别和关系分类作为两个完全独立的过程，不会相互影响，关系的识别依赖于实体识别的效果</li>
+<li>Joint Model<br>
+实体识别和关系分类的过程共同优化</li>
+</ul>
+<p>深度学习用到的特征通常有：</p>
+<ul>
+<li>Position embeddings</li>
+<li>Word embeddings</li>
+<li>Knowledge embeddings</li>
+</ul>
+<p>模型通常有 CNN/RNN + attention，损失函数 ranking loss 要优于交叉熵。</p>
+<h4 id="Pipeline">Pipeline</h4>
+<p><strong>CR-CNN</strong></p>
+<p>Santos et. al Computer Science 2015<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/28913131.jpg" alt=""></p>
+<p>输入层 word embedding + position embedding，用 6 个卷积核 + max pooling 生成句子向量表示，与关系（类别）向量做点积求相似度，作为关系分类的结果。<br>
+损失函数用的是 pairwise ranking loss function<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/34314979.jpg" alt=""></p>
+<p>训练时每个样本有两个标签，正确标签 y+ 和错误标签 c-，m+ 和 m- 对应了两个 margin，γ 用来缩放，希望 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo stretchy="false">(</mo><mi>x</mi><msub><mo stretchy="false">)</mo><mrow><mi>y</mi><mo>+</mo></mrow></msub></mrow><annotation encoding="application/x-tex">s(x)_{y+}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord mathnormal">s</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2583em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span><span class="mord mtight">+</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> 越大越好，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo stretchy="false">(</mo><mi>x</mi><msub><mo stretchy="false">)</mo><mrow><mi>c</mi><mo>−</mo></mrow></msub></mrow><annotation encoding="application/x-tex">s(x)_{c−}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">s</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2583em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span><span class="mord mtight">−</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span></span></span></span> 越小越好。</p>
+<p>另外还有一些 tips：</p>
+<ul>
+<li>负样本选择 s(x)c 最大的标签，便于更好地将比较类似的两种 label 分开</li>
+<li>加了一个 Artifical Class，表示两个实体没有任何关系，可以理解为 Other/拒识，训练时不考虑这一类，损失函数的第一项直接置 0，预测时如果其他 actual classes 的分数都为负，那么就分为 Other，对于整体的 performance 有提升</li>
+<li>position feature 是每个 word 与两个 entity 的相对距离，强调了两个实体的作用，认为距离实体近的单词更重要，PE 对效果的提升明显，但实际上只用两个实体间的 word embedding 作为输入代替整个句子的 word embedding+position embedding，也有相近效果，且输入更少实现更简单。<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/783266.jpg" alt=""></li>
+</ul>
+<p>** Att-CNN**<br>
+Relation Classification via Multi-Level Attention CNNs<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/95161914.jpg" alt=""></p>
+<p>用了两个层面的 Attention，一个是输入层对两个 entity 的注意力，另一个是在卷积后的 pooling 阶段，用 attention pooling 代替 max pooling 来加强相关性强的词的权重。</p>
+<p>输入特征还是 word embedding 和 position embedding，另外做了 n-gram 的操作，取每个词前后 k/2 个词作为上下文信息，每个词的 embedding size 就是$ (d_w+2d_p)∗k$。这个滑动窗口的效果其实和卷积一样，但因为输入层后直接接了 attention，所以这里先做了 n-gram。</p>
+<p>第一层 input attention 用两个对角矩阵分别对应两个 entity，对角线各元素是输入位置对应词与实体间的相关性分数 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>A</mi><mrow><mi>i</mi><mo separator="true">,</mo><mi>i</mi></mrow><mi>j</mi></msubsup><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><msub><mi>e</mi><mi>j</mi></msub><mo separator="true">,</mo><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">A_{i,i}^j=f(e_j,w_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.3555em;vertical-align:-0.413em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9426em;"><span style="top:-2.4231em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">i</span></span></span></span><span style="top:-3.1809em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.413em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>，通过词向量內积衡量相关性，然后 softmax 归一化，每个词对两个实体各有一个权重 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\alpha_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>,<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\alpha_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，然后进行加权把权重与输入 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">z_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.044em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 融合，有三种融合方法， 求平均、拼接、相减（类似 transE 操作，把 relation 看做两个权重的差）。这一层的 attention 捕捉的是句中单词与实体的词向量距离，但其实有些线索词如 caused 与实体的相似度不高但很重要。</p>
+<p>接着做正常卷积，然后第二层用 attention pooling 代替 max-pooling，bilinear 方法计算相关度，然后归一化，再做 max pooling 得到模型最后的输出 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>w</mi><mi>O</mi></msup></mrow><annotation encoding="application/x-tex">w^O</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">O</span></span></span></span></span></span></span></span></span></span></span>。</p>
+<p>另外，这篇 paper 还改进了 Santos 提出的 Ranking loss，Ranking loss 里的 distance function 直接用了网络的输出，而这里定义了新的 distance function 来衡量模型输出 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>w</mi><mi>O</mi></msup></mrow><annotation encoding="application/x-tex">w^O</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">O</span></span></span></span></span></span></span></span></span></span></span> 和正确标签对应的向量 relation embedding$ W_y^L$ 的距离：<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/66464569.jpg" alt=""><br>
+用了 L2 正则，然后基于这一距离定义了目标函数：<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/83471456.jpg" alt=""></p>
+<p>两个距离分别为网络输出与正例和与负例的距离，负例照例用了所有错误类别中与输出最接近的，margin 设置的 1。</p>
+<p>这应该是目前最好的方法，SemEval-2010 Task 8 上的 F1 值到了 88。</p>
+<p>** Att-BLSTM**<br>
+Peng Zhou et. al ACL 2016</p>
+<p>CNN 可以处理文本较短的输入，但是长距离的依赖还是需要 LSTM，这一篇就是中规中矩的 BiLSTM+Attn 来做关系分类任务。<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/14931019.jpg" alt=""></p>
+<h4 id="评测">评测</h4>
+<p>各方法在 SemEval-2010 Task 8 上的评测：<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/26726552.jpg" alt=""></p>
+<h3 id="Joint-Model">Joint Model</h3>
+<p>Pipeline 的方法会导致误差的传递，端到端的方法直觉上会更优。</p>
+<h4 id="LSTM-RNNs">LSTM-RNNs</h4>
+<p>Miwa et. al ACL 2016</p>
+<p>用端到端的方式进行抽取，实体识别和关系分类的参数共享，不过判断过程并没有进行交互。<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/15968350.jpg" alt=""></p>
+<p>三个表示层</p>
+<ul>
+<li>
+<p>Embedding layer (word embeddings layer)<br>
+用到了词向量 vw、词性 POS tags vp、依存句法标签 Dependency types vd、实体标签 entity labels ve</p>
+</li>
+<li>
+<p>Sequence layer (word sequence based LSTM-RNN layer)<br>
+<em>负责实体识别</em><br>
+BiLSTM 对句子进行编码，输入是 word embedding 和 POS embedding 的拼接，输出是两个方向的隐层单元输出的拼接 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">s_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><br>
+然后进行实体识别，还是序列标注任务，两层 NN 加一个 softmax 输出标签。打标签的方法用 BILOU(Begin, Inside, Last, Outside, Unit)，解码时考虑到当前标签依赖于上一个标签的问题，输入在 sequence layer 层的输出上还加了上一时刻的 label embedding，用 schedule sampling 的方式来决定用 gold label 还是 predict label<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/91110337.jpg" alt=""></p>
+</li>
+<li>
+<p>Dependency layer (dependency subtree based LSTM-RNN layer )<br>
+<em>负责关系分类</em><br>
+用 tree-structured BiLSTM-RNNs 来表示 relation candidate，捕捉了 top-down 和 bottom-up 双向的关系，输入是 sequence layer 的输出 st，dependency type embedding <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>d</mi></msub></mrow><annotation encoding="application/x-tex">v_d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">d</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，以及 label embedding <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>e</mi></msub></mrow><annotation encoding="application/x-tex">v_e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">e</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，输出是$ d_p$<br>
+关系分类主要还是利用了依存树中两个实体之间的最短路径（shortest path）。主要过程是找到 sequence layer 识别出的所有实体，对每个实体的最后一个单词进行排列组合，再经过 dependency layer 得到每个组合的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">d_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span>，然后同样用两层 NN + softmax 对该组合进行分类，输出这对实体的关系类别。<br>
+<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">d_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> 第一项是 bottom-up LSTM-RNN 的 top LSTM unit，代表实体对的最低公共父节点（the lowest common ancestor of the target word pair p），第二、三项分别是两个实体对应的 top-down LSTM-RNN 的 hidden state。<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/19184818.jpg" alt=""><br>
+不同模型在 SemEval-2010 Task 8 数据集上的效果比较：<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/50960756.jpg" alt=""><br>
+与我们的直觉相反，joint model 不一定能起正作用。不过上面的比较能得到的另一个结论是：外部资源可以来优化模型。</p>
+</li>
+</ul>
+<h3 id="监督学习-评价指标">监督学习-评价指标</h3>
+<p>最常用的 Precision, Recall, F1<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/52092166.jpg" alt=""></p>
+<h3 id="监督学习-小结">监督学习-小结</h3>
+<p>如果测试集和训练集很相似，那么监督学习的准确率会很高，然而，它对不同 genre 的泛化能力有限，模型比较脆弱，也很难扩展新的关系；另一方面，获取这么大的训练集代价也是昂贵的。</p>
+<h3 id="半监督学习">半监督学习</h3>
+<h4 id="研究综述-2">研究综述</h4>
+<p>漆桂林,高桓,吴天星.知识图谱研究进展[J].情报工程,2017,3(1):004-025</p>
+<blockquote>
+<p>Brin[23]等人通过少量的实例学习种子模板，从网络上大量非结构化文本中抽取新的实例，同时学习新的抽取模板，其主要贡献是构建了 DIPRE 系统；Agichtein[24]在 Brin 的基础上对新抽取的实例进行可信度的评分和完善关系描述的模式，设计实现了 Snowball 抽取系统；此后的一些系统都沿着 Bootstrap 的方法，但会加入更合理的对 pattern 描述、更加合理的限制条件和评分策略，或者基于先前系统抽取结果上构建大规模 pattern；如 NELL（Never-EndingLanguage Learner）系统[25-26]，NELL 初始化一个本体和种子 pattern，从大规模的 Web 文本中学习，通过对学习到的内容进行打分来提高准确率，目前已经获得了 280 万个事实。</p>
+</blockquote>
+<p>[23] brin s. Extracting Patterns and relations fromthe World Wide Web[J]. lecture notes in computerScience, 1998, 1590:172-183.<br>
+[24] Agichtein E, Gravano L. Snowball : Extractingrelations from large Plain-text collections[c]// acMConference on Digital Libraries. ACM, 2000:85-94.<br>
+[25] Carlson A, Betteridge J, Kisiel B, et al. Toward anarchitecture for never-Ending language learning.[c]// twenty-Fourth aaai conference on artificialIntelligence, AAAI 2010, Atlanta, Georgia, Usa, July.DBLP, 2010:529-573.<br>
+[26] Mitchell T, Fredkin E. Never-ending Languagelearning[M]// never-Ending language learning.Alphascript Publishing, 2014.</p>
+<h4 id="Seed-based-or-bootstrapping-approaches">Seed-based or bootstrapping approaches</h4>
+<p>半监督学习主要是利用少量的标注信息进行学习，这方面的工作主要是基于 Bootstrap 的方法以及远程监督方法（distance supervision）。基于 Bootstrap 的方法 主要是利用少量实例作为初始种子(seed tuples)的集合，然后利用 pattern 学习方法进行学习，通过不断迭代从非结构化数据中抽取实例，然后从新学到的实例中学习新的 pattern 并扩充 pattern 集合，寻找和发现新的潜在关系三元组。远程监督 方法主要是对知识库与非结构化文本对齐来自动构建大量训练数据，减少模型对人工标注数据的依赖，增强模型跨领域适应能力。</p>
+<p><strong>Relation Bootstrapping</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">•  Gather a set of seed pairs that have relation R</span><br><span class="line">•  Iterate:</span><br><span class="line">1.  Find sentences with these pairs</span><br><span class="line">2.  Look at the context between or around the pair and generalize the context to create patterns</span><br><span class="line">3.  Use the patterns for grep for more pairs</span><br></pre></td></tr></table></figure>
+<p>看一个完整的例子<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/62683819.jpg" alt=""><br>
+从 5 对种子开始，找到包含种子的实例，替换关键词，形成 pattern，迭代匹配，就为 (authoer,book) 抽取到了 relation pattern，x, by y, 和 x, one of y’s</p>
+<p>优点：</p>
+<ul>
+<li>构建成本低，适合大规模构建</li>
+<li>可以发现新的关系（隐含的）</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>对初始给定的种子集敏感</li>
+<li>存在语义漂移问题</li>
+<li>结果准确率较低</li>
+<li>缺乏对每一个结果的置信度的计算</li>
+</ul>
+<p><strong>Snowball</strong></p>
+<p>对 Dipre 算法的改进。Snowball 也是一种相似的迭代算法，Dipre 的 X,Y 可以是任何字符串，而 Snowball 要求 X,Y 必须是命名实体，并且 Snowball 对每个 pattern 计算了 confidence value</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Group instances w/similar prefix, middle, suffix, extract patterns</span><br><span class="line"> •  But require that X and Y be named entites</span><br><span class="line"> •  And compute a confidence for each pattern</span><br><span class="line">ORGANIZATION &#123;&#x27;s, in, headquaters&#125; LOCATION</span><br><span class="line">LOCATION &#123;in, based&#125; ORGANIZATION</span><br></pre></td></tr></table></figure>
+<p><strong>Distant Supervision</strong></p>
+<p>基本假设：两个实体如果在知识库中存在某种关系，则包含该两个实体的非结构化句子均能表示出这种关系。</p>
+<p>具体步骤：</p>
+<p>１．　从知识库中抽取存在关系的实体对<br>
+２．　从非结构化文本中抽取含有实体对的句子作为训练样例，然后提取特征训练分类器。<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/85339511.jpg" alt=""><br>
+Distant Supervision 结合了 bootstrapping 和监督学习的长处，使用一个大的 corpus 来得到海量的 seed example，然后从这些 example 中创建特征，最后与有监督的分类器相结合。</p>
+<p>与监督学习相似的是这种方法用大量特征训练了分类器，通过已有的知识进行监督，不需要用迭代的方法来扩充 pattern。<br>
+与无监督学习相似的是这种方法采用了大量没有标注的数据，对训练语料库中的 genre 并不敏感，适合泛化。</p>
+<p><strong>PCNN + Attention</strong><br>
+Kang Liu <a target="_blank" rel="noopener" href="http://et.al">et.al</a> AI 2017<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/32950130.jpg" alt=""></p>
+<ol>
+<li>
+<p>PCNN<br>
+单一池化难以刻画不同上下文对句向量的贡献，而进行分段池化，根据两个实体把句子分成三段然后对不同部分分别进行池化，刻画更为精准。<br>
+另见 [Distant Supervision for Relation Extraction via Piecewise Convolutional Neural Networks]attention(<a target="_blank" rel="noopener" href="http://www.emnlp2015.org/proceedings/EMNLP/pdf/EMNLP203.pdf">http://www.emnlp2015.org/proceedings/EMNLP/pdf/EMNLP203.pdf</a>)</p>
+</li>
+<li>
+<p>Sentence-level<br>
+远程监督常用的 multi-instance learning，只选取最有可能的一个句子进行训练预测，丢失了大部分信息，句子层面的 attention 对 bag 里所有句子进行加权作为 bag 的特征向量，保留尽可能多的信息，能动态减少噪声句的权重，有利于解决错误标记的问题。<br>
+另见 <a target="_blank" rel="noopener" href="http://www.aclweb.org/anthology/P16-1200">Neural Relation Extraction with Selective Attention over Instances</a><br>
+这里对两个实体向量作差来表示 relation 向量 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mrow><mi>r</mi><mi>e</mi><mi>l</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">v_{relation}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">re</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，如果一个实例能表达这种关系，那么这个实例的向量表达应该和$ v_{relation}$ 高度相似，根据这个假设来计算句向量和关系向量的相关性，其中$ [b_i;v_{relation}]$ 表示垂直级联，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">b_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 是 PCNN 得到的特征输出，softmax 归一化再进行加权，最后再过softmax 进行分类。<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/42249673.jpg" alt=""><br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/53632735.jpg" alt=""></p>
+</li>
+<li>
+<p>Entity representation<br>
+引入了实体的背景知识（Freebase 和 Wikipedia 提供的实体描述信息），增强了实体表达（entity representation），D 是 (entity, description) 的集合表示，ei 是实体表示，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">d_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 通过另一个传统 CNN 对收集到的实体的描述句抽特征得到<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/32930644.jpg" alt=""></p>
+</li>
+</ol>
+<p>希望 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">e_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">d_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 尽可能相似，定义两者间的误差：<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/69841616.jpg" alt=""><br>
+最后的损失函数是交叉熵和实体描述误差的加权和：<br>
+<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/71646212.jpg" alt=""></p>
+<h4 id="小结-2">小结</h4>
+<p>优点：</p>
+<ul>
+<li>可以利用丰富的知识库信息，减少一定的人工标注</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>假设过于肯定，引入大量噪声，存在语义漂移现象</li>
+<li>很难发现新的关系</li>
+</ul>
+<h3 id="无监督学习">无监督学习</h3>
+<h4 id="研究综述-3">研究综述</h4>
+<blockquote>
+<p>Bollegala[27]从搜索引擎摘要中获取和聚合抽取模板，将模板聚类后发现由实体对代表的隐含语义关系; Bollegala[28]使用联合聚类(Co-clustering)算法，利用关系实例和关系模板的对偶性，提高了关系模板聚类效果，同时使用 L1 正则化 Logistics 回归模型，在关系模板聚类结果中筛选出代表性的抽取模板，使得关系抽取在准确率和召回率上都有所提高。</p>
+</blockquote>
+<blockquote>
+<p>无监督学习一般利用语料中存在的大量冗余信息做聚类，在聚类结果的基础上给定关系，但由于聚类方法本身就存在难以描述关系和低频实例召回率低的问题，因此无监督学习一般难以得很好的抽取效果。</p>
+</blockquote>
+<p>[27] Bollegala D T, Matsuo Y, Ishizuka M. Measuringthe similarity between implicit semantic relationsfrom the Web[J]. Www Madrid! track semantic/dataWeb, 2009:651-660.<br>
+[28] Bollegala D T, Matsuo Y, Ishizuka M. RelationalDuality: Unsupervised Extraction of semantic relations between Entities on the Web[c]//International Conference on World Wide Web, WWW 2010, Raleigh, North Carolina, Usa, April. DBLP, 2010:151-160.</p>
+<h2 id="Open-IE">Open IE</h2>
+<p>Open Information Extraction 从网络中抽取关系，没有训练数据，没有关系列表。过程如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. Use parsed data to train a “trustworthy tuple” classifier</span><br><span class="line">2. Single-pass extract all relations between NPs, keep if trustworthy</span><br><span class="line">3. Assessor ranks relations based on text redundancy</span><br><span class="line">E.g.,</span><br><span class="line">(FCI, specializes in, sobware development)</span><br><span class="line">(Tesla, invented, coil transformer)</span><br></pre></td></tr></table></figure>
+<h3 id="半监督-无监督学习-评价指标">半监督/无监督学习-评价指标</h3>
+<p>因为抽取的是新的关系，并不能准确的计算 precision 和 recall，所以我们只能估计，从结果集中随机抽取一个关系的 sample，然后人工来检验准确率</p>
+\hat{P}={\text{Number of correctly extracted relations in the sample| \over \text{Total number of extracted relations in the sample}} $
+
+也可以计算不同 recall level 上的 precision，比如说分别计算在前 1000，10,000，100,000 个新的关系中的 precision，在各个情况下随机取样。
+
+然而，并没有方法来计算 recall。
+
+原文地址:http://www.shuang0420.com/2018/09/15/%E7%9F%A5%E8%AF%86%E6%8A%BD%E5%8F%96-%E5%AE%9E%E4%BD%93%E5%8F%8A%E5%85%B3%E7%B3%BB%E6%8A%BD%E5%8F%96/
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Weitang Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lonepatient.top/2018/09/16/knowledge-extraction-entity-and-relationshaip.html">http://lonepatient.top/2018/09/16/knowledge-extraction-entity-and-relationshaip.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lonepatient.top" target="_blank">闲记算法</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/">知识图谱</a><a class="post-meta__tags" href="/tags/%E5%AE%9E%E4%BD%93%E6%8A%BD%E5%8F%96/">实体抽取</a><a class="post-meta__tags" href="/tags/%E5%85%B3%E7%B3%BB%E6%8A%BD%E5%8F%96/">关系抽取</a></div><div class="post_share"><div class="social-share" data-image="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/66325724.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2018/09/24/a-review-of-dropout-as-applied-to-rnns.html"><img class="prev-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-9-24/54079865.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Dropout在RNN中的应用综述</div></div></a></div><div class="next-post pull-right"><a href="/2018/09/09/kaggle-home-credit-default-risk.html"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Kaggle竞赛-Home Credit Risk小结</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2018/03/20/Application_of_deep_learning_in_knowledge_graph_construction.html" title="深度学习在知识图谱构建中的应用"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-03-20</div><div class="title">深度学习在知识图谱构建中的应用</div></div></a></div><div><a href="/2018/08/31/E-commerce-knowledge-graph.html" title="电商知识图谱"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/57633521.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-08-31</div><div class="title">电商知识图谱</div></div></a></div><div><a href="/2018/04/01/Know-Evolve-Deep-Temporal-Reasoning-for-Dynamic-KG.html" title="Know-Evolve-Deep Temporal Reasoning for Dynamic KG"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/42382734.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-04-01</div><div class="title">Know-Evolve-Deep Temporal Reasoning for Dynamic KG</div></div></a></div><div><a href="/2018/06/29/The_whole_process_of_knowledge_graph_construction_from_bottom_to_top.html" title="一文揭秘！自底向上构建知识图谱全过程"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-06-29</div><div class="title">一文揭秘！自底向上构建知识图谱全过程</div></div></a></div><div><a href="/2018/08/27/health-knowledge-graph.html" title="健康知识图谱"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-27/4294525.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-08-27</div><div class="title">健康知识图谱</div></div></a></div><div><a href="/2018/04/21/introduce knowledge graph.html" title="为什么需要知识图谱？什么是知识图谱?KG的前世今生"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/44425462.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-04-21</div><div class="title">为什么需要知识图谱？什么是知识图谱?KG的前世今生</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Weitang Liu</div><div class="author-info__description">一个致力于记录技术的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lonePatient"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/lonePatient" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liuweitangmath@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/277974397" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有任何问题可通过留言板或者微信公众号给我留言，谢谢！<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201201102.jpg"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E7%AB%9E%E8%B5%9B%E4%B8%8E%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-number">1.</span> <span class="toc-text">相关竞赛与数据集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E4%BD%93%E6%8A%BD%E5%8F%96"><span class="toc-number">2.</span> <span class="toc-text">实体抽取</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9F%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95"><span class="toc-number">2.1.</span> <span class="toc-text">传统机器学习方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text">编码方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9"><span class="toc-number">2.3.</span> <span class="toc-text">特征选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.4.</span> <span class="toc-text">序列模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Greedy-Inference"><span class="toc-number">2.4.1.</span> <span class="toc-text">Greedy Inference</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Beam-Inference"><span class="toc-number">2.4.2.</span> <span class="toc-text">Beam Inference</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Viterbi-Inference"><span class="toc-number">2.4.3.</span> <span class="toc-text">Viterbi Inference</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95"><span class="toc-number">2.5.</span> <span class="toc-text">深度学习方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#LSTM-CRF"><span class="toc-number">2.5.1.</span> <span class="toc-text">LSTM+CRF</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87"><span class="toc-number">2.5.2.</span> <span class="toc-text">评价指标</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96-%E5%AE%9E%E4%BD%93%E9%93%BE%E6%8E%A5"><span class="toc-number">2.5.3.</span> <span class="toc-text">其他-实体链接</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E7%B3%BB%E6%8A%BD%E5%8F%96"><span class="toc-number">3.</span> <span class="toc-text">关系抽取</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%A8%A1%E6%9D%BF%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">3.1.</span> <span class="toc-text">基于模板的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E8%A7%A6%E5%8F%91%E8%AF%8D-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">3.1.1.</span> <span class="toc-text">基于触发词&#x2F;字符串</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E4%BE%9D%E5%AD%98%E5%8F%A5%E6%B3%95"><span class="toc-number">3.2.</span> <span class="toc-text">基于依存句法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">3.3.</span> <span class="toc-text">小结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0"><span class="toc-number">3.4.</span> <span class="toc-text">监督学习-机器学习</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A0%94%E7%A9%B6%E7%BB%BC%E8%BF%B0"><span class="toc-number">3.4.1.</span> <span class="toc-text">研究综述</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E7%B1%BB%E5%99%A8"><span class="toc-number">3.5.</span> <span class="toc-text">分类器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E5%BE%81"><span class="toc-number">3.6.</span> <span class="toc-text">特征</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Named-Entities-Type-and-Mention-Level-Features"><span class="toc-number">3.6.1.</span> <span class="toc-text">Named Entities Type and Mention Level Features</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Parse-Features"><span class="toc-number">3.6.2.</span> <span class="toc-text">Parse Features</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Gazetteer-and-trigger-word-features"><span class="toc-number">3.6.3.</span> <span class="toc-text">Gazetteer and trigger word features</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><span class="toc-number">3.7.</span> <span class="toc-text">监督学习-深度学习</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Pipeline"><span class="toc-number">3.7.1.</span> <span class="toc-text">Pipeline</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%84%E6%B5%8B"><span class="toc-number">3.7.2.</span> <span class="toc-text">评测</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Joint-Model"><span class="toc-number">3.8.</span> <span class="toc-text">Joint Model</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#LSTM-RNNs"><span class="toc-number">3.8.1.</span> <span class="toc-text">LSTM-RNNs</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0-%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87"><span class="toc-number">3.9.</span> <span class="toc-text">监督学习-评价指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0-%E5%B0%8F%E7%BB%93"><span class="toc-number">3.10.</span> <span class="toc-text">监督学习-小结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8A%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="toc-number">3.11.</span> <span class="toc-text">半监督学习</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A0%94%E7%A9%B6%E7%BB%BC%E8%BF%B0-2"><span class="toc-number">3.11.1.</span> <span class="toc-text">研究综述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Seed-based-or-bootstrapping-approaches"><span class="toc-number">3.11.2.</span> <span class="toc-text">Seed-based or bootstrapping approaches</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93-2"><span class="toc-number">3.11.3.</span> <span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="toc-number">3.12.</span> <span class="toc-text">无监督学习</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A0%94%E7%A9%B6%E7%BB%BC%E8%BF%B0-3"><span class="toc-number">3.12.1.</span> <span class="toc-text">研究综述</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Open-IE"><span class="toc-number">4.</span> <span class="toc-text">Open IE</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8A%E7%9B%91%E7%9D%A3-%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0-%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87"><span class="toc-number">4.1.</span> <span class="toc-text">半监督&#x2F;无监督学习-评价指标</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-27"/></a><div class="content"><a class="title" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27">Arxiv今日论文 | 2026-02-27</a><time datetime="2026-02-27T12:30:00.000Z" title="发表于 2026-02-27 12:30:00">2026-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-26"/></a><div class="content"><a class="title" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26">Arxiv今日论文 | 2026-02-26</a><time datetime="2026-02-26T12:30:00.000Z" title="发表于 2026-02-26 12:30:00">2026-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-25"/></a><div class="content"><a class="title" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25">Arxiv今日论文 | 2026-02-25</a><time datetime="2026-02-25T12:30:00.000Z" title="发表于 2026-02-25 12:30:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225222513891.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板">大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板</a><time datetime="2026-02-25T12:00:00.000Z" title="发表于 2026-02-25 12:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225123005910.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mid-training：构建预训练与后训练之间的分布式桥梁"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁">mid-training：构建预训练与后训练之间的分布式桥梁</a><time datetime="2026-02-25T00:00:00.000Z" title="发表于 2026-02-25 00:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-24"/></a><div class="content"><a class="title" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24">Arxiv今日论文 | 2026-02-24</a><time datetime="2026-02-24T12:30:00.000Z" title="发表于 2026-02-24 12:30:00">2026-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-23"/></a><div class="content"><a class="title" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23">Arxiv今日论文 | 2026-02-23</a><time datetime="2026-02-23T12:30:00.000Z" title="发表于 2026-02-23 12:30:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260223165943195.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用&quot;深度思考率&quot;精准度量LLM推理质量"/></a><div class="content"><a class="title" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量">用&quot;深度思考率&quot;精准度量LLM推理质量</a><time datetime="2026-02-23T12:00:00.000Z" title="发表于 2026-02-23 12:00:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-20"/></a><div class="content"><a class="title" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20">Arxiv今日论文 | 2026-02-20</a><time datetime="2026-02-20T12:30:00.000Z" title="发表于 2026-02-20 12:30:00">2026-02-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201606857.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前沿大模型训练方法：深度解析与实践指南"/></a><div class="content"><a class="title" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南">前沿大模型训练方法：深度解析与实践指南</a><time datetime="2026-02-20T10:30:00.000Z" title="发表于 2026-02-20 10:30:00">2026-02-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Weitang Liu</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.lonepatient.top/',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.lonepatient.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo@1.4.11/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (99)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/计算机视觉/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 计算机视觉 (16)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/知识图谱/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 知识图谱 (13)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">👩‍💻 深度学习 (139)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item" style="visibility: hidden"></div><a class="magnet_link_more"  href="http://lonepatient.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-18</span><a class="blog-slider__title" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">通向AGI之路：大型语言模型（LLM）技术精要</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/07/12/gaiic_2022_ner_top10.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220712181905.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-07-12</span><a class="blog-slider__title" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">GAIIC2022商品标题识别二等奖获奖解决思路</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230807190424.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-01-20</span><a class="blog-slider__title" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">2025-03|高质量中文预训练模型集合</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

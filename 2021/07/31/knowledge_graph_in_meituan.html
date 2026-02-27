@@ -1,0 +1,387 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>(转)美团商品知识图谱的构建及应用 | 闲记算法</title><meta name="keywords" content="知识图谱"><meta name="author" content="Weitang Liu"><meta name="copyright" content="Weitang Liu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="在互联网新零售的大背景下，商品知识图谱作为新零售行业数字化的基石，提供了对于商品相关内容的立体化、智能化、常识化的理解，对上层业务的落地起到了至关重要的作用。相比于美团大脑中围绕商户的知识图谱而言，在新零售背景下的商品知识图谱需要应对更加分散、复杂的数据和业务场景，而这些不同的业务对于底层知识图谱都提出了各自不同的需求和挑战。美团作为互联网行业中新零售的新势力，业务上已覆盖了包括外卖、商超、生鲜、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(转)美团商品知识图谱的构建及应用">
+<meta property="og:url" content="http://lonepatient.top/2021/07/31/knowledge_graph_in_meituan.html">
+<meta property="og:site_name" content="闲记算法">
+<meta property="og:description" content="在互联网新零售的大背景下，商品知识图谱作为新零售行业数字化的基石，提供了对于商品相关内容的立体化、智能化、常识化的理解，对上层业务的落地起到了至关重要的作用。相比于美团大脑中围绕商户的知识图谱而言，在新零售背景下的商品知识图谱需要应对更加分散、复杂的数据和业务场景，而这些不同的业务对于底层知识图谱都提出了各自不同的需求和挑战。美团作为互联网行业中新零售的新势力，业务上已覆盖了包括外卖、商超、生鲜、">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801131622.jpg">
+<meta property="article:published_time" content="2021-07-31T23:20:08.000Z">
+<meta property="article:modified_time" content="2026-02-27T07:52:12.939Z">
+<meta property="article:author" content="Weitang Liu">
+<meta property="article:tag" content="知识图谱">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801131622.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lonepatient.top/2021/07/31/knowledge_graph_in_meituan"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//s4.cnzz.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" data-pjax="data-pjax" src="https://s4.cnzz.com/z_stat.php?id=1273275888&amp;web_id=1273275888"></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-02-27 07:52:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/backgroud.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><script src="https://at.alicdn.com/t/c/font_3570527_dthoqrrv2tv.css"></script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JwRQtLKZggvJH4sJ",ck:"JwRQtLKZggvJH4sJ"})</script><link rel="stylesheet" href="/css/universe.css"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536467946304280" crossorigin="anonymous"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801131622.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">闲记算法</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">(转)美团商品知识图谱的构建及应用<a class="post-edit-link" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts/knowledge_graph_in_meituan.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-07-31T23:20:08.000Z" title="发表于 2021-07-31 23:20:08">2021-07-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-27T07:52:12.939Z" title="更新于 2026-02-27 07:52:12">2026-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/">知识图谱</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/%E8%A1%8C%E4%B8%9A%E5%BA%94%E7%94%A8/">行业应用</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">8.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>24分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2021/07/31/knowledge_graph_in_meituan.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>在互联网新零售的大背景下，商品知识图谱作为新零售行业数字化的基石，提供了对于商品相关内容的立体化、智能化、常识化的理解，对上层业务的落地起到了至关重要的作用。相比于美团大脑中围绕商户的知识图谱而言，在新零售背景下的商品知识图谱需要应对更加分散、复杂的数据和业务场景，而这些不同的业务对于底层知识图谱都提出了各自不同的需求和挑战。美团作为互联网行业中新零售的新势力，业务上已覆盖了包括外卖、商超、生鲜、药品等在内的多个新零售领域，技术上在相关的知识图谱方面进行了深入探索。本文将对美团新零售背景下零售商品知识图谱的构建和应用进行介绍。</p>
+<h2 id="背景">背景</h2>
+<p>近年来，人工智能正在快速地改变人们的生活，背后其实有两大技术驱动力：深度学习和知识图谱。我们将深度学习归纳为隐性的模型，它通常是面向某一个具体任务，比如说下围棋、识别猫、人脸识别、语音识别等等。通常而言，在很多任务上它能够取得很优秀的结果，同时它也有一些局限性，比如说它需要海量的训练数据，以及强大的计算能力，难以进行跨任务的迁移，并且不具有较好的可解释性。在另一方面，知识图谱作为显示模型，同样也是人工智能的一大技术驱动力，它能够广泛地适用于不同的任务。相比深度学习，知识图谱中的知识可以沉淀，具有较强的可解释性，与人类的思考更加贴近，为隐式的深度模型补充了人类的知识积累，和深度学习互为补充。因此，全球的互联网公司都在积极布局知识图谱。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801130857.jpg" alt=""></p>
+<p>美团作为中国最大的在线本地生活服务平台，连接了数亿用户和数千万商户，其背后也蕴含着丰富的日常生活相关知识。美团知识图谱团队从2018年开始构建美团大脑，着力于利用知识图谱技术赋能业务，进一步改善用户体验。具体的，美团大脑将对美团业务中涉及到的千万级别商家、亿级别的菜品/商品、数十亿的用户评论、以及背后百万级别的场景进行深入的理解和结构化的知识建模，构建人、店、商品、场景之间的知识关联，从而形成生活服务领域大规模的“知识大脑”。现阶段，美团大脑已覆盖了数十亿实体，数百亿三元组，在餐饮、外卖、酒店、金融等场景中验证了知识图谱的有效性。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801131117.jpg" alt=""></p>
+<h2 id="美团在新零售的探索">美团在新零售的探索</h2>
+<p>美团逐步突破原有边界，在生活服务领域探索新的业务，不仅局限于通过外卖、餐饮帮助大家“吃得更好”，近年来也逐步拓展到零售、出行等其他领域，帮助大家“生活更好”。在零售领域中，美团先后落地了美团闪购、美团买菜、美团优选、团好货等一系列相应的业务，逐步实现“万物到家”的愿景。为了更好地支持美团的新零售业务，我们需要对背后的零售商品建立知识图谱，积累结构化数据，深入对零售领域内商品、用户、属性、场景等的理解，以便能更好地为用户提供零售商品领域内的服务。</p>
+<p>相比于围绕商户的餐饮、外卖、酒店的等领域，零售商品领域对于结构化知识的需求和依赖会更强。一方面，商品数量更加庞大，覆盖的领域范围也更加宽广。另一方面，商品本身所具有的显示信息往往比较稀疏，很大程度上需要结合生活中的常识知识来进行推理，方可将隐藏在背后的数十维的属性进行补齐，完成对商品完整的理解。在下图的例子中，“乐事黄瓜味”这样简单的商品描述其实就对应着丰富的隐含信息，只有对这些知识进行了结构化提取和相应的知识推理后，才能够更好的支持下游搜索、推荐等模块的优化。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801131504.jpg" alt=""></p>
+<h3 id="商品图谱建设的目标">商品图谱建设的目标</h3>
+<p>我们针对美团零售业务的特点，制定了多层级、多维度、跨业务的零售商品知识图谱体系。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801131622.jpg" alt=""></p>
+<h4 id="多层级">多层级</h4>
+<p>在不同业务的不同应用场景下，对于“商品”的定义会有所差别，需要对各个不同颗粒度的商品进行理解。因此，在我们的零售商品知识图谱中，建立了五层的层级体系，具体包括：</p>
+<p>L1 - 商品SKU/SPU：对应业务中所售卖的商品颗粒度，是用户交易的对象，往往为商户下挂的商品，例如“望京家乐福所售卖的蒙牛低脂高钙牛奶250ml盒装”。这一层级也是作为商品图谱的最底层的基石，将业务商品库和图谱知识进行打通关联。</p>
+<p>L2 - 标准商品：描述商品本身客观事实的颗粒度，例如“蒙牛低脂高钙牛奶250ml盒装”，无论通过什么渠道在什么商户购买，商品本身并没有任何区别。商品条形码则是在标准商品这层的客观依据。在这一层级上，我们可以建模围绕标准商品的客观知识，例如同一个标准商品都会具有同样的品牌、口味、包装等属性。</p>
+<p>L3 - 抽象商品：进一步我们将标准商品向上抽象的商品系列，例如“蒙牛低脂高钙牛奶”。在这一层级中，我们不再关注商品具体的包装、规格等，将同系列的商品聚合为抽象商品，承载了用户对于商品的主观认知，包括用户对商品系列的别名俗称、品牌认知、主观评价等。</p>
+<p>L4 - 主体品类：描述商品主体的本质品类，列如“鸡蛋”、“奶油草莓”、“台式烤肠”等。这一层作为商品图谱的后台类目体系，以客观的方式对商品领域的品类进行建模，承载了用户对于商品的需求，例如各品牌各产地的鸡蛋都能够满足用户对于鸡蛋这个品类的需求。</p>
+<p>L5 - 业务类目：相比于主体品类的后台类目体系，业务类目作为前台类目体系会依据业务当前的发展阶段进行人工定义和调整，各个业务会根据当前业务阶段的特点和需求建立对应的前台类目体系。</p>
+<h4 id="多维度">多维度</h4>
+<p>商品属性视角：围绕商品本身，我们需要有海量的属性维度来对商品进行描述。商品属性维度主要分为两类：一类是通用的属性维度，包括品牌、规格、包装、产地等；另一类是品类特有的属性维度，例如对于牛奶品类我们会关注脂肪含量（全脂/低脂/脱脂牛奶）、存储方式（常温奶、冷藏奶）等。商品属性主要是刻画了商品的客观知识，往往会建立在标准商品这一层级上。</p>
+<p>用户认知视角：除了客观的商品属性维度以外，用户往往对于商品会有一系列的主观认知，例如商品的别名俗称（“小黑瓶”、“快乐水”）、对于商品的评价（“香甜可口”、“入口即化”、“性价比高”）、商品的清单/榜单（“进口食品榜单”、“夏季消暑常备”）等维度。这些主观认知往往会建立在抽象商品这一层级上。</p>
+<p>品类/类目视角：从品类/类目的视角来看，不同品类/类目也会有各自不同的关注点。在这一层级上，我们会建模各个品类/类目下有哪些典型的品牌、用户关注哪些典型属性、不同品类的复购周期是多长时间等等。</p>
+<h3 id="跨业务">跨业务</h3>
+<p>美团大脑商品知识图谱的目标是希望能够对客观世界中的商品知识进行建模，而非局限于单个业务之中。在商品图谱的五层体系中，标准商品、抽象商品、品类体系都是与业务解耦的，围绕着客观商品所建立的，包括围绕这些层级建立的各维度数据也均是刻画了商品领域的客观知识。在应用于各个业务当中时，我们将客观的图谱知识向上关联至业务前台类目，向下关联至业务商品SPU/SKU，则可以完成各个业务数据的接入，实现各个业务数据和客观知识之间的联通，提供更加全面的跨业务的全景数据视角。利用这样的数据，在用户方面我们可以更加全面的建模、分析用户对于业务、品类的偏好，对于价格、品质等的敏感程度，在商品方面我们可以更准确的建模各品类的复购周期、地域/季节/节日偏好等。</p>
+<h3 id="商品图谱建设的挑战">商品图谱建设的挑战</h3>
+<p>商品知识图谱的构建的挑战主要来源于以下三个方面：</p>
+<ul>
+<li>
+<p>信息来源质量低：商品本身所具有的信息比较匮乏，往往以标题和图片为主。尤其在美团闪购这样LBS的电商场景下，商户需要上传大量的商品数据，对于商品信息的录入存在很多信息不完整的情况。在标题和图片之外，商品详情虽然也蕴含着大量的知识信息，但是其质量往往参差不齐，并且结构各异，从中进行知识挖掘难度极高。</p>
+</li>
+<li>
+<p>数据维度多：在商品领域有众多的数据维度需要进行建设。以商品属性部分为例，我们不仅需要建设通用的诸如品牌、规格、包装、口味等属性维度，同时还要覆盖各个品类/类目下特定关注的属性维度诸如脂肪含量、是否含糖、电池容量等，整体会涉及到数百维的属性维度。因此，数据建设的效率问题也是一大挑战。</p>
+</li>
+<li>
+<p>依赖常识/专业知识：人们在日常生活中因为有很丰富的常识知识积累，可以通过很简短的描述获取其背后隐藏的商品信息，例如在看到“乐事黄瓜”这样一个商品的时候知道其实是乐事黄瓜味的薯片、看到“唐僧肉”的时候知道其实这不是一种肉类而是一种零食。因此，我们也需要探索结合常识知识的语义理解方法。同时，在医药、个护等领域中，图谱的建设需要依赖较强的专业知识，例如疾病和药品之间的关系，并且此类关系对于准确度的要求极高，需要做到所有知识都准确无误，因此也需要较好的专家和算法相结合的方式来进行高效的图谱构建。</p>
+</li>
+</ul>
+<h2 id="商品图谱建设">商品图谱建设</h2>
+<p>在了解了图谱建设的目标和挑战后，接下来我们将介绍商品图谱数据建设的具体方案。</p>
+<h3 id="层级体系建设">层级体系建设</h3>
+<h4 id="品类体系建设">品类体系建设</h4>
+<p>品类描述了商品本质所属的最细类别，它聚合了一类商品，承载了用户最终的消费需求，如“高钙牛奶”、“牛肉干”等。与品类不同，类目是若干品类的集合，它是抽象后的品类概念，不能够明确到具体的某类商品品类上，如“乳制品”、“水果”等。</p>
+<p>品类打标：对商品图谱的构建来说，关键的一步便是建立起商品和品类之间的关联，即对商品打上品类标签。通过商品和品类之间的关联，我们可以建立起商品库中商品与用户需求之间的关联，进而将具体的商品展示到用户面前。下面简单介绍下品类打标方法：</p>
+<ul>
+<li>
+<p>品类词表构建：品类打标首先需要构建一个初步的商品品类词表。首先，我们通过对美团的各个电商业务的商品库、搜索日志、商户标签等数据源进行分词、NER、新词发现等操作，获得初步的商品候选词。然后，通过标注少量的样本进行二分类模型的训练（判断一个词是否是品类）。此外，我们通过结合主动学习的方法，从预测的结果中挑选出难分样本，进行再次标注，继续迭代模型，直到模型收敛。</p>
+</li>
+<li>
+<p>品类打标：首先，我们通过对商品标题进行命名实体识别，并结合上一步中的品类词表来获取商品中的候选品类，如识别“蒙牛脱脂牛奶 500ml”中的“脱脂牛奶”、“牛奶”等。然后，在获得了商品以及对应的品类之后，我们利用监督数据训练品类打标的二分类模型，输入商品的SPU_ID和候选品类TAG构成的pair，即，对它进行是否匹配的预测。具体的，我们一方面利用结合业务中丰富的半结构化语料构建围绕标签词的统计特征，另一方面利用命名实体识别、基于BERT的语义匹配等模型产出高阶相关性特征，在此基础上，我们将上述特征输入到终判模型中进行模型训练。</p>
+</li>
+<li>
+<p>品类标签后处理：在这一步中，我们对模型打上的品类进行后处理的一些策略，如基于图片相关性、结合商品标题命名实体识别结果等的品类清洗策略。</p>
+</li>
+</ul>
+<p>通过上述的三个步骤，我们便可以建立起商品与品类之间的联系。</p>
+<p>品类体系：品类体系由品类和品类间关系构成。常见的品类关系包括同义词和上下位等。在构建品类体系的过程中，常用的以下几种方法来进行关系的补全。我们主要使用下面的一些方法：</p>
+<ul>
+<li>
+<p>基于规则的品类关系挖掘。在百科等通用语料数据中，有些品类具有固定模式的描述，如“玉米又名苞谷、苞米棒子、玉蜀黍、珍珠米等”、“榴莲是著名热带水果之一”，因此，可以使用规则从中提取同义词和上下位。</p>
+</li>
+<li>
+<p>基于分类的品类关系挖掘。类似于上文中提到的品类打标方法，我们将同义词和上下位构建为的样本，通过在商品库、搜索日志、百科数据、UGC中挖掘的统计特征以及基于sentence-bert得到的语义特征，使用二分类模型进行品类关系是否成立的判断。对于训练得到的分类模型，我们同样通过主动学习的方式，选出结果中的难分样本，进行二次标注，进而不断迭代数据，提高模型性能。</p>
+</li>
+<li>
+<p>基于图的品类关系推理。在获得了初步的同义词、上下位关系之后，我们使用已有的这些关系构建网络，使用GAE、VGAE等方法对网络进行链路预测，从而进行图谱边关系的补全。</p>
+</li>
+</ul>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801140438.jpg" alt=""></p>
+<h3 id="标准-抽象商品">标准/抽象商品</h3>
+<p>标准商品是描述商品本身客观事实的颗粒度，和销售渠道和商户无关，而商品条形码是标准商品这层的客观依据。标品关联即将同属于某个商品条形码的业务SKU/SPU，都正确关联到该商品条形码上，从而在标准商品层级上建模相应的客观知识，例如标准商品对应的品牌、口味和包装等属性。 下面通过一个案例来说明标品关联的具体任务和方案。</p>
+<p>案例：下图是一个公牛三米插线板的标准商品。商家录入信息的时候，会把商品直接关联到商品条码上。通过商户录入数据完成了一部分的标品关联，但这部分比例比较少，且存在大量的链接缺失，链接错误的问题。另外，不同的商家对于同样的标品，商品的标题的描述是千奇百怪的。我们的目标是补充缺失的链接，将商品关联到正确的标品上。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801140620.jpg" alt=""></p>
+<p>针对标品关联任务，我们构建了商品领域的同义词判别模型：通过远监督的方式利用商户已经提供的少量有关联的数据，作为已有的知识图谱构造远监督的训练样本。在模型中，正例是置信度比较高的标品码；负例是原始数据中商品名或者图像类似但不属于同一标品的SPU。构造准确率比较高的训练样本之后，通过Bert模型进行同义词模型训练。最后，通过模型自主去噪的方式，使得最终的准确率能够达到99%以上。总体能做到品牌，规格，包装等维度敏感。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801140745.jpg" alt=""></p>
+<p>抽象商品是用户认知的层面，作为用户所评论的对象，这一层对用户偏好建模更加有效。同时，在决策信息的展示上，抽象商品粒度也更符合用户认知。例如下图所示冰淇淋的排行榜中，罗列了用户认知中抽象商品对应的SKU，然后对应展示不同抽象商品的特点，推荐理由等。抽象商品层整体的构建方式，和标准商品层比较类似，采用标品关联的模型流程，并在数据构造部分进行规则上的调整。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801140959.jpg" alt=""></p>
+<h3 id="属性维度建设">属性维度建设</h3>
+<p>对一个商品的全面理解，需要涵盖各个属性维度。例如“乐事黄瓜味薯片”，需要挖掘它对应的品牌、品类、口味、包装规格、标签、产地以及用户评论特色等属性，才能在商品搜索、推荐等场景中精准触达用户。商品属性挖掘的源数据主要包含商品标题，商品图片和半结构化数据三个维度。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801141708.jpg" alt=""></p>
+<p>商品标题包含了对于商品最重要的信息维度，同时，商品标题解析模型可以应用在查询理解中，对用户快速深入理解拆分，为下游的召回排序也能提供高阶特征。因此，这里我们着重介绍一下利用商品标题进行属性抽取的方法。</p>
+<p>商品标题解析整体可以建模成文本序列标注的任务。例如，对于商品标题“乐事黄瓜薯片”，目标是理解标题文本序列中各个成分，如乐事对应品牌，黄瓜对应口味，薯片是品类，因此我们使用命名实体识别（NER）模型进行商品标题解析。然而商品标题解析存在着三大挑战：（1）上下文信息少；（2）依赖常识知识；（3）标注数据通常有较多的噪音。为了解决上述挑战，我们尝试在模型中引入了图谱信息，主要包含以下三个维度：</p>
+<ul>
+<li>
+<p>节点信息：将图谱实体作为词典，以Soft-Lexicon方式接入，以此来缓解NER的边界切分错误问题。</p>
+</li>
+<li>
+<p>关联信息：商品标题解析依赖常识知识，例如在缺乏常识的情况下，仅从标题“乐事黄瓜薯片”中，我们无法确认“黄瓜”是商品品类还是口味属性。因此，我们引入知识图谱的关联数据缓解了常识知识缺失的问题：在知识图谱中，乐事和薯片之间存在着较强的relation，但是乐事跟黄瓜之间的relation比较弱，因此可以利用图结构来缓解NER模型常识知识缺少的问题。具体来说，我们通过图谱Graph Embedding的方式，利用图谱的图结构信息对图谱中的单字，词进行embedding表示，然后将embedding表示和文本语义的表征进行拼接融合，再接入NER模型，使得模型能够既考虑到语义，也考虑到常识知识的信息。</p>
+</li>
+<li>
+<p>节点类型信息：同一个词可以代表不同的属性，比如“黄瓜”既可以作为品类又可以作为属性。因此，对图谱进行embedding建模的时候，根据不同的类型对实体节点进行拆分。在将图谱节点表征喂入NER模型中时，利用注意力机制根据上下文来选择更符合语义的实体类型对应的表征 ，缓解不同类型下词语含义不同的问题，实现不同类型实体的融合。</p>
+</li>
+</ul>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801142156.jpg" alt=""></p>
+<p>在标注过程中，少标漏标或错标的问题无法避免，尤其像在商品标题NER这种标注比较复杂的问题上，尤为显著。对于标注数据中的噪音问题，采用以下方式对噪音标注优化：不再采取原先非0即1的hard的训练方式，而是采用基于置信度数据的soft训练方式，然后再通过Bootstrapping的方式迭代交叉验证，然后根据当前的训练集的置信度进行调整。我们通过实验验证，使用soft训练+ Bootstrapping 多轮迭代的方式，在噪声比例比较大的数据集上，模型效果得到了明显提升。具体的方法可参见我们在NLPCC 2020 比赛中的论文《Iterative Strategy for Named Entity Recognition with Imperfect Annotations》。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801142326.jpg" alt=""></p>
+<h3 id="效率提升">效率提升</h3>
+<p>知识图谱的构建往往是针对于各个领域维度的数据单独制定的挖掘方式。这种挖掘方式相对来说重人工，比较低效，针对每个不同的领域、每个不同的数据维度，我们都需要定制化的去建设任务相关的特征及标注数据。在商品场景下，挖掘的维度众多，因此效率方面的提高也是至关重要的。我们首先将知识挖掘任务建模为三类分类任务，包括节点建模、关系建模以及节点关联。在整个模型的训练过程中，最需要进行效率优化的其实就是上述提到的两个步骤：</p>
+<ol>
+<li>针对任务的特征提取</li>
+<li>针对任务的数据标注</li>
+</ol>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801142738.jpg" alt=""></p>
+<p>针对特征提取部分，我们摒弃了针对不同挖掘任务做定制化特征挖掘的方式，而是尝试将特征和任务解耦，构建跨任务通用的图谱挖掘特征体系，利用海量的特征库来对目标的节点/关系/关联进行表征，并利用监督训练数据来进行特征的组合和选择。具体的，我们构建的图谱特征体系主要由四个类型的特征组构成：i) 规则模板型特征主要是利用人工先验知识，融合规则模型能力；ii) 统计分布型特征，可以充分利用各类语料，基于不同语料不同层级维度进行统计；iii) 句法分析型特征则是利用NLP领域的模型能力，引入分词、词性、句法等维度特征；iv) 嵌入表示型特征，则是利用高阶模型能力，引入BERT等语义理解模型的能力。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801142954.jpg" alt=""></p>
+<p>针对数据标注部分，我们主要从三个角度来提升效率。i) 通过半监督学习，充分的利用未标注的数据进行预训练；ii）通过主动学习技术，选择对于模型来说能够提供最多信息增益的样本进行标注；iii）利用远程监督方法，通过已有的知识构造远监督样本进行模型训练，尽可能的发挥出已有知识的价值。</p>
+<h3 id="人机结合-专业图谱建设">人机结合 - 专业图谱建设</h3>
+<p>相比于普通商品知识图谱的建设，药品领域知识具有以下两个特点:</p>
+<ol>
+<li>具有极强的专业性，需要相关背景知识才能判断相应的属性维度，例如药品的适用症状等；</li>
+<li>相对敏感，对于强专业性知识不允许出错，否则更容易导致严重的后果。</li>
+</ol>
+<p>当前医药健康行业结构性正在发生变化，消费者更加倾向于使用在线医疗解决方案和药品配送服务，因此医药业务也逐渐成为了美团的重要业务之一。相比于普通商品知识图谱的建设，药品领域知识具有以下两个特点：（1）具有极强的专业性，需要有相关背景知识才能判断相应的属性维度，例如药品的适用症状等；（2）相对敏感，对于强专业性知识不允许出错，否则更容易导致严重后果。因此我们采用将智能模型和专家知识结合的方式来构建药品知识图谱。</p>
+<p>药品图谱中的知识可以分为弱专业知识和强专业知识两类，弱专业知识即一般人能够较容易获取和理解的知识，例如药品的使用方法、适用人群等；而强专业知识则是需要具有专业背景的人才能够判断的知识，例如药品的主治疾病、适应症状等。由于这两类数据对专家的依赖程度不同，因此我们分别采取不同的挖掘链路：</p>
+<ul>
+<li>
+<p>弱专业知识：对于药品图谱的弱专业知识挖掘，我们从说明书、百科知识等数据源中提取出相应的信息，并结合通过专家知识沉淀出来的规则策略，借助通用语义模型从中提取相应的知识，并通过专家的批量抽检，完成数据的建设。</p>
+</li>
+<li>
+<p>强专业知识：对于药品图谱的强专业知识挖掘，为了确保相关知识百分百准确，我们通过模型提取出药品相关属性维度的候选后，将这些候选知识给到专家进行全量质检。在这里，我们主要是通过算法的能力，尽可能减少专业药师在基础数据层面上的精力花费，提高专家从半结构化语料中提取专业知识的效率。</p>
+</li>
+</ul>
+<p>在药品这类专业性强的领域，专业知识的表述和用户习惯往往存在差异。因此我们除了挖掘强弱专业知识外，还需要填补专业知识和用户之间的差异，才能将药品图谱更好的与下游应用结合。为此，我们从用户行为日志以及领域日常对话等数据源中，挖掘了疾病、症状和功效的别名数据，以及药品通用名的俗称数据，来打通用户习惯和专业表述之间的通路。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801143608.jpg" alt=""></p>
+<h2 id="商品图谱的落地应用">商品图谱的落地应用</h2>
+<p>近年来，随着深度学习技术的飞速发展，基于深度神经网络的搜索、推荐算法不断迭代，取得了丰富的业务成果。然而大量ID化的特征与深度模型结构的可解释性不强，缺乏系统描述能力，与用户引导能力。</p>
+<p>自从谷歌将知识图谱应用于搜索引擎，并显著提升了搜索质量与用户体验，知识图谱在各垂直领域场景都扮演起了重要的角色。以美团场景为例，下面重点介绍商品图谱在搜索、推荐和C端、B端的落地点。</p>
+<p>知识图谱最大的应用是在搜索和推荐场景中。在搜索和推荐的各层模块当中，知识图谱可以提供包括：基于知识的结构化召回、基于图嵌入表示的向量化召回、基于商品理解的高阶排序特征、基于知识推理的展示层优化等。</p>
+<h3 id="结构化召回">结构化召回</h3>
+<p>商品图谱的数据，对于商品的理解很有帮助。例如，在商品搜索中， 如用户在搜索头疼腰疼时，通过结构化的知识图谱，才能知道什么药品是有止疼功效的；用户在搜索可爱多草莓、黄瓜薯片时，需要依赖图谱的常识知识来理解用户真正需求是冰淇淋和薯片，而不是草莓和黄瓜。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801151312.jpg" alt=""></p>
+<h3 id="排序模型泛化性">排序模型泛化性</h3>
+<p>图谱的类目信息、品类信息、属性信息，一方面可以作为比较强有力的相关性的判断方法和干预手段，另一方面可以提供不同粗细粒度的商品聚合能力，作为泛化性特征提供到排序模型，能有效地提升排序模型的泛化能力，对于用户行为尤为稀疏的商品领域来说则具有着更高的价值。具体的特征使用方式则包括：i) 通过各颗粒度进行商品聚合，以ID化特征接入排序模型；ii）在各颗粒度聚合后进行统计特征的建设；iii）通过图嵌入表示的方式，将商品的高维向量表示和排序模型结合。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801151505.jpg" alt=""></p>
+<h3 id="多模态图谱嵌入">多模态图谱嵌入</h3>
+<p>现有的研究工作已经在多个领域中证明了，将知识图谱的数据进行嵌入表示，以高维向量表示的方式和排序模型结合，可以有效地通过引入外部知识达到缓解排序/推荐场景中数据稀疏以及冷启动问题的效果。然而，传统的图谱嵌入的工作往往忽视了知识图谱中的多模态信息，例如商品领域中我们有商品的图片、商品的标题、商家的介绍等非简单的图谱节点型的知识，这些信息的引入也可以进一步提升图谱嵌入对推荐/排序的信息增益。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801151612.jpg" alt=""></p>
+<p>现有的图谱嵌入方法在应用到多模态图谱表征的时候会存在一些问题，因为在多模态场景下，图谱中边的含义不再是单纯的语义推理关系，而是存在多模态的信息补充的关系，因此我们也针对多模态图谱的特点，提出了MKG Entity Encoder和MKG Attention Layer来更好的建模多模态知识图谱，并将其表征有效的接入至推荐/排序模型中，具体方法可以参考我们在CIKM 2020发表了的论文《Multi-Modal Knowledge Graphs for Recommender Systems》。</p>
+<p><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801151713.jpg" alt=""></p>
+<h3 id="C端-B端优化">C端/B端优化</h3>
+<p>商品图谱在C端提供显式化的可解释性信息，辅助用户进行决策。具体的呈现形式包括筛选项、特色标签、榜单、推荐理由等。筛选项的维度受当前查询词对应品类下用户关注的属性类别决定，例如，当用户搜索查询词为薯片时，用户通常关注的是它的口味、包装、净含量等，我们将会根据供给数据在这些维度下的枚举值展示筛选项。商品的亮点标签来源于标题、商品详情页信息与评论数据的提取，以简洁明了的结构化数据展示商品特色。商品的推荐理由通过评论抽取与文本生成两种渠道获得，与查询词联动，以用户视角给出商品值得买的原因，而榜单数据则更为客观，以销量等真实数据，反应商品品质。</p>
+<p>在B端，即商家发布侧，商品图谱则提供了基于商品标题的实时预测能力，帮助商家进行类目的挂载、属性信息的完善。例如，商家填写标题“德国进口德亚脱脂纯牛奶12盒”后，商品图谱提供的在线类目预测服务可将其挂载到“食品饮料-乳制品-纯牛奶”类目，并通过实体识别服务，得到商品的“产地-德国”，“是否进口-进口”，“品牌-德亚”，“脂肪含量-脱脂”，“规格-12盒”的属性信息，预测完成后，由商家确认发布，降低商家对商品信息的维护成本，并提升发布商品的信息质量。</p>
+<p>原文地址: <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/ZSn10RAxPKBQBhP6iTmlxQ">link</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Weitang Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lonepatient.top/2021/07/31/knowledge_graph_in_meituan.html">http://lonepatient.top/2021/07/31/knowledge_graph_in_meituan.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lonepatient.top" target="_blank">闲记算法</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/">知识图谱</a></div><div class="post_share"><div class="social-share" data-image="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210801131622.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/09/20/new_use_prompt.html"><img class="prev-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210923200026.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">(转)格局打开，带你解锁 prompt 的花式用法</div></div></a></div><div class="next-post pull-right"><a href="/2021/07/20/R-Drop-Regularized-Dropout-for-Neural-Networks.html"><img class="next-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210812204958.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">R-Drop-Regularized Dropout for Neural Networks</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2018/03/20/Application_of_deep_learning_in_knowledge_graph_construction.html" title="深度学习在知识图谱构建中的应用"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-03-20</div><div class="title">深度学习在知识图谱构建中的应用</div></div></a></div><div><a href="/2018/08/31/E-commerce-knowledge-graph.html" title="电商知识图谱"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-31/57633521.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-08-31</div><div class="title">电商知识图谱</div></div></a></div><div><a href="/2018/04/01/Know-Evolve-Deep-Temporal-Reasoning-for-Dynamic-KG.html" title="Know-Evolve-Deep Temporal Reasoning for Dynamic KG"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/42382734.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-04-01</div><div class="title">Know-Evolve-Deep Temporal Reasoning for Dynamic KG</div></div></a></div><div><a href="/2018/06/29/The_whole_process_of_knowledge_graph_construction_from_bottom_to_top.html" title="一文揭秘！自底向上构建知识图谱全过程"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-06-29</div><div class="title">一文揭秘！自底向上构建知识图谱全过程</div></div></a></div><div><a href="/2018/08/27/health-knowledge-graph.html" title="健康知识图谱"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-8-27/4294525.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-08-27</div><div class="title">健康知识图谱</div></div></a></div><div><a href="/2018/04/21/introduce knowledge graph.html" title="为什么需要知识图谱？什么是知识图谱?KG的前世今生"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/18-7-25/44425462.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-04-21</div><div class="title">为什么需要知识图谱？什么是知识图谱?KG的前世今生</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Weitang Liu</div><div class="author-info__description">一个致力于记录技术的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">281</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">384</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">92</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lonePatient"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/lonePatient" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liuweitangmath@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/277974397" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有任何问题可通过留言板或者微信公众号给我留言，谢谢！<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201201102.jpg"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BE%8E%E5%9B%A2%E5%9C%A8%E6%96%B0%E9%9B%B6%E5%94%AE%E7%9A%84%E6%8E%A2%E7%B4%A2"><span class="toc-number">2.</span> <span class="toc-text">美团在新零售的探索</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%95%86%E5%93%81%E5%9B%BE%E8%B0%B1%E5%BB%BA%E8%AE%BE%E7%9A%84%E7%9B%AE%E6%A0%87"><span class="toc-number">2.1.</span> <span class="toc-text">商品图谱建设的目标</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E5%B1%82%E7%BA%A7"><span class="toc-number">2.1.1.</span> <span class="toc-text">多层级</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E7%BB%B4%E5%BA%A6"><span class="toc-number">2.1.2.</span> <span class="toc-text">多维度</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%A8%E4%B8%9A%E5%8A%A1"><span class="toc-number">2.2.</span> <span class="toc-text">跨业务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%95%86%E5%93%81%E5%9B%BE%E8%B0%B1%E5%BB%BA%E8%AE%BE%E7%9A%84%E6%8C%91%E6%88%98"><span class="toc-number">2.3.</span> <span class="toc-text">商品图谱建设的挑战</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%95%86%E5%93%81%E5%9B%BE%E8%B0%B1%E5%BB%BA%E8%AE%BE"><span class="toc-number">3.</span> <span class="toc-text">商品图谱建设</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%82%E7%BA%A7%E4%BD%93%E7%B3%BB%E5%BB%BA%E8%AE%BE"><span class="toc-number">3.1.</span> <span class="toc-text">层级体系建设</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%93%81%E7%B1%BB%E4%BD%93%E7%B3%BB%E5%BB%BA%E8%AE%BE"><span class="toc-number">3.1.1.</span> <span class="toc-text">品类体系建设</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E5%87%86-%E6%8A%BD%E8%B1%A1%E5%95%86%E5%93%81"><span class="toc-number">3.2.</span> <span class="toc-text">标准&#x2F;抽象商品</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7%E7%BB%B4%E5%BA%A6%E5%BB%BA%E8%AE%BE"><span class="toc-number">3.3.</span> <span class="toc-text">属性维度建设</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%88%E7%8E%87%E6%8F%90%E5%8D%87"><span class="toc-number">3.4.</span> <span class="toc-text">效率提升</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%BA%E6%9C%BA%E7%BB%93%E5%90%88-%E4%B8%93%E4%B8%9A%E5%9B%BE%E8%B0%B1%E5%BB%BA%E8%AE%BE"><span class="toc-number">3.5.</span> <span class="toc-text">人机结合 - 专业图谱建设</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%95%86%E5%93%81%E5%9B%BE%E8%B0%B1%E7%9A%84%E8%90%BD%E5%9C%B0%E5%BA%94%E7%94%A8"><span class="toc-number">4.</span> <span class="toc-text">商品图谱的落地应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E5%8C%96%E5%8F%AC%E5%9B%9E"><span class="toc-number">4.1.</span> <span class="toc-text">结构化召回</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%92%E5%BA%8F%E6%A8%A1%E5%9E%8B%E6%B3%9B%E5%8C%96%E6%80%A7"><span class="toc-number">4.2.</span> <span class="toc-text">排序模型泛化性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E6%A8%A1%E6%80%81%E5%9B%BE%E8%B0%B1%E5%B5%8C%E5%85%A5"><span class="toc-number">4.3.</span> <span class="toc-text">多模态图谱嵌入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C%E7%AB%AF-B%E7%AB%AF%E4%BC%98%E5%8C%96"><span class="toc-number">4.4.</span> <span class="toc-text">C端&#x2F;B端优化</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-27"/></a><div class="content"><a class="title" href="/2026/02/27/arxiv_papers_2026-02-27.html" title="Arxiv今日论文 | 2026-02-27">Arxiv今日论文 | 2026-02-27</a><time datetime="2026-02-27T12:30:00.000Z" title="发表于 2026-02-27 12:30:00">2026-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-26"/></a><div class="content"><a class="title" href="/2026/02/26/arxiv_papers_2026-02-26.html" title="Arxiv今日论文 | 2026-02-26">Arxiv今日论文 | 2026-02-26</a><time datetime="2026-02-26T12:30:00.000Z" title="发表于 2026-02-26 12:30:00">2026-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-25"/></a><div class="content"><a class="title" href="/2026/02/25/arxiv_papers_2026-02-25.html" title="Arxiv今日论文 | 2026-02-25">Arxiv今日论文 | 2026-02-25</a><time datetime="2026-02-25T12:30:00.000Z" title="发表于 2026-02-25 12:30:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225222513891.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Less-is-Enough-Synthesizing-Diverse-Data-in-Feature-Space-of-LLMs.html" title="大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板">大模型数据合成新范式：2K样本打败30万，从特征空间精准狙击任务短板</a><time datetime="2026-02-25T12:00:00.000Z" title="发表于 2026-02-25 12:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260225123005910.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mid-training：构建预训练与后训练之间的分布式桥梁"/></a><div class="content"><a class="title" href="/2026/02/25/2026-02-25-Midtraining-%E4%B8%AD%E9%97%B4%E8%AE%AD%E7%BB%83-%E6%9E%84%E5%BB%BA%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8E%E5%90%8E%E8%AE%AD%E7%BB%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%A5%E6%A2%81.html" title="mid-training：构建预训练与后训练之间的分布式桥梁">mid-training：构建预训练与后训练之间的分布式桥梁</a><time datetime="2026-02-25T00:00:00.000Z" title="发表于 2026-02-25 00:00:00">2026-02-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-24"/></a><div class="content"><a class="title" href="/2026/02/24/arxiv_papers_2026-02-24.html" title="Arxiv今日论文 | 2026-02-24">Arxiv今日论文 | 2026-02-24</a><time datetime="2026-02-24T12:30:00.000Z" title="发表于 2026-02-24 12:30:00">2026-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-23"/></a><div class="content"><a class="title" href="/2026/02/23/arxiv_papers_2026-02-23.html" title="Arxiv今日论文 | 2026-02-23">Arxiv今日论文 | 2026-02-23</a><time datetime="2026-02-23T12:30:00.000Z" title="发表于 2026-02-23 12:30:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260223165943195.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用&quot;深度思考率&quot;精准度量LLM推理质量"/></a><div class="content"><a class="title" href="/2026/02/23/Think-Deep,-Not-Just-Long-Measuring-LLM-Reasoning-Effort-via-Deep-Thinking-Tokens.html" title="用&quot;深度思考率&quot;精准度量LLM推理质量">用&quot;深度思考率&quot;精准度量LLM推理质量</a><time datetime="2026-02-23T12:00:00.000Z" title="发表于 2026-02-23 12:00:00">2026-02-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-02-20"/></a><div class="content"><a class="title" href="/2026/02/20/arxiv_papers_2026-02-20.html" title="Arxiv今日论文 | 2026-02-20">Arxiv今日论文 | 2026-02-20</a><time datetime="2026-02-20T12:30:00.000Z" title="发表于 2026-02-20 12:30:00">2026-02-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201606857.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前沿大模型训练方法：深度解析与实践指南"/></a><div class="content"><a class="title" href="/2026/02/20/frontier_training_cn.html" title="前沿大模型训练方法：深度解析与实践指南">前沿大模型训练方法：深度解析与实践指南</a><time datetime="2026-02-20T10:30:00.000Z" title="发表于 2026-02-20 10:30:00">2026-02-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Weitang Liu</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.lonepatient.top/',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.lonepatient.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo@1.4.11/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (99)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/计算机视觉/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 计算机视觉 (16)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/知识图谱/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 知识图谱 (13)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">👩‍💻 深度学习 (139)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item" style="visibility: hidden"></div><a class="magnet_link_more"  href="http://lonepatient.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-18</span><a class="blog-slider__title" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">通向AGI之路：大型语言模型（LLM）技术精要</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/07/12/gaiic_2022_ner_top10.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220712181905.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-07-12</span><a class="blog-slider__title" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">GAIIC2022商品标题识别二等奖获奖解决思路</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230807190424.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-01-20</span><a class="blog-slider__title" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">2025-03|高质量中文预训练模型集合</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>
