@@ -1,0 +1,889 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>你不知道的 Claude Code：架构、治理与工程实践 | 闲记算法</title><meta name="keywords" content="Claude Code,AI 编程助手,Agent 架构,Prompt Engineering,上下文管理,Skills,MCP,工程化"><meta name="author" content="Weitang Liu"><meta name="copyright" content="Weitang Liu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="0. 太长不读 今天这篇文章源于最近半年深度使用 Claude Code、两个账号每月 40 刀氪金换来的一些踩坑经验，希望能给大伙一些输入。 刚开始我也把它当 ChatBot 用，后来很快发现不对劲：上下文越来越乱、工具越来越多但效果越来越差、规则越写越长却越不遵守，折腾了一段时间，研究了 Claude Code 本身之后才意识到，这不是 Prompt 问题，而是这套系统的设计就是这样的。 这篇">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你不知道的 Claude Code：架构、治理与工程实践">
+<meta property="og:url" content="http://lonepatient.top/2026/03/24/claude_code.html">
+<meta property="og:site_name" content="闲记算法">
+<meta property="og:description" content="0. 太长不读 今天这篇文章源于最近半年深度使用 Claude Code、两个账号每月 40 刀氪金换来的一些踩坑经验，希望能给大伙一些输入。 刚开始我也把它当 ChatBot 用，后来很快发现不对劲：上下文越来越乱、工具越来越多但效果越来越差、规则越写越长却越不遵守，折腾了一段时间，研究了 Claude Code 本身之后才意识到，这不是 Prompt 问题，而是这套系统的设计就是这样的。 这篇">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260324194832636.jpg">
+<meta property="article:published_time" content="2026-03-24T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-03T08:06:44.628Z">
+<meta property="article:author" content="Weitang Liu">
+<meta property="article:tag" content="Claude Code">
+<meta property="article:tag" content="AI 编程助手">
+<meta property="article:tag" content="Agent 架构">
+<meta property="article:tag" content="Prompt Engineering">
+<meta property="article:tag" content="上下文管理">
+<meta property="article:tag" content="Skills">
+<meta property="article:tag" content="MCP">
+<meta property="article:tag" content="工程化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260324194832636.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lonepatient.top/2026/03/24/claude_code"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//s4.cnzz.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" data-pjax="data-pjax" src="https://s4.cnzz.com/z_stat.php?id=1273275888&amp;web_id=1273275888"></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-04-03 08:06:44'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/backgroud.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><script src="https://at.alicdn.com/t/c/font_3570527_dthoqrrv2tv.css"></script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JwRQtLKZggvJH4sJ",ck:"JwRQtLKZggvJH4sJ"})</script><link rel="stylesheet" href="/css/universe.css"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536467946304280" crossorigin="anonymous"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">282</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">392</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">95</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260324194832636.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">闲记算法</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">你不知道的 Claude Code：架构、治理与工程实践<a class="post-edit-link" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts/claude_code.markdown" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-03-24T00:00:00.000Z" title="发表于 2026-03-24 00:00:00">2026-03-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-04-03T08:06:44.628Z" title="更新于 2026-04-03 08:06:44">2026-04-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI-%E5%B7%A5%E5%85%B7/">AI 工具</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI-%E5%B7%A5%E5%85%B7/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">工程实践</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI-%E5%B7%A5%E5%85%B7/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/%E5%BC%80%E5%8F%91%E6%95%88%E7%8E%87/">开发效率</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">10.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>37分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2026/03/24/claude_code.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="0-太长不读">0. 太长不读</h2>
+<p>今天这篇文章源于最近半年深度使用 Claude Code、两个账号每月 40 刀氪金换来的一些踩坑经验，希望能给大伙一些输入。</p>
+<p>刚开始我也把它当 ChatBot 用，后来很快发现不对劲：上下文越来越乱、工具越来越多但效果越来越差、规则越写越长却越不遵守，折腾了一段时间，研究了 Claude Code 本身之后才意识到，这不是 Prompt 问题，而是这套系统的设计就是这样的。</p>
+<p>这篇文章想和大伙聊聊这几个事：Claude Code 底层怎么运作、上下文为什么会乱以及怎么治理、Skills 和 Hooks 应该怎么设计、Subagents 的正确用法、Prompt Caching 的架构影响，以及怎么写一个真正有用的 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a>。</p>
+<p>我觉得最直接的理解方式，是把 Claude Code 拆成六层来看：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">层</th>
+<th style="text-align:center">职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>CLAUDE.md</code> / rules / memory</td>
+<td style="text-align:center">长期上下文，告诉 Claude “是什么”</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Tools</code> / <code>MCP</code></td>
+<td style="text-align:center">动作能力，告诉 Claude “能做什么”</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Skills</code></td>
+<td style="text-align:center">按需加载的方法论，告诉 Claude “怎么做”</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Hooks</code></td>
+<td style="text-align:center">强制执行某些行为，不依赖 Claude 自己判断</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Subagents</code></td>
+<td style="text-align:center">隔离上下文的工作者，负责受控自治</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Verifiers</code></td>
+<td style="text-align:center">验证闭环，让输出可验、可回滚、可审计</td>
+</tr>
+</tbody>
+</table>
+<p>只强化其中一层，系统就会失衡，<a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 写太长，上下文先污染自己了；工具堆太多了，选择就搞不清楚了；subagents 开得到处都是，状态就漂移了；验证这步跳过了，出了问题根本不知道是哪里挂的。</p>
+<hr>
+<h2 id="1-它底层是怎么运行的">1. 它底层是怎么运行的</h2>
+<p><img src="https://cdn.fliggy.com/upic/QrTwEC.svg" alt="Agent Loop"></p>
+<p>Claude Code 的核心不是”回答”，而是一个反复循环的代理过程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">收集上下文 → 采取行动 → 验证结果 → [完成 or 回到收集]</span><br><span class="line">     ↑                    ↓</span><br><span class="line">  CLAUDE.md          Hooks / 权限 / 沙箱</span><br><span class="line">  Skills             Tools / MCP</span><br><span class="line">  Memory</span><br></pre></td></tr></table></figure>
+<p>用了一段时间才意识到，卡住的地方几乎从来不是模型不够聪明，更多时候是给了它错误的上下文，或者写出来了但根本没法判断对不对，也没法撤回。</p>
+<h3 id="真正要关注的五个层面">真正要关注的五个层面</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">层面</th>
+<th style="text-align:center">核心问题</th>
+<th style="text-align:center">主要载体</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>Context surface</code></td>
+<td style="text-align:center">哪些信息常驻，哪些按需加载</td>
+<td style="text-align:center"><code>CLAUDE.md</code>、rules、memory、skills</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Action surface</code></td>
+<td style="text-align:center">Claude 当前具备哪些动作能力</td>
+<td style="text-align:center">built-in tools、MCP、plugins</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Control surface</code></td>
+<td style="text-align:center">哪些动作必须被约束、阻断或审计</td>
+<td style="text-align:center">permissions、sandbox、hooks</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Isolation surface</code></td>
+<td style="text-align:center">哪些任务需要隔离上下文和权限</td>
+<td style="text-align:center">subagents、worktrees、forked sessions</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Verification surface</code></td>
+<td style="text-align:center">如何判断任务完成且结果可信</td>
+<td style="text-align:center">tests、lint、screenshots、logs、CI</td>
+</tr>
+</tbody>
+</table>
+<p>对着这几个面看，很多问题就好排查了。结果不稳定，查上下文加载顺序，不是模型的事；自动化失控，看控制层有没有设计，不是 agent 太主动；长会话质量下降，中间产物把上下文污染了，换个新会话比反复调 prompt 有用得多。</p>
+<hr>
+<h2 id="2-概念边界：MCP-Plugin-Tools-Skills-Hooks-Subagents">2. 概念边界：MCP / Plugin / Tools / Skills / Hooks / Subagents</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">概念</th>
+<th style="text-align:center">运行时角色</th>
+<th style="text-align:center">解决什么</th>
+<th style="text-align:center">典型误用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>CLAUDE.md</code></td>
+<td style="text-align:center">项目级持久契约</td>
+<td style="text-align:center">每次会话都必须成立的命令、边界、禁止项</td>
+<td style="text-align:center">写成团队知识库</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>.claude/rules/*</code></td>
+<td style="text-align:center">路径或语言相关规则</td>
+<td style="text-align:center">目录、文件类型或语言级局部规范</td>
+<td style="text-align:center">所有规则都堆到根 <code>CLAUDE.md</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Built-in Tools</code></td>
+<td style="text-align:center">内置能力</td>
+<td style="text-align:center">读文件、改文件、跑命令、搜索</td>
+<td style="text-align:center">把所有集成都塞进 shell</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>MCP</code></td>
+<td style="text-align:center">外部能力接入协议</td>
+<td style="text-align:center">让 Claude 访问 GitHub、Sentry、数据库</td>
+<td style="text-align:center">接太多 server，工具定义挤爆上下文</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Plugin</code></td>
+<td style="text-align:center">打包分发层</td>
+<td style="text-align:center">把 Skills/Hooks/MCP 一起分发</td>
+<td style="text-align:center">把 plugin 当成运行时 primitive</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Skill</code></td>
+<td style="text-align:center">按需加载的知识/工作流</td>
+<td style="text-align:center">给 Claude 一个”方法包”</td>
+<td style="text-align:center">skill 既像百科全书又像部署脚本</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Hook</code></td>
+<td style="text-align:center">强制执行规则的拦截层</td>
+<td style="text-align:center">在生命周期事件前后执行规则</td>
+<td style="text-align:center">用 hook 替代所有模型判断</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Subagent</code></td>
+<td style="text-align:center">隔离上下文的工作单元</td>
+<td style="text-align:center">并行研究、限制工具与权限</td>
+<td style="text-align:center">无边界 fan-out，治理失控</td>
+</tr>
+</tbody>
+</table>
+<p>简单记：给 Claude 新动作能力用 Tool/MCP，给它一套工作方法用 Skill，需要隔离执行环境用 Subagent，要强制约束和审计用 Hook，跨项目分发用 Plugin。</p>
+<hr>
+<h2 id="3-上下文工程：最重要的系统约束">3. 上下文工程：最重要的系统约束</h2>
+<p>很多人把上下文当”容量问题”，但卡住的地方通常不是不够长，而是太吵了，有用的信息被大量无关内容淹没了。</p>
+<h3 id="真实的上下文成本构成">真实的上下文成本构成</h3>
+<p><img src="https://cdn.fliggy.com/upic/1auitO.svg" alt="Context Loading"></p>
+<p>Claude Code 的 200K 上下文并非全部可用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">200K 总上下文</span><br><span class="line">├── 固定开销 (~15-20K)</span><br><span class="line">│   ├── 系统指令: ~2K</span><br><span class="line">│   ├── 所有启用的 Skill 描述符: ~1-5K</span><br><span class="line">│   ├── MCP Server 工具定义: ~10-20K  ← 最大隐形杀手</span><br><span class="line">│   └── LSP 状态: ~2-5K</span><br><span class="line">│</span><br><span class="line">├── 半固定 (~5-10K)</span><br><span class="line">│   ├── CLAUDE.md: ~2-5K</span><br><span class="line">│   └── Memory: ~1-2K</span><br><span class="line">│</span><br><span class="line">└── 动态可用 (~160-180K)</span><br><span class="line">    ├── 对话历史</span><br><span class="line">    ├── 文件内容</span><br><span class="line">    └── 工具调用结果</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.fliggy.com/upic/g1Ce7x.png?x-oss-process=image/auto-orient,1/resize,w_2000/format,webp" alt="img"></p>
+<p>一个典型 MCP Server（如 GitHub）包含 20-30 个工具定义，每个约 200 tokens，合计 <strong>4,000-6,000 tokens</strong>。接 5 个 Server，光这部分固定开销就到了 <strong>25,000 tokens（12.5%）</strong>。我第一次算出这个数字的时候，真没想到有这么多，在要读大量代码的场景，这 12.5% 真的很关键。</p>
+<h3 id="推荐的上下文分层">推荐的上下文分层</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">始终常驻    → CLAUDE.md：项目契约 / 构建命令 / 禁止事项</span><br><span class="line">按路径加载  → rules：语言 / 目录 / 文件类型特定规则</span><br><span class="line">按需加载    → Skills：工作流 / 领域知识</span><br><span class="line">隔离加载    → Subagents：大量探索 / 并行研究</span><br><span class="line">不进上下文  → Hooks：确定性脚本 / 审计 / 阻断</span><br></pre></td></tr></table></figure>
+<p>说白了，偶尔用的东西就不要每次都加载进来。</p>
+<h3 id="上下文最佳实践">上下文最佳实践</h3>
+<ul>
+<li>保持 <code>CLAUDE.md</code> 短、硬、可执行，优先写命令、约束、架构边界。Anthropic 官方自己的 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 大约只有 2.5K tokens，可以参考</li>
+<li>把大型参考文档拆到 Skills 的 supporting files，不要塞进 <a target="_blank" rel="noopener" href="http://SKILL.md">SKILL.md</a> 正文</li>
+<li>使用 <code>.claude/rules/</code> 做路径/语言规则，不让根 <code>CLAUDE.md</code> 承担所有差异</li>
+<li>长会话主动用 <code>/context</code> 观察消耗，不要等系统自动压缩后再补救</li>
+</ul>
+<p><img src="https://cdn.fliggy.com/upic/DOPgjN.png?x-oss-process=image/auto-orient,1/resize,w_2000/format,webp" alt="/context 命令输出，可以看到各来源的 token 占比"></p>
+<ul>
+<li>任务切换优先 <code>/clear</code>，同一任务进入新阶段用 <code>/compact</code></li>
+<li><strong>把 Compact Instructions 写进 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a></strong>，压缩后必须保留什么由你控制，不由算法猜</li>
+</ul>
+<h3 id="Tool-Output-噪声：另一个隐形上下文杀手">Tool Output 噪声：另一个隐形上下文杀手</h3>
+<p>前面算的是 MCP 工具定义的固定开销，但动态部分同样有个坑容易被忽视：Tool Output。<code>cargo test</code> 一次完整输出动辄几千行，<code>git log</code>、<code>find</code>、<code>grep</code> 在稍大的仓库里也能轻松塞满屏幕。这些输出 Claude 并不需要全看，但只要它出现在上下文里，就是实实在在的 token 消耗，同样会挤掉对话历史和文件内容的空间。</p>
+<p>后来看到 <a target="_blank" rel="noopener" href="https://www.rtk-ai.app/">RTK（Rust Token Killer）</a>[1] 这个思路觉得挺对的，它做的事很简单：在命令输出到 Claude 之前自动过滤，只留决策需要的核心信息。比如 <code>cargo test</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Claude 看到的原始输出</span><br><span class="line">running 262 tests</span><br><span class="line">test auth::test_login ... ok</span><br><span class="line">...（几千行）</span><br><span class="line"></span><br><span class="line"># 走 RTK 之后</span><br><span class="line">✓ cargo test: 262 passed (1 suite, 0.08s)</span><br></pre></td></tr></table></figure>
+<p>Claude 真正需要知道的就是「过了还是挂了，挂在哪里」，其他都是噪声。它通过 Hook 透明重写命令，对 Claude Code 来说完全无感。</p>
+<p>后面第 6 节会提到 <code>| head -30</code> 这种手动截断，RTK 干的就是这件事，只是覆盖面更广，不用每条命令自己加。项目 <a target="_blank" rel="noopener" href="https://github.com/rtk-ai/rtk">开源在 GitHub</a>[2]。</p>
+<h3 id="压缩机制的陷阱">压缩机制的陷阱</h3>
+<p><img src="https://cdn.fliggy.com/upic/HQlqLw.svg" alt="Session Continuity"></p>
+<p>默认压缩算法按”可重新读取”判断，早期的 Tool Output 和文件内容会被优先删掉，顺带把<strong>架构决策和约束理由</strong>也一起扔了。两小时后再改，可能根本不记得两小时前定了什么，莫名其妙的 Bug 就是这么来的。</p>
+<p>解决方案就是在 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 里写明：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">## Compact Instructions</span><br><span class="line"></span><br><span class="line">When compressing, preserve in priority order:</span><br><span class="line"></span><br><span class="line">1. Architecture decisions (NEVER summarize)</span><br><span class="line">2. Modified files and their key changes</span><br><span class="line">3. Current verification status (pass/fail)</span><br><span class="line">4. Open TODOs and rollback notes</span><br><span class="line">5. Tool outputs (can delete, keep pass/fail only)</span><br></pre></td></tr></table></figure>
+<p>除了写 Compact Instructions，还有一种更主动的方案：在开新会话前，先让 Claude 写一份 <a target="_blank" rel="noopener" href="http://HANDOFF.md">HANDOFF.md</a>，把当前进度、尝试过什么、哪些走通了、哪些是死路、下一步该做什么写清楚。下一个 Claude 实例只读这个文件就能接着做，不依赖压缩算法的摘要质量：</p>
+<blockquote>
+<p>在 <a target="_blank" rel="noopener" href="http://HANDOFF.md">HANDOFF.md</a> 里写清楚现在的进展。解释你试了什么、什么有效、什么没用，让下一个拿到新鲜上下文的 agent 只看这个文件就能继续完成任务。</p>
+</blockquote>
+<p>写完后快速扫一眼，有缺漏直接让它补，然后开新会话，把 <a target="_blank" rel="noopener" href="http://HANDOFF.md">HANDOFF.md</a> 的路径发过去就行。</p>
+<h3 id="Plan-Mode-的工程价值">Plan Mode 的工程价值</h3>
+<p><img src="https://cdn.fliggy.com/upic/6qvOIC.png?x-oss-process=image/auto-orient,1/resize,w_2000/format,webp" alt="img"></p>
+<p>Plan Mode 的核心是把探索和执行拆开，探索阶段不动文件，确认方案后再执行：</p>
+<ul>
+<li>探索阶段以只读操作为主</li>
+<li>Claude 可以先澄清目标和边界，再提交具体方案</li>
+<li>执行成本在计划确认之后才发生</li>
+</ul>
+<p><img src="https://cdn.fliggy.com/upic/iOfkNM.png?x-oss-process=image/auto-orient,1/resize,w_2000/format,webp" alt="img"></p>
+<p>对于复杂重构、迁移、跨模块改动，这样做比”急着出代码”有用多了，在错误假设上越跑越偏的情况会少很多。按两下 <code>Shift+Tab</code> 进入 Plan Mode，<strong>进阶玩法是开一个 Claude 写计划，再开一个 Codex 以”高级工程师”身份审这个计划，让 AI 审 AI，效果很好</strong>。</p>
+<hr>
+<h2 id="4-Skills-设计：不是模板库，是用的时候才加载的工作流">4. Skills 设计：不是模板库，是用的时候才加载的工作流</h2>
+<p>Skill 官方描述是”按需加载的知识与工作流”，描述符常驻上下文，完整内容按需加载，用起来和”保存的 Prompt”差别挺大的。</p>
+<h3 id="一个好-Skill-应该满足什么">一个好 Skill 应该满足什么</h3>
+<ul>
+<li>描述要让模型知道”何时该用我”，而不是”我是干什么的”，这两个差很多</li>
+<li>有完整步骤、输入、输出和停止条件，别写了个开头没有结尾</li>
+<li>正文只放导航和核心约束，大资料拆到 supporting files 里</li>
+<li>有副作用的 Skill 要显式设置 <code>disable-model-invocation: true</code>，不然 Claude 会自己决定要不要跑</li>
+</ul>
+<h3 id="Skill-怎么做到”按需加载”">Skill 怎么做到”按需加载”</h3>
+<p>Claude Code 团队在内部设计中反复强调 “progressive disclosure”，意思不是让模型一次性看到所有信息，而是先获得索引和导航，再按需拉取细节：</p>
+<ul>
+<li><code>SKILL.md</code> 负责定义任务语义、边界和执行骨架</li>
+<li>supporting files 负责提供领域细节</li>
+<li>脚本负责确定性收集上下文或证据</li>
+</ul>
+<p>一个比较稳定的结构长这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.claude/skills/</span><br><span class="line">└── incident-triage/</span><br><span class="line">    ├── SKILL.md</span><br><span class="line">    ├── runbook.md</span><br><span class="line">    ├── examples.md</span><br><span class="line">    └── scripts/</span><br><span class="line">        └── collect-context.sh</span><br></pre></td></tr></table></figure>
+<h3 id="Skill-的三种典型类型">Skill 的三种典型类型</h3>
+<p>下面几个例子都来自我在开源 terminal 项目 <a target="_blank" rel="noopener" href="https://github.com/tw93/Kaku">Kaku</a>[3] 里的实际 Skill，比较直观。</p>
+<p><strong>类型一：检查清单型（质量门禁）</strong></p>
+<p>发布前跑一遍，确保不漏项：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">name: release-check</span><br><span class="line">description: Use before cutting a release to verify build, version, and smoke test.</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">## Pre-flight (All must pass)</span><br><span class="line">- [ ] `cargo build --release` passes</span><br><span class="line">- [ ] `cargo clippy -- -D warnings` clean</span><br><span class="line">- [ ] Version bumped in Cargo.toml</span><br><span class="line">- [ ] CHANGELOG updated</span><br><span class="line">- [ ] `kaku doctor` passes on clean env</span><br><span class="line"></span><br><span class="line">## Output</span><br><span class="line">Pass / Fail per item. Any Fail must be fixed before release.</span><br></pre></td></tr></table></figure>
+<p><strong>类型二：工作流型（标准化操作）</strong></p>
+<p>配置迁移高风险，显式调用 + 内置回滚步骤：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">name: config-migration</span><br><span class="line">description: Migrate config schema. Run only when explicitly requested.</span><br><span class="line">disable-model-invocation: true</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">## Steps</span><br><span class="line">1. Backup: `cp ~/.config/kaku/config.toml ~/.config/kaku/config.toml.bak`</span><br><span class="line">2. Dry run: `kaku config migrate --dry-run`</span><br><span class="line">3. Apply: remove `--dry-run` after confirming output</span><br><span class="line">4. Verify: `kaku doctor` all pass</span><br><span class="line"></span><br><span class="line">## Rollback</span><br><span class="line">`cp ~/.config/kaku/config.toml.bak ~/.config/kaku/config.toml`</span><br></pre></td></tr></table></figure>
+<p><strong>类型三：领域专家型（封装决策框架）</strong></p>
+<p>运行时出问题时让 Claude 按固定路径收集证据，不要瞎猜：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">name: runtime-diagnosis</span><br><span class="line">description: Use when kaku crashes, hangs, or behaves unexpectedly at runtime.</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">## Evidence Collection</span><br><span class="line">1. Run `kaku doctor` and capture full output</span><br><span class="line">2. Last 50 lines of `~/.local/share/kaku/logs/`</span><br><span class="line">3. Plugin state: `kaku --list-plugins`</span><br><span class="line"></span><br><span class="line">## Decision Matrix</span><br><span class="line">| Symptom | First Check |</span><br><span class="line">|---|---|</span><br><span class="line">| Crash on startup | doctor output → Lua syntax error |</span><br><span class="line">| Rendering glitch | GPU backend / terminal capability |</span><br><span class="line">| Config not applied | Config path + schema version |</span><br><span class="line"></span><br><span class="line">## Output Format</span><br><span class="line">Root cause / Blast radius / Fix steps / Verification command</span><br></pre></td></tr></table></figure>
+<h3 id="描述符写短点，每个-Skill-都在偷你的上下文空间">描述符写短点，每个 Skill 都在偷你的上下文空间</h3>
+<p>每个启用的 Skill，描述符常驻上下文。优化前后差距很大：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 低效（~45 tokens）</span><br><span class="line">description: |</span><br><span class="line">  This skill helps you review code changes in Rust projects.</span><br><span class="line">  It checks for common issues like unsafe code, error handling...</span><br><span class="line">  Use this when you want to ensure code quality before merging.</span><br><span class="line"></span><br><span class="line"># 高效（~9 tokens）</span><br><span class="line">description: Use for PR reviews with focus on correctness.</span><br></pre></td></tr></table></figure>
+<p>还有一个很重要的 <code>disable-auto-invoke</code> 使用策略：</p>
+<ul>
+<li>高频（&gt;1 次/会话）→ 保持 auto-invoke，优化描述符</li>
+<li>低频（&lt;1 次/会话）→ disable-auto-invoke，手动触发，描述符完全脱离上下文</li>
+<li>极低频（&lt;1 次/月）→ 移除 Skill，改为 <a target="_blank" rel="noopener" href="http://AGENTS.md">AGENTS.md</a> 中的文档</li>
+</ul>
+<h3 id="Skills-反模式">Skills 反模式</h3>
+<ul>
+<li>描述过短：<code>description: help with backend</code>（任何后端工作都能触发，哈哈）</li>
+<li>正文过长：几百行工作手册全塞进 <a target="_blank" rel="noopener" href="http://SKILL.md">SKILL.md</a> 正文</li>
+<li>一个 Skill 覆盖 review、deploy、debug、docs、incident 五件事</li>
+<li>有副作用的 Skill 允许模型自动调用</li>
+</ul>
+<hr>
+<h2 id="5-工具设计：怎么让-Claude-少选错">5. 工具设计：怎么让 Claude 少选错</h2>
+<p>我后面越用越觉得，给 Claude 的工具和给人写的 API 不是一回事。给人用的 API 往往会追求功能齐全，但给 agent 用，重点不是功能堆得多完整，而是让它更容易用对。</p>
+<h3 id="好工具-vs-坏工具">好工具 vs 坏工具</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">维度</th>
+<th style="text-align:center">好工具</th>
+<th style="text-align:center">坏工具</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">名称</td>
+<td style="text-align:center"><code>jira_issue_get</code>, <code>sentry_errors_search</code></td>
+<td style="text-align:center"><code>query</code>, <code>fetch</code>, <code>do_action</code></td>
+</tr>
+<tr>
+<td style="text-align:center">参数</td>
+<td style="text-align:center"><code>issue_key</code>, <code>project_id</code>, <code>response_format</code></td>
+<td style="text-align:center"><code>id</code>, <code>name</code>, <code>target</code></td>
+</tr>
+<tr>
+<td style="text-align:center">返回</td>
+<td style="text-align:center">与下一步决策直接相关的信息</td>
+<td style="text-align:center">一堆 UUID、内部字段、原始噪声</td>
+</tr>
+<tr>
+<td style="text-align:center">规模</td>
+<td style="text-align:center">单一目标，边界清楚</td>
+<td style="text-align:center">多个动作混杂，副作用不透明</td>
+</tr>
+<tr>
+<td style="text-align:center">成本</td>
+<td style="text-align:center">默认输出受控、可截断</td>
+<td style="text-align:center">默认返回过大上下文</td>
+</tr>
+<tr>
+<td style="text-align:center">错误信息</td>
+<td style="text-align:center">包含修正建议</td>
+<td style="text-align:center">仅返回 opaque error code</td>
+</tr>
+</tbody>
+</table>
+<p>几个实用设计原则：</p>
+<ul>
+<li>名称前缀按系统或资源分层：<code>github_pr_*</code>、<code>jira_issue_*</code></li>
+<li>对大响应支持 <code>response_format: concise / detailed</code></li>
+<li>错误响应要教模型如何修正，不要只抛 opaque error code</li>
+<li>能合并成高层任务工具时，不要暴露过多底层碎片工具，避免 <code>list_all_*</code> 让模型自行筛选</li>
+</ul>
+<h3 id="从-Claude-Code-内部工具演进学到的">从 Claude Code 内部工具演进学到的</h3>
+<p><img src="https://cdn.fliggy.com/upic/aMfLwM.png?x-oss-process=image/auto-orient,1/resize,w_2000/format,webp" alt="Finding the sweet spot"></p>
+<p>我看到 Claude Code 团队内部工具的这段演进时，感觉还挺有意思。像这种需要在任务中途停下来问用户的场景，他们前后试了三种做法：</p>
+<ul>
+<li><strong>第一版</strong>：给已有工具（如 Bash）加一个 <code>question</code> 参数，让 Claude 在调用工具时顺带提问。结果 Claude 大多数时候直接忽略这个参数，继续往下跑，根本不停下来问。</li>
+<li><strong>第二版</strong>：要求 Claude 在输出里写特定 markdown 格式，外层解析到这个格式就暂停。问题是没有强制约束，Claude 经常”忘了”按格式写，提问逻辑非常脆弱。</li>
+<li><strong>第三版</strong>：做成独立的 <code>AskUserQuestion</code> 工具。Claude 想提问就必须显式调用它，调用即暂停，没有歧义。比前两版靠谱多了。</li>
+</ul>
+<p>下面这张图刚好能解释，为什么第三版明显更稳：</p>
+<p><img src="https://cdn.fliggy.com/upic/JHqSz5.png?x-oss-process=image/auto-orient,1/resize,w_2000/format,webp" alt="Improving Elicitation &amp; the AskUserQuestion tool"></p>
+<p>左边（markdown 自由输出）太松，模型格式随意、外层解析脆弱；右边（ExitPlanTool 参数）太死，等到退出计划阶段提问已经太晚；<code>AskUserQuestion</code> 独立工具落在中间，结构化且随时可调用，是这三者里最稳定的设计。</p>
+<p>说白了，既然你就是要 Claude 停下来问一句，那就直接给它一个专门的工具。加个 flag 或者约定一段输出格式，很多时候它一顺手就略过去了。</p>
+<p><strong>Todo 工具的演进</strong>：</p>
+<p><img src="https://cdn.fliggy.com/upic/hXrzJK.png?x-oss-process=image/auto-orient,1/resize,w_2000/format,webp" alt="Updating with Capabilities - Tasks &amp; Todos"></p>
+<p>早期用 TodoWrite 工具 + 每 5 轮插入提醒让 Claude 记住任务。随着模型变强，这个工具反而成了限制，Todo 提醒让 Claude 认为必须严格遵循，无法灵活修改计划。挺有意思的教训：当初加这个工具是因为模型不够强，模型变强之后它反而变成了枷锁。值得过段时间回来检查一下，当初加的限制还成不成立。</p>
+<p><strong>搜索工具的演进</strong>：最初用 RAG 向量数据库，虽然快但需要索引、不同环境脆弱，最重要的是 <strong>Claude 不喜欢用</strong>。改成 Grep 工具让 Claude 自己搜索后，好用很多。后来又发现一个顺带的好处：Claude 读 Skill 文件，Skill 文件又引用其他文件，模型会递归读取，按需发现信息，不需要提前塞进去，这个模式后来被叫做”渐进式披露”。</p>
+<h3 id="什么时候不该再加-Tool">什么时候不该再加 Tool</h3>
+<ul>
+<li>本地 shell 可以可靠完成的事情</li>
+<li>模型只需要静态知识，不需要真正与外部交互</li>
+<li>需求更适合 Skill 的工作流约束，而不是 Tool 的动作能力</li>
+<li>还没验证过工具描述、schema 和返回格式能被模型稳定使用</li>
+</ul>
+<hr>
+<h2 id="6-Hooks：在-Claude-执行操作前后，强制插入你自己的逻辑">6. Hooks：在 Claude 执行操作前后，强制插入你自己的逻辑</h2>
+<p>Hooks 很容易被当成”自动运行的脚本”，但我自己用下来，觉得它更像是把一些不能交给 Claude 临场发挥的事情，重新收回到确定性的流程里。</p>
+<p>比如格式化要不要跑、保护文件能不能改、任务完成后要不要通知，这些事真不要指望 Claude 每次都自己记得。</p>
+<h3 id="当前支持的-Hook-点">当前支持的 Hook 点</h3>
+<p><img src="https://cdn.fliggy.com/upic/5J83L4.png?x-oss-process=image/auto-orient,1/resize,w_2000/format,webp" alt="Hooks 配置界面"></p>
+<h3 id="适合-vs-不适合放到-Hooks-的">适合 vs 不适合放到 Hooks 的</h3>
+<p><strong>适合</strong>：阻断修改受保护文件、Edit 后自动格式化/lint/轻量校验、SessionStart 后注入动态上下文（Git 分支、环境变量）、任务完成后推送通知。</p>
+<p><strong>不适合</strong>：需要读大量上下文的复杂语义判断、长时间运行的业务流程、需要多步推理和权衡的决策，这些该在 Skill 或 Subagent 里。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;hooks&quot;: &#123;</span><br><span class="line">    &quot;PostToolUse&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;matcher&quot;: &quot;Edit&quot;,</span><br><span class="line">        &quot;pattern&quot;: &quot;*.rs&quot;,</span><br><span class="line">        &quot;hooks&quot;: [</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;type&quot;: &quot;command&quot;,</span><br><span class="line">            &quot;command&quot;: &quot;cargo check 2&gt;&amp;1 | head -30&quot;,</span><br><span class="line">            &quot;statusMessage&quot;: &quot;Running cargo check...&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    &quot;Notification&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;type&quot;: &quot;command&quot;,</span><br><span class="line">        &quot;command&quot;: &quot;osascript -e &#x27;display notification \&quot;Task completed\&quot; with title \&quot;Claude Code\&quot;&#x27;&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Hooks：越早发现错误，越省时间">Hooks：越早发现错误，越省时间</h3>
+<p><img src="https://cdn.fliggy.com/upic/O9aa1Q.png?x-oss-process=image/auto-orient,1/resize,w_2000/format,webp" alt="Hooks 在执行过程中的介入点"></p>
+<p>在 100 次编辑的会话中，每次节省 30-60 秒，累积节省 1-2 小时，还挺可观的。<strong>注意限制输出长度</strong>（<code>| head -30</code>），避免 Hook 输出反而污染上下文。如果不想在每条命令后面手动加截断，可以看看第 3 节提到的 RTK，它把这件事系统化了。</p>
+<h3 id="Hooks-Skills-CLAUDE-md-三层叠加">Hooks + Skills + <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 三层叠加</h3>
+<ul>
+<li><code>CLAUDE.md</code>：声明”提交前必须通过测试和 lint”</li>
+<li><code>Skill</code>：告诉 Claude 在什么顺序下运行测试、如何看失败、如何修复</li>
+<li><code>Hook</code>：对关键路径执行硬性校验，必要时阻断</li>
+</ul>
+<p>用下来感觉，三样少任何一层都会有漏洞。只写 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 规则，Claude 经常当没看见；只靠 Hooks，细节判断又做不了，放在一起才比较稳。</p>
+<hr>
+<h2 id="7-claude-文件夹完整配置指南">7. .claude/ 文件夹完整配置指南</h2>
+<p>前面几节聊了架构原理和设计思路，这一节来点实操的：.claude/ 文件夹里每个文件到底该怎么配。</p>
+<p>大多数 Claude Code 用户把 .claude 文件夹当黑盒——知道它存在，看到它出现，但从没打开过。其实它是控制 Claude 行为的控制中心，指令、自定义命令、权限规则、甚至跨会话的记忆都存放在这里。</p>
+<p><img src="https://pbs.twimg.com/media/HD70c_tbMAAvhzK?format=jpg&amp;name=medium" alt="img"></p>
+<p><strong>注意有两个 .claude 目录</strong>：项目里的 <code>.claude/</code> 存团队配置（提交到 git），<code>~/.claude/</code> 存个人偏好和机器本地状态（会话历史、自动记忆）。</p>
+<h3 id="CLAUDE-md"><a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a></h3>
+<p>这是整个系统中最重要的文件。启动 Claude Code 会话时，它首先读取的就是 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a>，直接加载到系统提示中并在整个对话过程中牢记。</p>
+<p><strong>应该包含</strong>：</p>
+<ul>
+<li>构建、测试和 lint 命令</li>
+<li>关键架构决策</li>
+<li>不明显的陷阱</li>
+<li>导入约定、命名模式、错误处理风格</li>
+<li>主要模块的文件和文件夹结构</li>
+</ul>
+<p><strong>跳过</strong>：</p>
+<ul>
+<li>属于 linter 或 formatter 配置的内容</li>
+<li>可以链接到的完整文档</li>
+<li>解释理论的长段落</li>
+</ul>
+<p>保持 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 在 200 行以内，超过这个长度会消耗太多上下文，指令遵循度反而下降。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># 项目：Acme API</span><br><span class="line"></span><br><span class="line">## 命令</span><br><span class="line">npm run dev          # 启动开发服务器</span><br><span class="line">npm run test         # 运行测试（Jest）</span><br><span class="line">npm run lint         # ESLint + Prettier 检查</span><br><span class="line">npm run build        # 生产构建</span><br><span class="line"></span><br><span class="line">## 架构</span><br><span class="line">- Express REST API，Node 20</span><br><span class="line">- 通过 Prisma ORM 使用 PostgreSQL</span><br><span class="line">- 所有处理程序位于 src/handlers/</span><br><span class="line">- 共享类型位于 src/types/</span><br><span class="line"></span><br><span class="line">## 约定</span><br><span class="line">- 在每个处理程序中使用 zod 进行请求验证</span><br><span class="line">- 返回格式始终是 &#123; data, error &#125;</span><br><span class="line">- 永远不要向客户端暴露堆栈跟踪</span><br><span class="line">- 使用日志模块，而不是 console.log</span><br><span class="line"></span><br><span class="line">## 注意事项</span><br><span class="line">- 测试使用真实的本地数据库，而不是模拟。先运行 `npm run db:test:reset`</span><br><span class="line">- 严格 TypeScript：永远不要有未使用的导入</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>关于如何写好 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 的更多方法论，可以参考第 12 节《如何写一个好的 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a>》。</p>
+</blockquote>
+<h3 id="CLAUDE-local-md"><a target="_blank" rel="noopener" href="http://CLAUDE.local.md">CLAUDE.local.md</a></h3>
+<p>有时你有一些只适用于你而不适用于整个团队的偏好。在项目根目录创建 <a target="_blank" rel="noopener" href="http://CLAUDE.local.md">CLAUDE.local.md</a>，Claude 会同时读取它和主 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a>，并且它会自动被 gitignore。</p>
+<p><img src="https://pbs.twimg.com/media/HD710uUaQAAppSN?format=jpg&amp;name=medium" alt="img"></p>
+<h3 id="rules-文件夹">rules/ 文件夹</h3>
+<p><a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 对单个项目效果很好，但一旦团队壮大，你最终会得到一个 300 行的 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a>，没有人维护，每个人都忽略。</p>
+<p><code>.claude/rules/</code> 中的每个 markdown 文件都会自动与 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 一起加载，你可以按关注点拆分指令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.claude/rules/</span><br><span class="line">├── code-style.md</span><br><span class="line">├── testing.md</span><br><span class="line">├── api-conventions.md</span><br><span class="line">└── security.md</span><br></pre></td></tr></table></figure>
+<p>真正的力量来自<strong>路径限定规则</strong>。向规则文件添加 YAML frontmatter，它只在 Claude 处理匹配文件时激活：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">paths:</span><br><span class="line">  - &quot;src/api/**/*.ts&quot;</span><br><span class="line">  - &quot;src/handlers/**/*.ts&quot;</span><br><span class="line">---</span><br><span class="line"># API 设计规则</span><br><span class="line"></span><br><span class="line">- 所有处理程序返回 &#123; data, error &#125; 格式</span><br><span class="line">- 使用 zod 进行请求体验证</span><br><span class="line">- 永远不要向客户端暴露内部错误详情</span><br></pre></td></tr></table></figure>
+<p>当 Claude 编辑 React 组件时，不会加载此文件。它只在处理 src/api/ 或 src/handlers/ 内部时加载。</p>
+<h3 id="commands-文件夹">commands/ 文件夹</h3>
+<p><img src="https://pbs.twimg.com/media/HD72R4zboAEjp6U?format=jpg&amp;name=medium" alt="img"></p>
+<p>开箱即用，Claude Code 有内置的斜杠命令，如 /help 和 /compact。commands/ 文件夹让你添加自己的命令。</p>
+<p>你放入 <code>.claude/commands/</code> 的每个 markdown 文件都成为一个斜杠命令。名为 <a target="_blank" rel="noopener" href="http://review.md">review.md</a> 的文件创建 /project:review。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">description: 在合并前审查当前分支的差异</span><br><span class="line">---</span><br><span class="line">## 要审查的更改</span><br><span class="line"></span><br><span class="line">!`git diff --name-only main...HEAD`</span><br><span class="line"></span><br><span class="line">## 详细差异</span><br><span class="line"></span><br><span class="line">!`git diff main...HEAD`</span><br><span class="line"></span><br><span class="line">审查上述更改：</span><br><span class="line">1. 代码质量问题</span><br><span class="line">2. 安全漏洞</span><br><span class="line">3. 缺失的测试覆盖</span><br><span class="line">4. 性能问题</span><br><span class="line"></span><br><span class="line">按文件提供具体、可操作的反馈。</span><br></pre></td></tr></table></figure>
+<p><code>!</code> 反引号语法运行 shell 命令并嵌入输出。使用 <code>$ARGUMENTS</code> 传递命令名后的文本。</p>
+<p>项目命令放在 <code>.claude/commands/</code>，个人命令放在 <code>~/.claude/commands/</code>（显示为 /user:command-name）。</p>
+<h3 id="skills-文件夹">skills/ 文件夹</h3>
+<p><img src="https://pbs.twimg.com/media/HD73p9-bEAAZUSD?format=jpg&amp;name=medium" alt="img"></p>
+<p>技能是 Claude 可以在没有您输入斜杠命令的情况下自行调用的工作流，当任务与技能的描述匹配时。</p>
+<p>每个技能都位于自己的子目录中，带有 <a target="_blank" rel="noopener" href="http://SKILL.md">SKILL.md</a> 文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">.claude/skills/</span><br><span class="line">├── security-review/</span><br><span class="line">│   ├── SKILL.md</span><br><span class="line">│   └── DETAILED_GUIDE.md</span><br><span class="line">└── deploy/</span><br><span class="line">    ├── SKILL.md</span><br><span class="line">    └── templates/</span><br><span class="line">        └── release-notes.md</span><br><span class="line">---</span><br><span class="line">name: security-review</span><br><span class="line">description: 全面的安全审计。在审查代码漏洞、</span><br><span class="line">  部署前，或当用户提到安全时使用。</span><br><span class="line">allowed-tools: Read, Grep, Glob</span><br><span class="line">---</span><br><span class="line">分析代码库的安全漏洞：</span><br><span class="line"></span><br><span class="line">1. SQL 注入和 XSS 风险</span><br><span class="line">2. 暴露的凭据或密钥</span><br><span class="line">3. 不安全的配置</span><br><span class="line">4. 身份验证和授权缺口</span><br><span class="line"></span><br><span class="line">报告发现的问题，包含严重性评级和具体的修复步骤。</span><br><span class="line">参考 @DETAILED_GUIDE.md 了解我们的安全标准。</span><br></pre></td></tr></table></figure>
+<p>与命令的关键区别：技能可以捆绑支持文件（@DETAILED_GUIDE.md 引用相邻的详细文档）。命令是单个文件，技能是包。</p>
+<h3 id="agents-文件夹">agents/ 文件夹</h3>
+<p>当任务复杂到需要专门专家时，你可以在 <code>.claude/agents/</code> 中定义子代理角色。每个代理都是一个 markdown 文件，有自己的系统提示、工具访问权限和模型偏好：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">.claude/agents/</span><br><span class="line">├── code-reviewer.md</span><br><span class="line">└── security-auditor.md</span><br><span class="line">---</span><br><span class="line">name: code-reviewer</span><br><span class="line">description: 专家代码审查员。在审查 PR、</span><br><span class="line">  检查 bug 或在合并前验证实现时主动使用。</span><br><span class="line">model: sonnet</span><br><span class="line">tools: Read, Grep, Glob</span><br><span class="line">---</span><br><span class="line">你是一位专注于正确性和可维护性的高级代码审查员。</span><br><span class="line"></span><br><span class="line">审查代码时：</span><br><span class="line">- 标记 bug，而不仅仅是风格问题</span><br><span class="line">- 建议具体的修复，而不是模糊的改进</span><br><span class="line">- 检查边界情况和错误处理缺口</span><br><span class="line">- 只在规模上重要时才注意性能问题</span><br></pre></td></tr></table></figure>
+<p>tools 字段限制代理可以执行的操作，model 字段允许你为专注的任务使用更便宜、更快的模型。</p>
+<p><img src="https://pbs.twimg.com/media/HD76U4QbAAAt7X5?format=jpg&amp;name=medium" alt="img"></p>
+<h3 id="settings-json">settings.json</h3>
+<p><code>.claude/settings.json</code> 控制 Claude 可以做什么和不能做什么：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;$schema&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://json.schemastore.org/claude-code-settings.json&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;permissions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;allow&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="string">&quot;Bash(npm run *)&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="string">&quot;Bash(git status)&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="string">&quot;Bash(git diff *)&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="string">&quot;Read&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="string">&quot;Write&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="string">&quot;Edit&quot;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;deny&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="string">&quot;Bash(rm -rf *)&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="string">&quot;Bash(curl *)&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="string">&quot;Read(./.env)&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="string">&quot;Read(./.env.*)&quot;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>allow</strong>：无需询问确认即可运行的命令</li>
+<li><strong>deny</strong>：完全被阻止的命令</li>
+<li>不在任一列表中的命令，Claude 会在继续前询问</li>
+</ul>
+<p><code>settings.local.json</code> 用于个人权限覆盖，自动被 gitignore。</p>
+<h3 id="claude-文件夹">~/.claude/ 文件夹</h3>
+<ul>
+<li><code>~/.claude/CLAUDE.md</code>：加载到每个 Claude Code 会话中，适合存放个人编码原则</li>
+<li><code>~/.claude/projects/</code>：存储每个项目的会话记录和自动记忆，使用 <code>/memory</code> 浏览和编辑</li>
+<li><code>~/.claude/commands/</code> 和 <code>~/.claude/skills/</code>：可在所有项目中使用的个人命令和技能</li>
+</ul>
+<h3 id="完整目录结构">完整目录结构</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">your-project/</span><br><span class="line">├── CLAUDE.md                  # 团队指令（已提交）</span><br><span class="line">├── CLAUDE.local.md            # 你的个人覆盖（gitignored）</span><br><span class="line">│</span><br><span class="line">└── .claude/</span><br><span class="line">    ├── settings.json          # 权限 + 配置（已提交）</span><br><span class="line">    ├── settings.local.json    # 个人权限覆盖（gitignored）</span><br><span class="line">    │</span><br><span class="line">    ├── commands/              # 自定义斜杠命令</span><br><span class="line">    │   ├── review.md          # → /project:review</span><br><span class="line">    │   ├── fix-issue.md       # → /project:fix-issue</span><br><span class="line">    │   └── deploy.md          # → /project:deploy</span><br><span class="line">    │</span><br><span class="line">    ├── rules/                 # 模块化指令文件</span><br><span class="line">    │   ├── code-style.md</span><br><span class="line">    │   ├── testing.md</span><br><span class="line">    │   └── api-conventions.md</span><br><span class="line">    │</span><br><span class="line">    ├── skills/                # 自动调用的工作流</span><br><span class="line">    │   ├── security-review/</span><br><span class="line">    │   │   └── SKILL.md</span><br><span class="line">    │   └── deploy/</span><br><span class="line">    │       └── SKILL.md</span><br><span class="line">    │</span><br><span class="line">    └── agents/                # 专门的子代理角色</span><br><span class="line">        ├── code-reviewer.md</span><br><span class="line">        └── security-auditor.md</span><br><span class="line"></span><br><span class="line">~/.claude/</span><br><span class="line">├── CLAUDE.md                  # 你的全局指令</span><br><span class="line">├── settings.json              # 你的全局设置</span><br><span class="line">├── commands/                  # 你的个人命令（所有项目）</span><br><span class="line">├── skills/                    # 你的个人技能（所有项目）</span><br><span class="line">├── agents/                    # 你的个人代理（所有项目）</span><br><span class="line">└── projects/                  # 会话历史 + 自动记忆</span><br></pre></td></tr></table></figure>
+<h3 id="实用的入门路径">实用的入门路径</h3>
+<p>如果你从零开始，以下是一个有效的渐进路径：</p>
+<ol>
+<li><strong>步骤 1</strong>：运行 <code>/init</code> 生成初始 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a>，将其精简到要点</li>
+<li><strong>步骤 2</strong>：添加 <code>.claude/settings.json</code>，至少允许你的运行命令并阻止 .env 读取</li>
+<li><strong>步骤 3</strong>：为你最常做的工作流创建一个或两个命令</li>
+<li><strong>步骤 4</strong>：随着项目增长，将指令拆分到 <code>.claude/rules/</code> 文件中</li>
+<li><strong>步骤 5</strong>：添加 <code>~/.claude/CLAUDE.md</code> 包含你的个人偏好</li>
+</ol>
+<p>对于 95% 的项目，这些真的就是全部所需。当你有值得打包的重复复杂工作流时，技能和代理才会出现。</p>
+<hr>
+<h2 id="8-Subagents：派一个独立的-Claude-去干一件具体的事">8. Subagents：派一个独立的 Claude 去干一件具体的事</h2>
+<p>Subagent 就是从主对话派出去的一个独立 Claude 实例，有自己的上下文窗口，只用你指定的工具，干完汇报结果。我用下来觉得它最大的价值不是”并行”，而是隔离——扫代码库、跑测试、做审查这类会产生大量输出的事，塞进主线程很快就把有效上下文挤没了，交给 Subagent 做，主线程只拿一个摘要，干净很多。</p>
+<p>Claude Code 内置了三个：<strong>Explore</strong>（只读扫库，默认跑 Haiku 省成本）、<strong>Plan</strong>（规划调研）、<strong>General-purpose</strong>（通用），也可以自定义。</p>
+<h3 id="配置时要显式约束">配置时要显式约束</h3>
+<ul>
+<li><code>tools</code> / <code>disallowedTools</code>：限定能用什么工具，别给和主线程一样宽的权限</li>
+<li><code>model</code>：探索任务用 Haiku/Sonnet，重要审查用 Opus</li>
+<li><code>maxTurns</code>：防止跑飞</li>
+<li><code>isolation: worktree</code>：需要动文件时隔离文件系统</li>
+</ul>
+<p>另一个实用细节：长时间运行的 bash 命令可以按 <code>Ctrl+B</code> 移到后台，Claude 之后会用 BashOutput 工具查看结果，不会阻塞主线程继续工作。subagent 同理，直接告诉它「在后台跑」就行。</p>
+<h3 id="几个常见反模式">几个常见反模式</h3>
+<ul>
+<li>子代理权限和主线程一样宽，隔离没有意义</li>
+<li>输出格式不固定，主线程拿到没法用</li>
+<li>子任务之间强依赖，频繁要共享中间状态，这种情况用 Subagent 不合适</li>
+</ul>
+<hr>
+<h2 id="9-Prompt-Caching：Claude-Code-内部架构的核心">9. Prompt Caching：Claude Code 内部架构的核心</h2>
+<p>这块我之前在很多教程里都没怎么看到有人展开讲，但它其实很影响 Claude Code 的成本结构和很多设计取舍。</p>
+<blockquote>
+<p>工程界有句话 “Cache Rules Everything Around Me”，对 agent 同样如此，Claude Code 的整个架构都是围绕 Prompt 缓存构建的，高命中率不光省钱，速率限制也会松很多，Anthropic 甚至会对命中率跑告警，太低直接宣布 SEV。</p>
+</blockquote>
+<h3 id="为缓存设计的-Prompt-Layout">为缓存设计的 Prompt Layout</h3>
+<p><img src="https://cdn.fliggy.com/upic/tCDytz.png?x-oss-process=image/auto-orient,1/resize,w_2000/format,webp" alt="Lay Out Your Prompt for Caching"></p>
+<p>Prompt 缓存是按<strong>前缀匹配</strong>工作的，从请求开头到每个 <code>cache_control</code> 断点之前的内容都会被缓存。所以这里的顺序很重要：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Claude Code 的 Prompt 顺序：</span><br><span class="line">1. System Prompt → 静态，锁定</span><br><span class="line">2. Tool Definitions → 静态，锁定</span><br><span class="line">3. Chat History → 动态，在后面</span><br><span class="line">4. 当前用户输入 → 最后</span><br></pre></td></tr></table></figure>
+<p><strong>破坏缓存的常见陷阱：</strong></p>
+<ul>
+<li>在静态系统 Prompt 中放入带时间戳的内容（让它每次都变）</li>
+<li>非确定性地打乱工具定义顺序</li>
+<li>会话中途增删工具</li>
+</ul>
+<p>那像当前时间这种动态信息怎么办？别去动系统 Prompt，放到下一条消息里传进去就行。Claude Code 自己也是这么做的，用户消息里加 <code>&lt;system-reminder&gt;</code> 标签，系统 Prompt 不动，缓存也就不会被打坏。</p>
+<h3 id="会话中途不要切换模型">会话中途不要切换模型</h3>
+<p>Prompt 缓存是模型唯一的。假如你已经和 Opus 对话了 100K tokens，想问个简单问题，<strong>切换到 Haiku 实际上比继续用 Opus 更贵</strong>，因为要为 Haiku 重建整个缓存。确实需要切换的话，用 Subagent 交接：Opus 准备一条”交接消息”给另一个模型，说明需要完成的任务就行。</p>
+<h3 id="Compaction-的实际实现">Compaction 的实际实现</h3>
+<p><img src="https://cdn.fliggy.com/upic/0M2eXx.png?x-oss-process=image/auto-orient,1/resize,w_2000/format,webp" alt="Forking Context — Compaction"></p>
+<p>上图是 Compaction（上下文压缩）的执行流程：左边是上下文快满时的状态，中间是 Claude Code 开一个 fork 调用，把完整对话历史喂给模型，加一句”Summarize this conversation”，这一步命中缓存所以只需 1/10 的价格，右边是压缩完之后，原来几十轮对话被替换成一段 ~20k tokens 的摘要，System + Tools 还在，再挂上之前用到的文件引用，腾出空间继续新的轮次。</p>
+<p>直觉上 Plan Mode 应该切换成只读工具集，但这会破坏缓存。实际实现是：<code>EnterPlanMode</code> 是模型可以自己调用的工具，检测到复杂问题时自主进入 plan mode，工具集不变，缓存不受影响。</p>
+<h3 id="defer-loading：工具的延迟加载">defer_loading：工具的延迟加载</h3>
+<p>Claude Code 有数十个 MCP 工具，每次请求全量包含会很贵，但中途移除会破坏缓存。解决方案是发送轻量级 stub，只有工具名，标记 <code>defer_loading: true</code>。模型通过 ToolSearch 工具”发现”它们，完整的工具 schema 只在模型选择后才加载，这样缓存前缀保持稳定。</p>
+<hr>
+<h2 id="10-验证闭环：没有-Verifier-就没有工程上的-Agent">10. 验证闭环：没有 Verifier 就没有工程上的 Agent</h2>
+<p>「Claude 说完成了」其实没啥用，你得能知道它做没做对、出了问题能退回来、过程还能查，这才算数。</p>
+<h3 id="Verifier-的层级">Verifier 的层级</h3>
+<ul>
+<li>最低层：命令退出码、lint、typecheck、unit test</li>
+<li>中间层：集成测试、截图对比、contract test、smoke test</li>
+<li>更高层：生产日志验证、监控指标、人工审查清单</li>
+</ul>
+<h3 id="在-Prompt、Skill-和-CLAUDE-md-中显式定义验证">在 Prompt、Skill 和 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 中显式定义验证</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">## Verification</span><br><span class="line"></span><br><span class="line">For backend changes:</span><br><span class="line"></span><br><span class="line">- Run `make test` and `make lint`</span><br><span class="line">- For API changes, update contract tests under `tests/contracts/`</span><br><span class="line"></span><br><span class="line">For UI changes:</span><br><span class="line"></span><br><span class="line">- Capture before/after screenshots if visual</span><br><span class="line"></span><br><span class="line">Definition of done:</span><br><span class="line"></span><br><span class="line">- All tests pass</span><br><span class="line">- Lint passes</span><br><span class="line">- No TODO left behind unless explicitly tracked</span><br></pre></td></tr></table></figure>
+<p>写任务 Prompt 或 Skill 的时候，最好把验收标准提前说清楚。哪些命令跑完算完成，失败了先查什么，截图和日志看到什么才算过，这些越早讲明白，后面越省事。</p>
+<p>我自己有个很简单的判断：假如一个任务你都说不清楚「Claude 怎么才算做对了」，那它大概率也不适合直接丢给 Claude 自动完成。</p>
+<hr>
+<h2 id="11-高频命令的工程意义">11. 高频命令的工程意义</h2>
+<p>这些命令说白了就干一件事：主动管理上下文，别等系统自己处理。</p>
+<h3 id="上下文管理">上下文管理</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/context   # 查看 token 占用结构，排查 MCP 和文件读取占比</span><br><span class="line">/clear     # 清空会话，同一问题被纠偏两次以上就重来</span><br><span class="line">/compact   # 压缩但保留重点，配合 Compact Instructions</span><br><span class="line">/memory    # 确认哪些 CLAUDE.md 真的被加载了</span><br></pre></td></tr></table></figure>
+<h3 id="能力与治理">能力与治理</h3>
+<p><img src="https://cdn.fliggy.com/upic/XwDs5n.png?x-oss-process=image/auto-orient,1/resize,w_2000/format,webp" alt="/mcp 连接状态，可以看到各 server 的工具数量和 token 消耗"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/mcp       # 管理 MCP 连接，检查 token 成本，断开闲置 server</span><br><span class="line">/hooks     # 管理 hooks，控制平面入口</span><br><span class="line">/permissions # 查看或更新权限白名单</span><br><span class="line">/sandbox   # 配置沙箱隔离，高自动化场景必备</span><br><span class="line">/model     # 切换模型：Opus 用于深度推理，Sonnet 用于常规，Haiku 用于快速探索</span><br></pre></td></tr></table></figure>
+<h3 id="会话连续性与并行">会话连续性与并行</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">claude --continue               # 恢复当前目录最近会话，隔天接着做</span><br><span class="line">claude --resume                 # 打开选择器恢复历史会话</span><br><span class="line">claude --continue --fork    # 从已有会话分叉，同一起点不同方案</span><br><span class="line">claude --worktree              # 创建隔离 git worktree</span><br><span class="line">claude -p &quot;prompt&quot;            # 非交互模式，接入 CI / pre-commit / 脚本</span><br><span class="line">claude -p --output-format json  # 结构化输出，便于脚本消费</span><br></pre></td></tr></table></figure>
+<h3 id="几个不常见但很好用的命令">几个不常见但很好用的命令</h3>
+<p><strong><code>/simplify</code></strong>：对刚改完的代码做三维检查，代码复用、质量和效率，发现问题直接修掉。特别适合改完一段逻辑后立刻跑一遍，代替手动 review。</p>
+<p><strong><code>/rewind</code></strong>：不是”撤销”，而是回到某个会话 checkpoint 重新总结。适合：Claude 已沿错误路径探索太久；想保留前半段共识但丢掉后半段失败。</p>
+<p><strong><code>/btw</code></strong>：在不打断主任务的前提下快速问一个侧问题，适合”两个命令有什么区别”这类单轮旁路问答，不适合需要读仓库或调用工具的问题。</p>
+<p><strong><code>claude -p --output-format stream-json</code></strong>：实时 JSON 事件流，适合长任务监控、增量处理、流式集成到自己的工具。</p>
+<p><strong><code>/insight</code></strong>：让 Claude 分析当前会话，提炼出哪些内容值得沉淀到 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a>。用法是会话做了一段之后跑一次，它会指出”这个约定你们反复提到，但没有写进契约”之类的盲点，是迭代优化 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 的好手段。</p>
+<p><strong>双击 ESC 回溯</strong>：按两次 ESC 可以回到上一条输入重新编辑，不用重新手打。Claude 走偏了、或者上一句话没说清楚，双击 ESC 修改后重发，比重新开会话省事得多。</p>
+<p><strong>对话历史都在本地</strong>：所有会话记录存放在 <code>~/.claude/projects/</code> 下，文件夹名按项目路径命名（斜杠变横杠），每个会话是一个 <code>.jsonl</code> 文件。想找某个话题的历史，直接 <code>grep -rl &quot;关键词&quot; ~/.claude/projects/</code> 就能定位，或者直接告诉 Claude「帮我搜一下之前关于 X 的讨论」，它会自己去翻。</p>
+<hr>
+<h2 id="12-如何写一个好的-CLAUDE-md">12. 如何写一个好的 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a></h2>
+<p><code>CLAUDE.md</code> 在我看来更像是你和 Claude 之间的协作契约，不是团队文档，也不是知识库，里面只放那些每次会话都得成立的事。</p>
+<p>我自己的建议其实很简单，一开始甚至可以什么都不写。先用起来，等你发现自己老是在重复同一件事，再把它补进去。加法也不复杂，输入 <code>#</code> 可以把当前对话里的内容直接追加进 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a>，或者直接告诉 Claude「把这条加到项目的 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 里」，它会知道该改哪个文件。</p>
+<p><img src="https://cdn.fliggy.com/upic/6IysXR.jpg?x-oss-process=image/auto-orient,1/resize,w_2000/format,webp" alt="Keep it simple"></p>
+<h3 id="应该放什么">应该放什么</h3>
+<ul>
+<li>怎么 build、怎么 test、怎么跑（最核心）</li>
+<li>关键目录结构与模块边界</li>
+<li>代码风格和命名约束</li>
+<li>那些不明显的环境坑</li>
+<li>绝对不能干的事（NEVER 列表）</li>
+<li>压缩时必须保留的信息（Compact Instructions）</li>
+</ul>
+<h3 id="不该放什么">不该放什么</h3>
+<ul>
+<li>大段背景介绍</li>
+<li>完整 API 文档</li>
+<li>空泛原则，如”写高质量代码”</li>
+<li>Claude 通过读仓库即可推断的显然信息</li>
+<li>大量背景资料和低频任务知识（这些放到 Skills）</li>
+</ul>
+<h3 id="高质量模板">高质量模板</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"># Project Contract</span><br><span class="line"></span><br><span class="line">## Build And Test</span><br><span class="line"></span><br><span class="line">- Install: `pnpm install`</span><br><span class="line">- Dev: `pnpm dev`</span><br><span class="line">- Test: `pnpm test`</span><br><span class="line">- Typecheck: `pnpm typecheck`</span><br><span class="line">- Lint: `pnpm lint`</span><br><span class="line"></span><br><span class="line">## Architecture Boundaries</span><br><span class="line"></span><br><span class="line">- HTTP handlers live in `src/http/handlers/`</span><br><span class="line">- Domain logic lives in `src/domain/`</span><br><span class="line">- Do not put persistence logic in handlers</span><br><span class="line">- Shared types live in `src/contracts/`</span><br><span class="line"></span><br><span class="line">## Coding Conventions</span><br><span class="line"></span><br><span class="line">- Prefer pure functions in domain layer</span><br><span class="line">- Do not introduce new global state without explicit justification</span><br><span class="line">- Reuse existing error types from `src/errors/`</span><br><span class="line"></span><br><span class="line">## Safety Rails</span><br><span class="line"></span><br><span class="line">## NEVER</span><br><span class="line"></span><br><span class="line">- Modify `.env`, lockfiles, or CI secrets without explicit approval</span><br><span class="line">- Remove feature flags without searching all call sites</span><br><span class="line">- Commit without running tests</span><br><span class="line"></span><br><span class="line">## ALWAYS</span><br><span class="line"></span><br><span class="line">- Show diff before committing</span><br><span class="line">- Update CHANGELOG for user-facing changes</span><br><span class="line"></span><br><span class="line">## Verification</span><br><span class="line"></span><br><span class="line">- Backend changes: `make test` + `make lint`</span><br><span class="line">- API changes: update contract tests under `tests/contracts/`</span><br><span class="line">- UI changes: capture before/after screenshots</span><br><span class="line"></span><br><span class="line">## Compact Instructions</span><br><span class="line"></span><br><span class="line">Preserve:</span><br><span class="line"></span><br><span class="line">1. Architecture decisions (NEVER summarize)</span><br><span class="line">2. Modified files and key changes</span><br><span class="line">3. Current verification status (pass/fail commands)</span><br><span class="line">4. Open risks, TODOs, rollback notes</span><br></pre></td></tr></table></figure>
+<p>用起来其实不复杂：每次都要知道的放 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a>，只对部分文件生效的放 rules，只在某类任务中需要的放 Skills。</p>
+<h3 id="让-Claude-维护自己的-CLAUDE-md">让 Claude 维护自己的 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a></h3>
+<p>我最喜欢的一个技巧：每次纠正 Claude 的错误后，让它自己更新 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a>：</p>
+<blockquote>
+<p>“Update your <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> so you don’t make that mistake again.”</p>
+</blockquote>
+<p>Claude 在给自己补这类规则时其实还挺好用，用久了确实越来越少犯同样的错。不过也要定期 review，时间一长总会有些条目慢慢过时，当初有用的限制现在未必还适合，这件事后面第 14 节有个更系统的做法。</p>
+<hr>
+<h2 id="13-最近自己折腾中得到的新经验">13. 最近自己折腾中得到的新经验</h2>
+<p>春节放假时，我用 Claude Code 做了一个开源 terminal 项目 <a target="_blank" rel="noopener" href="https://github.com/tw93/Kaku">Kaku</a>[4]，底层是 Rust + Lua，也带了一些 AI 能力。混合语言加上自定义配置系统，实际折腾下来反而暴露出不少典型的 agent 协作问题，顺手聊几个对我帮助比较大的经验。</p>
+<h3 id="“环境透明”比你想象中重要">“环境透明”比你想象中重要</h3>
+<p>Claude Code 调用的都是真实的 shell、git、package manager 和本地配置。这里面只要有一层不透明，它就只能开始猜，一猜可靠性就掉。这不是 Claude Code 特有的问题，很多 agent 都一样。</p>
+<p>所以我后来很快就在 terminal 里加了个 <code>doctor</code> 命令，把环境状态、依赖和配置情况先统一收上来，输出一份结构化的健康报告。Claude Code 开始做事前先跑一次 doctor，确实能省掉很多”环境没搞清楚就开干”的问题。</p>
+<p>另外我还发现，假如 CLI 本身就有 <code>init</code>、<code>config</code>、<code>reset</code> 这类语义清楚的子命令，Claude Code 用起来会稳不少，比让它自己去猜配置文件怎么摆要靠谱。先把状态收敛住，再暴露编辑入口，顺序一反过来就很容易乱。</p>
+<h3 id="混合语言项目的-Hooks-实践">混合语言项目的 Hooks 实践</h3>
+<p>两套语言、两套检查，其实挺适合用 Hooks 按文件类型分别触发：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;hooks&quot;: &#123;</span><br><span class="line">    &quot;PostToolUse&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;matcher&quot;: &quot;Edit&quot;,</span><br><span class="line">        &quot;pattern&quot;: &quot;*.rs&quot;,</span><br><span class="line">        &quot;hooks&quot;: [&#123;</span><br><span class="line">          &quot;type&quot;: &quot;command&quot;,</span><br><span class="line">          &quot;command&quot;: &quot;cargo check 2&gt;&amp;1 | head -30&quot;,</span><br><span class="line">          &quot;statusMessage&quot;: &quot;Checking Rust...&quot;</span><br><span class="line">        &#125;]</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;matcher&quot;: &quot;Edit&quot;,</span><br><span class="line">        &quot;pattern&quot;: &quot;*.lua&quot;,</span><br><span class="line">        &quot;hooks&quot;: [&#123;</span><br><span class="line">          &quot;type&quot;: &quot;command&quot;,</span><br><span class="line">          &quot;command&quot;: &quot;luajit -b $FILE /dev/null 2&gt;&amp;1 | head -10&quot;,</span><br><span class="line">          &quot;statusMessage&quot;: &quot;Checking Lua syntax...&quot;</span><br><span class="line">        &#125;]</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>每次编辑完立刻知道有没有编译错误，比”跑了一堆才发现最开始就挂了”舒服得多。</p>
+<h3 id="完整的工程化布局参考">完整的工程化布局参考</h3>
+<p>假如有同学想给自己项目配一套比较完整的 Claude Code 工程布局，可以参考这个结构，不用全做，按需裁剪：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Project/</span><br><span class="line">├── CLAUDE.md</span><br><span class="line">├── .claude/</span><br><span class="line">│   ├── rules/</span><br><span class="line">│   │   ├── core.md</span><br><span class="line">│   │   ├── config.md</span><br><span class="line">│   │   └── release.md</span><br><span class="line">│   ├── skills/</span><br><span class="line">│   │   ├── runtime-diagnosis/     # 统一收集日志、状态和依赖</span><br><span class="line">│   │   ├── config-migration/      # 配置迁移回滚防污</span><br><span class="line">│   │   ├── release-check/         # 发布前校验、smoke test</span><br><span class="line">│   │   └── incident-triage/       # 线上故障分诊</span><br><span class="line">│   ├── agents/</span><br><span class="line">│   │   ├── reviewer.md</span><br><span class="line">│   │   └── explorer.md</span><br><span class="line">│   └── settings.json</span><br><span class="line">└── docs/</span><br><span class="line">    └── ai/</span><br><span class="line">        ├── architecture.md</span><br><span class="line">        └── release-runbook.md</span><br></pre></td></tr></table></figure>
+<p>全局约束（<code>CLAUDE.md</code>）、路径约束（<code>rules</code>）、工作流（<code>skills</code>）和架构细节各归各位，Claude Code 跑起来会稳很多。假如你同时维护多个项目，可以把稳定的个人基线放在 <code>~/.claude/</code>，各项目的差异放在项目级 <code>.claude/</code>，通过同步脚本分发，不同项目之间就不会互相污染了。</p>
+<hr>
+<h2 id="14-常见反模式">14. 常见反模式</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">反模式</th>
+<th style="text-align:center">症状</th>
+<th style="text-align:center">修复</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 当 wiki</td>
+<td style="text-align:center">每次加载污染上下文，关键指令被稀释</td>
+<td style="text-align:center">只保留契约，资料拆到 Skills 和 rules</td>
+</tr>
+<tr>
+<td style="text-align:center">Skill 大杂烩</td>
+<td style="text-align:center">描述无法稳定触发，工作流冲突</td>
+<td style="text-align:center">一个 Skill 只做一类事，副作用显式控制</td>
+</tr>
+<tr>
+<td style="text-align:center">工具太多描述模糊</td>
+<td style="text-align:center">选错工具，schema 挤爆上下文</td>
+<td style="text-align:center">合并重叠工具，做明确 namespacing</td>
+</tr>
+<tr>
+<td style="text-align:center">没有验证闭环</td>
+<td style="text-align:center">Claude 只能”觉得自己完成了”</td>
+<td style="text-align:center">给每类任务绑定 verifier</td>
+</tr>
+<tr>
+<td style="text-align:center">过度自治</td>
+<td style="text-align:center">多 agent 并行无边界，出错难止损</td>
+<td style="text-align:center">角色/权限/worktree 最小化，明确 maxTurns</td>
+</tr>
+<tr>
+<td style="text-align:center">上下文不做切分</td>
+<td style="text-align:center">研究、实现、审查全堆在主线程，有效上下文被稀释</td>
+<td style="text-align:center">任务切换 <code>/clear</code>，阶段切换 <code>/compact</code>，重型探索交给 subagent（Explore → Main 模式）</td>
+</tr>
+<tr>
+<td style="text-align:center">自治范围过宽但治理不足</td>
+<td style="text-align:center">多 agent、外部工具全开，但缺乏权限边界和结果回收边界</td>
+<td style="text-align:center">permissions + sandbox + hooks + subagent 组合边界</td>
+</tr>
+<tr>
+<td style="text-align:center">已批准命令堆积不清理</td>
+<td style="text-align:center"><code>settings.json</code> 里残留 <code>rm -rf</code> 等危险操作，一旦触发不可逆</td>
+<td style="text-align:center">定期审查 <code>.claude/settings.json</code> 的 <code>allowedTools</code> 列表</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="15-配置健康检查">15. 配置健康检查</h2>
+<p>基于文章里的六层框架，我把这套检查整理成了一个开源 Skill 项目 <a target="_blank" rel="noopener" href="https://github.com/tw93/claude-health"><code>tw93/claude-health</code></a>[5]，可以一键检查你的 Claude Code 配置现在处于什么状态。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx skills add tw93/claude-health -a claude-code -s health -g -y</span><br></pre></td></tr></table></figure>
+<p>装好之后在任意会话里跑 <code>/health</code>，它会自动识别项目复杂度，对 <code>CLAUDE.md</code>、<code>rules</code>、<code>skills</code>、<code>hooks</code>、<code>allowedTools</code> 和实际行为模式各跑一遍检查，输出一份优先级报告：需要立刻修 / 结构性问题 / 可以慢慢做。</p>
+<p>如果你读完这篇文章想知道自己的配置离这些原则差多远，跑一次 <code>/health</code> 是最快的方式。</p>
+<hr>
+<h2 id="16-结语">16. 结语</h2>
+<p>用 Claude Code 大概会经历三个阶段：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">阶段</th>
+<th style="text-align:center">关注点</th>
+<th style="text-align:center">效率感知</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">工具使用者</td>
+<td style="text-align:center">“这个功能怎么用”</td>
+<td style="text-align:center">有帮助但有限</td>
+</tr>
+<tr>
+<td style="text-align:center">流程优化者</td>
+<td style="text-align:center">“如何让协作更顺”，开始写 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 和 Skills</td>
+<td style="text-align:center">明显提升</td>
+</tr>
+<tr>
+<td style="text-align:center">系统设计者</td>
+<td style="text-align:center">“如何让 Agent 在约束下自主运作”</td>
+<td style="text-align:center">质变</td>
+</tr>
+</tbody>
+</table>
+<p>到了第三阶段，关注点会悄悄变掉，从「这个功能怎么用」变成「怎么让 agent 在约束下自己跑起来」，两件事感觉差很多。</p>
+<p>有一个问题挺值得想的：假如一个任务你说不清楚「什么叫做完」，那大概率也不适合直接扔给 Claude 自主完成，验证标准本身都没有，Claude 再聪明也跑不出正确答案。</p>
+<p>这些是半年折腾下来的一些总结，肯定还有很多没有挖掘到的地方，如果大伙有用得更 6 的技巧，欢迎告诉我。</p>
+<p>原文地址：<a target="_blank" rel="noopener" href="https://tw93.fun/2026-03-12/claude.html%5B6%5D">https://tw93.fun/2026-03-12/claude.html[6]</a></p>
+<h3 id="引用链接">引用链接</h3>
+<p>[1]RTK（Rust Token Killer）: <em><a target="_blank" rel="noopener" href="https://www.rtk-ai.app/">https://www.rtk-ai.app/</a></em></p>
+<p>[2]开源在 GitHub: <em><a target="_blank" rel="noopener" href="https://github.com/rtk-ai/rtk">https://github.com/rtk-ai/rtk</a></em></p>
+<p>[3]Kaku: <em><a target="_blank" rel="noopener" href="https://github.com/tw93/Kaku">https://github.com/tw93/Kaku</a></em></p>
+<p>[4]Kaku: <em><a target="_blank" rel="noopener" href="https://github.com/tw93/Kaku">https://github.com/tw93/Kaku</a></em></p>
+<p>[5]tw93/claude-health: <em><a target="_blank" rel="noopener" href="https://github.com/tw93/claude-health">https://github.com/tw93/claude-health</a></em></p>
+<p>[6]<em><a target="_blank" rel="noopener" href="https://tw93.fun/2026-03-12/claude.html">https://tw93.fun/2026-03-12/claude.html</a></em></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Weitang Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lonepatient.top/2026/03/24/claude_code.html">http://lonepatient.top/2026/03/24/claude_code.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lonepatient.top" target="_blank">闲记算法</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Claude-Code/">Claude Code</a><a class="post-meta__tags" href="/tags/AI-%E7%BC%96%E7%A8%8B%E5%8A%A9%E6%89%8B/">AI 编程助手</a><a class="post-meta__tags" href="/tags/Agent-%E6%9E%B6%E6%9E%84/">Agent 架构</a><a class="post-meta__tags" href="/tags/Prompt-Engineering/">Prompt Engineering</a><a class="post-meta__tags" href="/tags/%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86/">上下文管理</a><a class="post-meta__tags" href="/tags/Skills/">Skills</a><a class="post-meta__tags" href="/tags/MCP/">MCP</a><a class="post-meta__tags" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a></div><div class="post_share"><div class="social-share" data-image="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260324194832636.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/03/24/arxiv_papers_2026-03-24.html"><img class="prev-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Arxiv今日论文 | 2026-03-24</div></div></a></div><div class="next-post pull-right"><a href="/2026/03/23/arxiv_papers_2026-03-23.html"><img class="next-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Arxiv今日论文 | 2026-03-23</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Weitang Liu</div><div class="author-info__description">一个致力于记录技术的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">282</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">392</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">95</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lonePatient"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/lonePatient" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liuweitangmath@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/277974397" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有任何问题可通过留言板或者微信公众号给我留言，谢谢！<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201201102.jpg"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-%E5%A4%AA%E9%95%BF%E4%B8%8D%E8%AF%BB"><span class="toc-number">1.</span> <span class="toc-text">0. 太长不读</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%83%E5%BA%95%E5%B1%82%E6%98%AF%E6%80%8E%E4%B9%88%E8%BF%90%E8%A1%8C%E7%9A%84"><span class="toc-number">2.</span> <span class="toc-text">1. 它底层是怎么运行的</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9C%9F%E6%AD%A3%E8%A6%81%E5%85%B3%E6%B3%A8%E7%9A%84%E4%BA%94%E4%B8%AA%E5%B1%82%E9%9D%A2"><span class="toc-number">2.1.</span> <span class="toc-text">真正要关注的五个层面</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A6%82%E5%BF%B5%E8%BE%B9%E7%95%8C%EF%BC%9AMCP-Plugin-Tools-Skills-Hooks-Subagents"><span class="toc-number">3.</span> <span class="toc-text">2. 概念边界：MCP &#x2F; Plugin &#x2F; Tools &#x2F; Skills &#x2F; Hooks &#x2F; Subagents</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B%EF%BC%9A%E6%9C%80%E9%87%8D%E8%A6%81%E7%9A%84%E7%B3%BB%E7%BB%9F%E7%BA%A6%E6%9D%9F"><span class="toc-number">4.</span> <span class="toc-text">3. 上下文工程：最重要的系统约束</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9C%9F%E5%AE%9E%E7%9A%84%E4%B8%8A%E4%B8%8B%E6%96%87%E6%88%90%E6%9C%AC%E6%9E%84%E6%88%90"><span class="toc-number">4.1.</span> <span class="toc-text">真实的上下文成本构成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E7%9A%84%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%86%E5%B1%82"><span class="toc-number">4.2.</span> <span class="toc-text">推荐的上下文分层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-number">4.3.</span> <span class="toc-text">上下文最佳实践</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tool-Output-%E5%99%AA%E5%A3%B0%EF%BC%9A%E5%8F%A6%E4%B8%80%E4%B8%AA%E9%9A%90%E5%BD%A2%E4%B8%8A%E4%B8%8B%E6%96%87%E6%9D%80%E6%89%8B"><span class="toc-number">4.4.</span> <span class="toc-text">Tool Output 噪声：另一个隐形上下文杀手</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%8B%E7%BC%A9%E6%9C%BA%E5%88%B6%E7%9A%84%E9%99%B7%E9%98%B1"><span class="toc-number">4.5.</span> <span class="toc-text">压缩机制的陷阱</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Plan-Mode-%E7%9A%84%E5%B7%A5%E7%A8%8B%E4%BB%B7%E5%80%BC"><span class="toc-number">4.6.</span> <span class="toc-text">Plan Mode 的工程价值</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Skills-%E8%AE%BE%E8%AE%A1%EF%BC%9A%E4%B8%8D%E6%98%AF%E6%A8%A1%E6%9D%BF%E5%BA%93%EF%BC%8C%E6%98%AF%E7%94%A8%E7%9A%84%E6%97%B6%E5%80%99%E6%89%8D%E5%8A%A0%E8%BD%BD%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="toc-number">5.</span> <span class="toc-text">4. Skills 设计：不是模板库，是用的时候才加载的工作流</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E5%A5%BD-Skill-%E5%BA%94%E8%AF%A5%E6%BB%A1%E8%B6%B3%E4%BB%80%E4%B9%88"><span class="toc-number">5.1.</span> <span class="toc-text">一个好 Skill 应该满足什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Skill-%E6%80%8E%E4%B9%88%E5%81%9A%E5%88%B0%E2%80%9D%E6%8C%89%E9%9C%80%E5%8A%A0%E8%BD%BD%E2%80%9D"><span class="toc-number">5.2.</span> <span class="toc-text">Skill 怎么做到”按需加载”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Skill-%E7%9A%84%E4%B8%89%E7%A7%8D%E5%85%B8%E5%9E%8B%E7%B1%BB%E5%9E%8B"><span class="toc-number">5.3.</span> <span class="toc-text">Skill 的三种典型类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%8F%E8%BF%B0%E7%AC%A6%E5%86%99%E7%9F%AD%E7%82%B9%EF%BC%8C%E6%AF%8F%E4%B8%AA-Skill-%E9%83%BD%E5%9C%A8%E5%81%B7%E4%BD%A0%E7%9A%84%E4%B8%8A%E4%B8%8B%E6%96%87%E7%A9%BA%E9%97%B4"><span class="toc-number">5.4.</span> <span class="toc-text">描述符写短点，每个 Skill 都在偷你的上下文空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Skills-%E5%8F%8D%E6%A8%A1%E5%BC%8F"><span class="toc-number">5.5.</span> <span class="toc-text">Skills 反模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%B7%A5%E5%85%B7%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%80%8E%E4%B9%88%E8%AE%A9-Claude-%E5%B0%91%E9%80%89%E9%94%99"><span class="toc-number">6.</span> <span class="toc-text">5. 工具设计：怎么让 Claude 少选错</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%BD%E5%B7%A5%E5%85%B7-vs-%E5%9D%8F%E5%B7%A5%E5%85%B7"><span class="toc-number">6.1.</span> <span class="toc-text">好工具 vs 坏工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E-Claude-Code-%E5%86%85%E9%83%A8%E5%B7%A5%E5%85%B7%E6%BC%94%E8%BF%9B%E5%AD%A6%E5%88%B0%E7%9A%84"><span class="toc-number">6.2.</span> <span class="toc-text">从 Claude Code 内部工具演进学到的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%B8%8D%E8%AF%A5%E5%86%8D%E5%8A%A0-Tool"><span class="toc-number">6.3.</span> <span class="toc-text">什么时候不该再加 Tool</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Hooks%EF%BC%9A%E5%9C%A8-Claude-%E6%89%A7%E8%A1%8C%E6%93%8D%E4%BD%9C%E5%89%8D%E5%90%8E%EF%BC%8C%E5%BC%BA%E5%88%B6%E6%8F%92%E5%85%A5%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E9%80%BB%E8%BE%91"><span class="toc-number">7.</span> <span class="toc-text">6. Hooks：在 Claude 执行操作前后，强制插入你自己的逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%93%E5%89%8D%E6%94%AF%E6%8C%81%E7%9A%84-Hook-%E7%82%B9"><span class="toc-number">7.1.</span> <span class="toc-text">当前支持的 Hook 点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E5%90%88-vs-%E4%B8%8D%E9%80%82%E5%90%88%E6%94%BE%E5%88%B0-Hooks-%E7%9A%84"><span class="toc-number">7.2.</span> <span class="toc-text">适合 vs 不适合放到 Hooks 的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hooks%EF%BC%9A%E8%B6%8A%E6%97%A9%E5%8F%91%E7%8E%B0%E9%94%99%E8%AF%AF%EF%BC%8C%E8%B6%8A%E7%9C%81%E6%97%B6%E9%97%B4"><span class="toc-number">7.3.</span> <span class="toc-text">Hooks：越早发现错误，越省时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hooks-Skills-CLAUDE-md-%E4%B8%89%E5%B1%82%E5%8F%A0%E5%8A%A0"><span class="toc-number">7.4.</span> <span class="toc-text">Hooks + Skills + CLAUDE.md 三层叠加</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-claude-%E6%96%87%E4%BB%B6%E5%A4%B9%E5%AE%8C%E6%95%B4%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97"><span class="toc-number">8.</span> <span class="toc-text">7. .claude&#x2F; 文件夹完整配置指南</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CLAUDE-md"><span class="toc-number">8.1.</span> <span class="toc-text">CLAUDE.md</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CLAUDE-local-md"><span class="toc-number">8.2.</span> <span class="toc-text">CLAUDE.local.md</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rules-%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-number">8.3.</span> <span class="toc-text">rules&#x2F; 文件夹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#commands-%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-number">8.4.</span> <span class="toc-text">commands&#x2F; 文件夹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#skills-%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-number">8.5.</span> <span class="toc-text">skills&#x2F; 文件夹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#agents-%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-number">8.6.</span> <span class="toc-text">agents&#x2F; 文件夹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#settings-json"><span class="toc-number">8.7.</span> <span class="toc-text">settings.json</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#claude-%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-number">8.8.</span> <span class="toc-text">~&#x2F;.claude&#x2F; 文件夹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">8.9.</span> <span class="toc-text">完整目录结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%94%A8%E7%9A%84%E5%85%A5%E9%97%A8%E8%B7%AF%E5%BE%84"><span class="toc-number">8.10.</span> <span class="toc-text">实用的入门路径</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-Subagents%EF%BC%9A%E6%B4%BE%E4%B8%80%E4%B8%AA%E7%8B%AC%E7%AB%8B%E7%9A%84-Claude-%E5%8E%BB%E5%B9%B2%E4%B8%80%E4%BB%B6%E5%85%B7%E4%BD%93%E7%9A%84%E4%BA%8B"><span class="toc-number">9.</span> <span class="toc-text">8. Subagents：派一个独立的 Claude 去干一件具体的事</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%97%B6%E8%A6%81%E6%98%BE%E5%BC%8F%E7%BA%A6%E6%9D%9F"><span class="toc-number">9.1.</span> <span class="toc-text">配置时要显式约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%A0%E4%B8%AA%E5%B8%B8%E8%A7%81%E5%8F%8D%E6%A8%A1%E5%BC%8F"><span class="toc-number">9.2.</span> <span class="toc-text">几个常见反模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-Prompt-Caching%EF%BC%9AClaude-Code-%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84%E7%9A%84%E6%A0%B8%E5%BF%83"><span class="toc-number">10.</span> <span class="toc-text">9. Prompt Caching：Claude Code 内部架构的核心</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E7%BC%93%E5%AD%98%E8%AE%BE%E8%AE%A1%E7%9A%84-Prompt-Layout"><span class="toc-number">10.1.</span> <span class="toc-text">为缓存设计的 Prompt Layout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%9A%E8%AF%9D%E4%B8%AD%E9%80%94%E4%B8%8D%E8%A6%81%E5%88%87%E6%8D%A2%E6%A8%A1%E5%9E%8B"><span class="toc-number">10.2.</span> <span class="toc-text">会话中途不要切换模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Compaction-%E7%9A%84%E5%AE%9E%E9%99%85%E5%AE%9E%E7%8E%B0"><span class="toc-number">10.3.</span> <span class="toc-text">Compaction 的实际实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#defer-loading%EF%BC%9A%E5%B7%A5%E5%85%B7%E7%9A%84%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD"><span class="toc-number">10.4.</span> <span class="toc-text">defer_loading：工具的延迟加载</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E9%AA%8C%E8%AF%81%E9%97%AD%E7%8E%AF%EF%BC%9A%E6%B2%A1%E6%9C%89-Verifier-%E5%B0%B1%E6%B2%A1%E6%9C%89%E5%B7%A5%E7%A8%8B%E4%B8%8A%E7%9A%84-Agent"><span class="toc-number">11.</span> <span class="toc-text">10. 验证闭环：没有 Verifier 就没有工程上的 Agent</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Verifier-%E7%9A%84%E5%B1%82%E7%BA%A7"><span class="toc-number">11.1.</span> <span class="toc-text">Verifier 的层级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8-Prompt%E3%80%81Skill-%E5%92%8C-CLAUDE-md-%E4%B8%AD%E6%98%BE%E5%BC%8F%E5%AE%9A%E4%B9%89%E9%AA%8C%E8%AF%81"><span class="toc-number">11.2.</span> <span class="toc-text">在 Prompt、Skill 和 CLAUDE.md 中显式定义验证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-%E9%AB%98%E9%A2%91%E5%91%BD%E4%BB%A4%E7%9A%84%E5%B7%A5%E7%A8%8B%E6%84%8F%E4%B9%89"><span class="toc-number">12.</span> <span class="toc-text">11. 高频命令的工程意义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86"><span class="toc-number">12.1.</span> <span class="toc-text">上下文管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%83%BD%E5%8A%9B%E4%B8%8E%E6%B2%BB%E7%90%86"><span class="toc-number">12.2.</span> <span class="toc-text">能力与治理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%9A%E8%AF%9D%E8%BF%9E%E7%BB%AD%E6%80%A7%E4%B8%8E%E5%B9%B6%E8%A1%8C"><span class="toc-number">12.3.</span> <span class="toc-text">会话连续性与并行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%A0%E4%B8%AA%E4%B8%8D%E5%B8%B8%E8%A7%81%E4%BD%86%E5%BE%88%E5%A5%BD%E7%94%A8%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="toc-number">12.4.</span> <span class="toc-text">几个不常见但很好用的命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E5%A5%BD%E7%9A%84-CLAUDE-md"><span class="toc-number">13.</span> <span class="toc-text">12. 如何写一个好的 CLAUDE.md</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E8%AF%A5%E6%94%BE%E4%BB%80%E4%B9%88"><span class="toc-number">13.1.</span> <span class="toc-text">应该放什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E8%AF%A5%E6%94%BE%E4%BB%80%E4%B9%88"><span class="toc-number">13.2.</span> <span class="toc-text">不该放什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E8%B4%A8%E9%87%8F%E6%A8%A1%E6%9D%BF"><span class="toc-number">13.3.</span> <span class="toc-text">高质量模板</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A9-Claude-%E7%BB%B4%E6%8A%A4%E8%87%AA%E5%B7%B1%E7%9A%84-CLAUDE-md"><span class="toc-number">13.4.</span> <span class="toc-text">让 Claude 维护自己的 CLAUDE.md</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-%E6%9C%80%E8%BF%91%E8%87%AA%E5%B7%B1%E6%8A%98%E8%85%BE%E4%B8%AD%E5%BE%97%E5%88%B0%E7%9A%84%E6%96%B0%E7%BB%8F%E9%AA%8C"><span class="toc-number">14.</span> <span class="toc-text">13. 最近自己折腾中得到的新经验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9C%E7%8E%AF%E5%A2%83%E9%80%8F%E6%98%8E%E2%80%9D%E6%AF%94%E4%BD%A0%E6%83%B3%E8%B1%A1%E4%B8%AD%E9%87%8D%E8%A6%81"><span class="toc-number">14.1.</span> <span class="toc-text">“环境透明”比你想象中重要</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E8%AF%AD%E8%A8%80%E9%A1%B9%E7%9B%AE%E7%9A%84-Hooks-%E5%AE%9E%E8%B7%B5"><span class="toc-number">14.2.</span> <span class="toc-text">混合语言项目的 Hooks 实践</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E7%9A%84%E5%B7%A5%E7%A8%8B%E5%8C%96%E5%B8%83%E5%B1%80%E5%8F%82%E8%80%83"><span class="toc-number">14.3.</span> <span class="toc-text">完整的工程化布局参考</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-%E5%B8%B8%E8%A7%81%E5%8F%8D%E6%A8%A1%E5%BC%8F"><span class="toc-number">15.</span> <span class="toc-text">14. 常见反模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-%E9%85%8D%E7%BD%AE%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5"><span class="toc-number">16.</span> <span class="toc-text">15. 配置健康检查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-%E7%BB%93%E8%AF%AD"><span class="toc-number">17.</span> <span class="toc-text">16. 结语</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E9%93%BE%E6%8E%A5"><span class="toc-number">17.1.</span> <span class="toc-text">引用链接</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/04/03/arxiv_papers_2026-04-03.html" title="Arxiv今日论文 | 2026-04-03"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-04-03"/></a><div class="content"><a class="title" href="/2026/04/03/arxiv_papers_2026-04-03.html" title="Arxiv今日论文 | 2026-04-03">Arxiv今日论文 | 2026-04-03</a><time datetime="2026-04-03T12:30:00.000Z" title="发表于 2026-04-03 12:30:00">2026-04-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/02/arxiv_papers_2026-04-02.html" title="Arxiv今日论文 | 2026-04-02"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-04-02"/></a><div class="content"><a class="title" href="/2026/04/02/arxiv_papers_2026-04-02.html" title="Arxiv今日论文 | 2026-04-02">Arxiv今日论文 | 2026-04-02</a><time datetime="2026-04-02T12:30:00.000Z" title="发表于 2026-04-02 12:30:00">2026-04-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/01/arxiv_papers_2026-04-01.html" title="Arxiv今日论文 | 2026-04-01"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-04-01"/></a><div class="content"><a class="title" href="/2026/04/01/arxiv_papers_2026-04-01.html" title="Arxiv今日论文 | 2026-04-01">Arxiv今日论文 | 2026-04-01</a><time datetime="2026-04-01T12:30:00.000Z" title="发表于 2026-04-01 12:30:00">2026-04-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/03/31/arxiv_papers_2026-03-31.html" title="Arxiv今日论文 | 2026-03-31"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-03-31"/></a><div class="content"><a class="title" href="/2026/03/31/arxiv_papers_2026-03-31.html" title="Arxiv今日论文 | 2026-03-31">Arxiv今日论文 | 2026-03-31</a><time datetime="2026-03-31T12:30:00.000Z" title="发表于 2026-03-31 12:30:00">2026-03-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/03/30/arxiv_papers_2026-03-30.html" title="Arxiv今日论文 | 2026-03-30"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-03-30"/></a><div class="content"><a class="title" href="/2026/03/30/arxiv_papers_2026-03-30.html" title="Arxiv今日论文 | 2026-03-30">Arxiv今日论文 | 2026-03-30</a><time datetime="2026-03-30T12:30:00.000Z" title="发表于 2026-03-30 12:30:00">2026-03-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/03/27/arxiv_papers_2026-03-27.html" title="Arxiv今日论文 | 2026-03-27"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-03-27"/></a><div class="content"><a class="title" href="/2026/03/27/arxiv_papers_2026-03-27.html" title="Arxiv今日论文 | 2026-03-27">Arxiv今日论文 | 2026-03-27</a><time datetime="2026-03-27T12:30:00.000Z" title="发表于 2026-03-27 12:30:00">2026-03-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/03/26/arxiv_papers_2026-03-26.html" title="Arxiv今日论文 | 2026-03-26"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-03-26"/></a><div class="content"><a class="title" href="/2026/03/26/arxiv_papers_2026-03-26.html" title="Arxiv今日论文 | 2026-03-26">Arxiv今日论文 | 2026-03-26</a><time datetime="2026-03-26T12:30:00.000Z" title="发表于 2026-03-26 12:30:00">2026-03-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/03/25/arxiv_papers_2026-03-25.html" title="Arxiv今日论文 | 2026-03-25"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-03-25"/></a><div class="content"><a class="title" href="/2026/03/25/arxiv_papers_2026-03-25.html" title="Arxiv今日论文 | 2026-03-25">Arxiv今日论文 | 2026-03-25</a><time datetime="2026-03-25T12:30:00.000Z" title="发表于 2026-03-25 12:30:00">2026-03-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/03/24/arxiv_papers_2026-03-24.html" title="Arxiv今日论文 | 2026-03-24"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-03-24"/></a><div class="content"><a class="title" href="/2026/03/24/arxiv_papers_2026-03-24.html" title="Arxiv今日论文 | 2026-03-24">Arxiv今日论文 | 2026-03-24</a><time datetime="2026-03-24T12:30:00.000Z" title="发表于 2026-03-24 12:30:00">2026-03-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/03/24/claude_code.html" title="你不知道的 Claude Code：架构、治理与工程实践"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/20260324194832636.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="你不知道的 Claude Code：架构、治理与工程实践"/></a><div class="content"><a class="title" href="/2026/03/24/claude_code.html" title="你不知道的 Claude Code：架构、治理与工程实践">你不知道的 Claude Code：架构、治理与工程实践</a><time datetime="2026-03-24T00:00:00.000Z" title="发表于 2026-03-24 00:00:00">2026-03-24</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Weitang Liu</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.lonepatient.top/',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.lonepatient.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo@1.4.11/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (99)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/计算机视觉/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 计算机视觉 (16)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/知识图谱/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 知识图谱 (13)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">👩‍💻 深度学习 (139)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item" style="visibility: hidden"></div><a class="magnet_link_more"  href="http://lonepatient.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-18</span><a class="blog-slider__title" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">通向AGI之路：大型语言模型（LLM）技术精要</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/07/12/gaiic_2022_ner_top10.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220712181905.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-07-12</span><a class="blog-slider__title" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">GAIIC2022商品标题识别二等奖获奖解决思路</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230807190424.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-01-20</span><a class="blog-slider__title" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">2025-03|高质量中文预训练模型集合</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>
