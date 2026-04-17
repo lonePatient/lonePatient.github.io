@@ -1,0 +1,651 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI Skills 生态系统深度解析：从 Prompt Engineering 到 Agentic 基础设施的范式跃迁 | 闲记算法</title><meta name="keywords" content="Agent,Prompt,Skill"><meta name="author" content="Weitang Liu"><meta name="copyright" content="Weitang Liu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="TL;DR: 本文系统梳理了当前 GitHub 上 10 个主流 AI Skills 仓库（累计超过 5,000+ Stars），揭示了一个正在形成的去中心化 Agent 能力市场。Anthropic 主导的 Agent Skills 开放标准正在获得 OpenAI、Google、Microsoft、Cursor 等主流厂商的广泛采纳，这标志着 AI 辅助开发从&quot;一次性 Prompt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI Skills 生态系统深度解析：从 Prompt Engineering 到 Agentic 基础设施的范式跃迁">
+<meta property="og:url" content="http://lonepatient.top/2026/02/18/ai-skills-ecosystem-analysis.html">
+<meta property="og:site_name" content="闲记算法">
+<meta property="og:description" content="TL;DR: 本文系统梳理了当前 GitHub 上 10 个主流 AI Skills 仓库（累计超过 5,000+ Stars），揭示了一个正在形成的去中心化 Agent 能力市场。Anthropic 主导的 Agent Skills 开放标准正在获得 OpenAI、Google、Microsoft、Cursor 等主流厂商的广泛采纳，这标志着 AI 辅助开发从&quot;一次性 Prompt">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602181212090.png">
+<meta property="article:published_time" content="2026-02-18T21:31:43.000Z">
+<meta property="article:modified_time" content="2026-04-17T08:50:09.571Z">
+<meta property="article:author" content="Weitang Liu">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="Prompt">
+<meta property="article:tag" content="Skill">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602181212090.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lonepatient.top/2026/02/18/ai-skills-ecosystem-analysis"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//s4.cnzz.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" data-pjax="data-pjax" src="https://s4.cnzz.com/z_stat.php?id=1273275888&amp;web_id=1273275888"></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-04-17 08:50:09'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/backgroud.css"><script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script><script src="https://at.alicdn.com/t/c/font_3570527_dthoqrrv2tv.css"></script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JwRQtLKZggvJH4sJ",ck:"JwRQtLKZggvJH4sJ"})</script><link rel="stylesheet" href="/css/universe.css"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536467946304280" crossorigin="anonymous"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">282</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">392</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">95</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602181212090.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">闲记算法</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa-fw fa fa-book"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page" href="/charts/"><i class="fa-fw fa fa-archive"></i><span> 统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 网站</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://www.aitoolist.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集合</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.deepdh.com"><i class="fa-fw fa fa-star"></i><span> AI工具导航</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://www.ai-lib.club"><i class="fa-fw fa fa-star"></i><span> 人工智能工具</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://ai-bot.cn"><i class="fa-fw fa fa-star"></i><span> AI工具集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 教程</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" target="_blank" rel="noopener" href="https://learningprompt.wiki/"><i class="fa-fw fa fa-star"></i><span> Prompt教程</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-tools"></i><span> 在线</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/md_editor/"><i class="fa-fw fa fa-star"></i><span> 在线markdown</span></a></li><li><a class="site-page" target="_blank" rel="noopener" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts"><i class="fa-fw fa fa-star"></i><span> 在线push</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">AI Skills 生态系统深度解析：从 Prompt Engineering 到 Agentic 基础设施的范式跃迁<a class="post-edit-link" href="https://github.com/lonePatient/blog_source/tree/main/source/_posts/ai-skills-ecosystem-analysis.md" title="编辑" target="_blank"><i class="fas fa-pencil-square"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-02-18T21:31:43.000Z" title="发表于 2026-02-18 21:31:43">2026-02-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-04-17T08:50:09.571Z" title="更新于 2026-04-17 08:50:09">2026-04-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/">自然语言处理</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/">大语言模型</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/%E6%99%BA%E8%83%BD%E4%BD%93%E7%B3%BB%E7%BB%9F/">智能体系统</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2026/02/18/ai-skills-ecosystem-analysis.html#post-comment"><span id="twikoo-count"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p><strong>TL;DR</strong>: 本文系统梳理了当前 GitHub 上 10 个主流 AI Skills 仓库（累计超过 5,000+ Stars），揭示了一个正在形成的<strong>去中心化 Agent 能力市场</strong>。Anthropic 主导的 Agent Skills 开放标准正在获得 OpenAI、Google、Microsoft、Cursor 等主流厂商的广泛采纳，这标志着 AI 辅助开发从&quot;一次性 Prompt 工程&quot;向&quot;可复用、可组合、可交易的技能单元&quot;的根本性转变。</p>
+</blockquote>
+<hr>
+<h2 id="一、核心洞察：为什么-AI-Skills-正在重塑开发范式">一、核心洞察：为什么 AI Skills 正在重塑开发范式</h2>
+<h3 id="1-1-从-Prompt-到-Skill：抽象层级的跃升">1.1 从 Prompt 到 Skill：抽象层级的跃升</h3>
+<p>传统的大模型交互模式是<strong>命令式</strong>的——开发者每次都需要精心构造 Prompt。而 AI Skills 引入了一种<strong>声明式</strong>的抽象：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Prompt Engineering (v1.0)</span><br><span class="line">    ↓ 抽象封装</span><br><span class="line">Skill-as-Code (v2.0)</span><br><span class="line">    ↓ 标准化</span><br><span class="line">Agent Skills Standard (v3.0)</span><br></pre></td></tr></table></figure>
+<p>这种抽象层级的跃升带来了三个关键收益：</p>
+<ol>
+<li><strong>可复用性</strong>: 一个 Skill 可以在多个项目、多个 Agent 之间复用</li>
+<li><strong>可组合性</strong>: Skills 可以像乐高积木一样组合成复杂的工作流</li>
+<li><strong>可交易性</strong>: Skills 正在成为可分发、可定价的数字资产</li>
+</ol>
+<h3 id="1-2-数据说话：生态系统的爆发式增长">1.2 数据说话：生态系统的爆发式增长</h3>
+<table>
+<thead>
+<tr>
+<th>仓库</th>
+<th>Stars</th>
+<th>Forks</th>
+<th>Skills 数量</th>
+<th>核心定位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/VoltAgent/awesome-openclaw-skills">awesome-openclaw-skills</a></td>
+<td>16.3k</td>
+<td>1.6k</td>
+<td>3,002</td>
+<td>OpenClaw 官方技能市场</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/sickn33/antigravity-awesome-skills">antigravity-awesome-skills</a></td>
+<td>11.5k</td>
+<td>2.2k</td>
+<td>864+</td>
+<td>跨平台通用技能库</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/VoltAgent/awesome-agent-skills">awesome-agent-skills</a></td>
+<td>7.3k</td>
+<td>567</td>
+<td>300+</td>
+<td>官方团队技能聚合</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/BehiSecc/awesome-claude-skills">awesome-claude-skills</a></td>
+<td>5.9k</td>
+<td>534</td>
+<td>100+</td>
+<td>精选 Claude 技能</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/alirezarezvani/claude-skills">claude-skills</a></td>
+<td>1.9k</td>
+<td>223</td>
+<td>65</td>
+<td>企业级技能套件</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/libukai/awesome-agent-skills">awesome-agent-skills (libukai)</a></td>
+<td>1.9k</td>
+<td>104</td>
+<td>-</td>
+<td>中文社区技能指南</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键观察</strong>:</p>
+<ul>
+<li>头部仓库的 Stars 数量呈现<strong>幂律分布</strong>，前 3 个仓库占据了约 70% 的社区关注度</li>
+<li>Skills 数量与 Stars 并非线性关系——质量筛选比数量堆砌更能获得社区认可</li>
+<li>跨平台兼容性正在成为新的竞争维度</li>
+</ul>
+<hr>
+<h2 id="二、技术架构解析：Agent-Skills-标准的工程实现">二、技术架构解析：Agent Skills 标准的工程实现</h2>
+<h3 id="2-1-标准规范：Anthropic-的开放标准">2.1 标准规范：Anthropic 的开放标准</h3>
+<p>Agent Skills 是一个由 <strong>Anthropic 牵头维护的开放标准</strong>，其核心设计哲学体现在以下技术决策中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">skill/</span><br><span class="line">├── SKILL.md          # 核心指令文档 (必须)</span><br><span class="line">├── scripts/          # 可执行脚本 (可选)</span><br><span class="line">│   ├── analyzer.py</span><br><span class="line">│   └── generator.py</span><br><span class="line">├── references/       # 知识库引用 (可选)</span><br><span class="line">│   ├── frameworks.md</span><br><span class="line">│   └── templates/</span><br><span class="line">└── .claude-plugin    # 插件元数据 (可选)</span><br></pre></td></tr></table></figure>
+<p><strong>关键技术约束</strong>:</p>
+<ol>
+<li><strong>文件夹即接口</strong>: 每个 Skill 是一个规范化命名的文件夹</li>
+<li><strong>Markdown 即协议</strong>: <a target="_blank" rel="noopener" href="http://SKILL.md">SKILL.md</a> 使用特定 frontmatter 格式定义元数据</li>
+<li><strong>脚本即能力</strong>: Python/Shell 脚本提供可执行的分析工具</li>
+</ol>
+<h3 id="2-2-多-Agent-兼容性矩阵">2.2 多 Agent 兼容性矩阵</h3>
+<table>
+<thead>
+<tr>
+<th>Agent 平台</th>
+<th>安装路径</th>
+<th>支持状态</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude Code</td>
+<td><code>~/.claude/skills/</code></td>
+<td>✅ 原生支持</td>
+<td>官方标准制定者</td>
+</tr>
+<tr>
+<td>OpenAI Codex</td>
+<td><code>~/.codex/skills/</code></td>
+<td>✅ 完全兼容</td>
+<td>YAML frontmatter 适配</td>
+</tr>
+<tr>
+<td>Cursor</td>
+<td><code>.cursor/skills/</code></td>
+<td>✅ 完全兼容</td>
+<td>项目级安装</td>
+</tr>
+<tr>
+<td>Gemini CLI</td>
+<td><code>~/.gemini/skills/</code></td>
+<td>✅ 完全兼容</td>
+<td>Google 官方支持</td>
+</tr>
+<tr>
+<td>GitHub Copilot</td>
+<td><code>.github/skills/</code></td>
+<td>✅ 完全兼容</td>
+<td>VS Code 集成</td>
+</tr>
+<tr>
+<td>Antigravity</td>
+<td><code>~/.antigravity/skills/</code></td>
+<td>✅ 原生支持</td>
+<td>IDE 内置</td>
+</tr>
+<tr>
+<td>OpenCode</td>
+<td><code>.opencode/skills/</code></td>
+<td>✅ 完全兼容</td>
+<td>社区驱动</td>
+</tr>
+<tr>
+<td>Windsurf</td>
+<td><code>.windsurf/skills/</code></td>
+<td>✅ 实验性支持</td>
+<td>正在开发</td>
+</tr>
+</tbody>
+</table>
+<p><strong>工程洞察</strong>: 这种跨平台兼容性的实现依赖于一个<strong>最小公分母策略</strong>——所有平台都支持 Markdown + Python 脚本的基础组合，而 frontmatter 元数据则通过适配层进行转换。</p>
+<hr>
+<h2 id="三、主流仓库深度剖析">三、主流仓库深度剖析</h2>
+<h3 id="3-1-awesome-openclaw-skills-——-规模最大的技能市场">3.1 <a target="_blank" rel="noopener" href="https://github.com/VoltAgent/awesome-openclaw-skills">awesome-openclaw-skills</a> —— 规模最大的技能市场</h3>
+<p><strong>核心指标</strong>: ⭐ 16.3k | 🍴 1.6k | 📦 3,002 Skills | 👥 26 Contributors</p>
+<p><strong>技术定位</strong>: OpenClaw (原 Moltbot/Clawdbot) 的官方技能注册表</p>
+<p><strong>架构特点</strong>:</p>
+<ul>
+<li>采用 <strong>ClawHub CLI</strong> 作为包管理器: <code>npx clawhub@latest install &lt;skill-slug&gt;</code></li>
+<li>所有 Skills 必须经过官方仓库审核，不接受个人 repo 直接提交</li>
+<li>遵循 Anthropic Agent Skills 开放标准</li>
+</ul>
+<p><strong>影响力评估</strong>:</p>
+<ul>
+<li>🔥 <strong>极高</strong>: 这是目前规模最大的结构化 Skills 集合</li>
+<li>社区贡献活跃（26 个贡献者，132 次提交）</li>
+<li>但 Skills 质量参差不齐，需要用户自行筛选</li>
+</ul>
+<hr>
+<h3 id="3-2-antigravity-awesome-skills-——-跨平台兼容性标杆">3.2 <a target="_blank" rel="noopener" href="https://github.com/sickn33/antigravity-awesome-skills">antigravity-awesome-skills</a> —— 跨平台兼容性标杆</h3>
+<p><strong>核心指标</strong>: ⭐ 11.5k | 🍴 2.2k | 📦 864+ Skills | 👥 49 Contributors</p>
+<p><strong>技术定位</strong>: 跨平台通用技能库，支持 Claude Code、Codex、Gemini CLI、Cursor、Copilot 等 9+ 平台</p>
+<p><strong>架构特点</strong>:</p>
+<ul>
+<li><strong>Universal Installer</strong>: <code>npx agent-skills-cli add &lt;skill&gt;</code> 一键安装到所有平台</li>
+<li><strong>版本管理</strong>: 46 个 Releases，遵循语义化版本控制</li>
+<li><strong>质量门禁</strong>: 包含 Skill Validator、Script Tester、Quality Scorer 三层质量检查</li>
+</ul>
+<p><strong>技能分类体系</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">skills/</span><br><span class="line">├── ai-ml-data/          # 数据科学、MLOps、LLM 集成</span><br><span class="line">├── architecture/        # 系统设计、架构决策</span><br><span class="line">├── cloud-platforms/     # AWS、Azure、GCP 云架构</span><br><span class="line">├── databases/           # 数据库设计、优化</span><br><span class="line">├── devops-sre/          # CI/CD、可观测性、SRE</span><br><span class="line">├── frontend/            # React、Vue、现代前端</span><br><span class="line">├── security/            # 安全审计、合规检查</span><br><span class="line">└── specialized-domains/ # 领域特定技能（金融、医疗等）</span><br></pre></td></tr></table></figure>
+<p><strong>影响力评估</strong>:</p>
+<ul>
+<li>🔥 <strong>极高</strong>: 跨平台兼容性做得最完善的仓库</li>
+<li>49 个贡献者，500 次提交，开发活跃度最高</li>
+<li>自动化工具链最完整（installer、validator、CI/CD）</li>
+</ul>
+<hr>
+<h3 id="3-3-claude-skills-——-企业级技能套件">3.3 <a target="_blank" rel="noopener" href="https://github.com/alirezarezvani/claude-skills">claude-skills</a> —— 企业级技能套件</h3>
+<p><strong>核心指标</strong>: ⭐ 1.9k | 🍴 223 | 📦 65 Skills | 👥 5 Contributors</p>
+<p><strong>技术定位</strong>: 面向创业公司的<strong>生产级技能套件</strong>，按职能团队组织</p>
+<p><strong>架构特点</strong>:</p>
+<ul>
+<li><strong>多 Agent 安装支持</strong>: Claude Code 原生插件 + OpenAI Codex + Universal Installer</li>
+<li><strong>87+ Python CLI 工具</strong>: 每个 Skill 都附带可执行的分析脚本</li>
+<li><strong>SkillCheck 验证</strong>: 通过第三方质量验证服务</li>
+</ul>
+<p><strong>技能矩阵</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>团队</th>
+<th>Skills 数量</th>
+<th>代表技能</th>
+<th>CLI 工具</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Marketing</td>
+<td>6</td>
+<td>Content Creator, ASO, Campaign Analytics</td>
+<td>Brand Voice Analyzer, SEO Optimizer, CAC Calculator</td>
+</tr>
+<tr>
+<td>C-Level</td>
+<td>2</td>
+<td>CEO Advisor, CTO Advisor</td>
+<td>Strategy Analyzer, Tech Debt Analyzer</td>
+</tr>
+<tr>
+<td>Product</td>
+<td>5</td>
+<td>PM Toolkit, Agile PO, UX Researcher</td>
+<td>RICE Prioritizer, Persona Generator</td>
+</tr>
+<tr>
+<td>Engineering</td>
+<td>19</td>
+<td>Fullstack Engineer, AWS Architect, RAG Architect</td>
+<td>Project Scaffolder, Cost Optimizer</td>
+</tr>
+<tr>
+<td>PMO</td>
+<td>6</td>
+<td>Jira Expert, Confluence Expert, Scrum Master</td>
+<td>Atlassian MCP 集成</td>
+</tr>
+<tr>
+<td>RA/QM</td>
+<td>12</td>
+<td>ISO 13485, FDA, GDPR 合规</td>
+<td>Compliance Checker, Risk Assessor</td>
+</tr>
+<tr>
+<td>Business</td>
+<td>3</td>
+<td>Customer Success, Sales Engineer</td>
+<td>Health Score Calculator</td>
+</tr>
+</tbody>
+</table>
+<p><strong>影响力评估</strong>:</p>
+<ul>
+<li>🔥 <strong>高</strong>: 企业级质量，每个 Skill 都有完整的文档和工具链</li>
+<li>虽然 Stars 数量不如头部仓库，但<strong>技能深度</strong>明显更高</li>
+<li>适合作为企业内部 Skills 开发的参考模板</li>
+</ul>
+<hr>
+<h3 id="3-4-awesome-claude-skills-——-精选技能策展">3.4 <a target="_blank" rel="noopener" href="https://github.com/BehiSecc/awesome-claude-skills">awesome-claude-skills</a> —— 精选技能策展</h3>
+<p><strong>核心指标</strong>: ⭐ 5.9k | 🍴 534 | 📦 100+ Skills | 👥 36 Contributors</p>
+<p><strong>技术定位</strong>: <strong>策展模式</strong>——不追求数量，专注于高质量 Skills 的筛选和分类</p>
+<p><strong>分类体系</strong>:</p>
+<ul>
+<li>📄 Document Skills: docx, pdf, pptx, xlsx, revealjs-skill</li>
+<li>🛠 Development &amp; Code Tools: web-artifacts-builder, TDD, git-worktrees</li>
+<li>📊 Data &amp; Analysis: 数据分析、可视化</li>
+<li>🔬 Scientific &amp; Research Tools: 科研辅助</li>
+<li>✍️ Writing &amp; Research: 写作辅助</li>
+<li>🛡 Security &amp; Web Testing: VibeSec-Skill, OWASP-security, Trail of Bits</li>
+</ul>
+<p><strong>影响力评估</strong>:</p>
+<ul>
+<li>🔥 <strong>中高</strong>: 策展模式保证了技能质量</li>
+<li>安全类 Skills 特别丰富（VibeSec-Skill 是其特色）</li>
+<li>适合快速发现高质量 Skills</li>
+</ul>
+<hr>
+<h3 id="3-5-awesome-agent-skills-——-中文社区入口">3.5 <a target="_blank" rel="noopener" href="https://github.com/libukai/awesome-agent-skills">awesome-agent-skills</a> —— 中文社区入口</h3>
+<p><strong>核心指标</strong>: ⭐ 1.9k | 🍴 104</p>
+<p><strong>技术定位</strong>: 中文社区的 Agent Skills 入门指南，提供中英日三语 README</p>
+<p><strong>核心价值</strong>:</p>
+<ul>
+<li>降低中文开发者的入门门槛</li>
+<li>聚合了多个 Skills 市场（Vercel、ClawHub、SkillHub 等）</li>
+<li>提供实战案例和最佳实践</li>
+</ul>
+<p><strong>影响力评估</strong>:</p>
+<ul>
+<li>🔥 <strong>中</strong>: 中文社区的重要入口</li>
+<li>作为信息聚合站而非原始 Skills 仓库</li>
+</ul>
+<hr>
+<h2 id="四、技术趋势分析">四、技术趋势分析</h2>
+<h3 id="4-1-标准化趋势：从碎片化到统一">4.1 标准化趋势：从碎片化到统一</h3>
+<p>当前 Skills 生态正在经历<strong>标准化收敛</strong>的过程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">2024 Q1-Q2: 碎片化阶段</span><br><span class="line">    ├── Anthropic 提出 Agent Skills 草案</span><br><span class="line">    ├── 各厂商推出自己的技能格式</span><br><span class="line">    └── 社区出现多种互不兼容的实现</span><br><span class="line"></span><br><span class="line">2024 Q3-Q4: 标准化阶段</span><br><span class="line">    ├── OpenAI 宣布支持 Agent Skills</span><br><span class="line">    ├── Google 在 Gemini CLI 中实现兼容</span><br><span class="line">    └── Cursor、VS Code 跟进支持</span><br><span class="line"></span><br><span class="line">2025+: 生态爆发阶段</span><br><span class="line">    ├── 统一的包管理器出现 (agent-skills-cli)</span><br><span class="line">    ├── Skills 交易市场形成</span><br><span class="line">    └── 质量评估和认证体系建立</span><br></pre></td></tr></table></figure>
+<h3 id="4-2-技能经济：从免费到商业化">4.2 技能经济：从免费到商业化</h3>
+<p>Skills 正在从<strong>社区贡献</strong>向<strong>商业变现</strong>演进：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>特征</th>
+<th>代表</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0 开源贡献</td>
+<td>免费、社区驱动</td>
+<td>当前主流</td>
+</tr>
+<tr>
+<td>2.0 专业套件</td>
+<td>免费+增值服务</td>
+<td>alirezarezvani/claude-skills</td>
+</tr>
+<tr>
+<td>3.0 技能市场</td>
+<td>付费 Skills、订阅制</td>
+<td>SkillHub、ClawHub</td>
+</tr>
+<tr>
+<td>4.0 技能即服务</td>
+<td>API 化、按需调用</td>
+<td>正在涌现</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-3-技术栈演进：从静态到动态">4.3 技术栈演进：从静态到动态</h3>
+<p>早期的 Skills 是<strong>静态文档</strong>（Markdown + 脚本），而新一代 Skills 正在向<strong>动态能力</strong>演进：</p>
+<ul>
+<li><strong>MCP 集成</strong>: Model Context Protocol 让 Skills 可以调用外部 API</li>
+<li><strong>Agent 编排</strong>: 多个 Skills 可以组合成复杂的工作流</li>
+<li><strong>自适应学习</strong>: Skills 可以根据使用反馈自动优化</li>
+</ul>
+<hr>
+<h2 id="五、工程实践建议">五、工程实践建议</h2>
+<h3 id="5-1-企业-Skills-开发-checklist">5.1 企业 Skills 开发 checklist</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">□ 遵循 Agent Skills 标准规范</span><br><span class="line">□ 提供完整的 SKILL.md 文档</span><br><span class="line">□ 包含可执行的 Python/Shell 脚本</span><br><span class="line">□ 实现多 Agent 兼容性测试</span><br><span class="line">□ 添加 frontmatter 元数据</span><br><span class="line">□ 提供使用示例和最佳实践</span><br><span class="line">□ 建立版本管理和更新机制</span><br><span class="line">□ 通过 SkillCheck 或类似质量验证</span><br></pre></td></tr></table></figure>
+<h3 id="5-2-Skills-选型决策树">5.2 Skills 选型决策树</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">需要 Skills?</span><br><span class="line">    ├── 通用开发任务</span><br><span class="line">    │       ├── 跨平台兼容优先 → antigravity-awesome-skills</span><br><span class="line">    │       └── Claude 生态优先 → awesome-openclaw-skills</span><br><span class="line">    ├── 企业级质量要求</span><br><span class="line">    │       └── claude-skills (生产级套件)</span><br><span class="line">    ├── 安全敏感场景</span><br><span class="line">    │       └── awesome-claude-skills (VibeSec)</span><br><span class="line">    └── 中文团队入门</span><br><span class="line">            └── awesome-agent-skills (libukai)</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="六、结论与展望">六、结论与展望</h2>
+<p>AI Skills 生态系统正在经历从<strong>实验性工具</strong>向<strong>生产级基础设施</strong>的关键转变。Anthropic 主导的开放标准获得了主流厂商的广泛支持，这为 Skills 的跨平台复用和交易奠定了基础。</p>
+<p><strong>三个确定性趋势</strong>:</p>
+<ol>
+<li>
+<p><strong>标准化加速</strong>: Agent Skills 标准将成为事实上的行业标准，类似于 Docker 镜像格式在容器领域的作用</p>
+</li>
+<li>
+<p><strong>技能经济崛起</strong>: Skills 将从社区贡献演变为可交易的数字资产，出现专门的 Skills 市场和定价机制</p>
+</li>
+<li>
+<p><strong>AI-Native 开发</strong>: 未来的软件开发将围绕&quot;人类架构师 + AI 执行者 + Skills 市场&quot;的模式重构</p>
+</li>
+</ol>
+<p><strong>对技术决策者的建议</strong>:</p>
+<ul>
+<li><strong>短期</strong>: 选择 1-2 个高质量的 Skills 仓库，建立内部 Skills 使用规范</li>
+<li><strong>中期</strong>: 开始积累企业内部的私有 Skills，形成领域知识壁垒</li>
+<li><strong>长期</strong>: 将 Skills 开发纳入技术战略，构建可复用的 AI 能力资产</li>
+</ul>
+<hr>
+<h2 id="附录：参考链接汇总">附录：参考链接汇总</h2>
+<table>
+<thead>
+<tr>
+<th>仓库</th>
+<th>链接</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>awesome-openclaw-skills</td>
+<td><a target="_blank" rel="noopener" href="https://github.com/VoltAgent/awesome-openclaw-skills">https://github.com/VoltAgent/awesome-openclaw-skills</a></td>
+<td>最大规模技能市场</td>
+</tr>
+<tr>
+<td>antigravity-awesome-skills</td>
+<td><a target="_blank" rel="noopener" href="https://github.com/sickn33/antigravity-awesome-skills">https://github.com/sickn33/antigravity-awesome-skills</a></td>
+<td>跨平台兼容性最佳</td>
+</tr>
+<tr>
+<td>awesome-agent-skills</td>
+<td><a target="_blank" rel="noopener" href="https://github.com/VoltAgent/awesome-agent-skills">https://github.com/VoltAgent/awesome-agent-skills</a></td>
+<td>官方团队技能聚合</td>
+</tr>
+<tr>
+<td>awesome-claude-skills</td>
+<td><a target="_blank" rel="noopener" href="https://github.com/BehiSecc/awesome-claude-skills">https://github.com/BehiSecc/awesome-claude-skills</a></td>
+<td>精选高质量技能</td>
+</tr>
+<tr>
+<td>claude-skills</td>
+<td><a target="_blank" rel="noopener" href="https://github.com/alirezarezvani/claude-skills">https://github.com/alirezarezvani/claude-skills</a></td>
+<td>企业级生产套件</td>
+</tr>
+<tr>
+<td>awesome-agent-skills (中文)</td>
+<td><a target="_blank" rel="noopener" href="https://github.com/libukai/awesome-agent-skills">https://github.com/libukai/awesome-agent-skills</a></td>
+<td>中文社区入口</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><em>本文基于 2026 年 2 月的 GitHub 数据撰写，Skills 生态系统发展迅速，建议读者关注各仓库的最新更新。</em></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Weitang Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lonepatient.top/2026/02/18/ai-skills-ecosystem-analysis.html">http://lonepatient.top/2026/02/18/ai-skills-ecosystem-analysis.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lonepatient.top" target="_blank">闲记算法</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Agent/">Agent</a><a class="post-meta__tags" href="/tags/Prompt/">Prompt</a><a class="post-meta__tags" href="/tags/Skill/">Skill</a></div><div class="post_share"><div class="social-share" data-image="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602181212090.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/02/19/arxiv_papers_2026-02-19.html"><img class="prev-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Arxiv今日论文 | 2026-02-19</div></div></a></div><div class="next-post pull-right"><a href="/2026/02/18/arxiv_papers_2026-02-18.html"><img class="next-cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Arxiv今日论文 | 2026-02-18</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/07/29/LLM_Powered_Autonomous_Agents.html" title="使用LLM构建AI Agents的正确姿势"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230908194136.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-29</div><div class="title">使用LLM构建AI Agents的正确姿势</div></div></a></div><div><a href="/2023/09/05/engineer_Landing_LLM.html" title="如何工程化落地LLM：五类模式加速 AI 应用开发"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230907104310.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-05</div><div class="title">如何工程化落地LLM：五类模式加速 AI 应用开发</div></div></a></div><div><a href="/2023/08/31/llm_in_1688.html" title="大语言模型在1688电商场景的算法实践"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230831212220.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-31</div><div class="title">大语言模型在1688电商场景的算法实践</div></div></a></div><div><a href="/2023/07/30/llm_qa_Embedding_recall.html" title="问答系统使用 Embedding 召回的局限及解决方案"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230907214925.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-07-30</div><div class="title">问答系统使用 Embedding 召回的局限及解决方案</div></div></a></div><div><a href="/2025/09/13/2025-09-12-langgraph-concept-subgraph.html" title="LangGraph 子图（Subgraph）：概念总结与代码验证"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-09-13</div><div class="title">LangGraph 子图（Subgraph）：概念总结与代码验证</div></div></a></div><div><a href="/2023/08/23/LLM_agents_part1.html" title="基于大语言模型的AI Agents—Part 1"><img class="cover" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230806160808.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-23</div><div class="title">基于大语言模型的AI Agents—Part 1</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Weitang Liu</div><div class="author-info__description">一个致力于记录技术的博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">282</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">392</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">95</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lonePatient"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/lonePatient" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:liuweitangmath@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/277974397" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录和分享一些学习和开源内容，若有任何问题可通过留言板或者微信公众号给我留言，谢谢！<img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/blog_picgo/202602201201102.jpg"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A0%B8%E5%BF%83%E6%B4%9E%E5%AF%9F%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88-AI-Skills-%E6%AD%A3%E5%9C%A8%E9%87%8D%E5%A1%91%E5%BC%80%E5%8F%91%E8%8C%83%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">一、核心洞察：为什么 AI Skills 正在重塑开发范式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%BB%8E-Prompt-%E5%88%B0-Skill%EF%BC%9A%E6%8A%BD%E8%B1%A1%E5%B1%82%E7%BA%A7%E7%9A%84%E8%B7%83%E5%8D%87"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 从 Prompt 到 Skill：抽象层级的跃升</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%95%B0%E6%8D%AE%E8%AF%B4%E8%AF%9D%EF%BC%9A%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%88%86%E5%8F%91%E5%BC%8F%E5%A2%9E%E9%95%BF"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 数据说话：生态系统的爆发式增长</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84%E8%A7%A3%E6%9E%90%EF%BC%9AAgent-Skills-%E6%A0%87%E5%87%86%E7%9A%84%E5%B7%A5%E7%A8%8B%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">二、技术架构解析：Agent Skills 标准的工程实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83%EF%BC%9AAnthropic-%E7%9A%84%E5%BC%80%E6%94%BE%E6%A0%87%E5%87%86"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 标准规范：Anthropic 的开放标准</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%A4%9A-Agent-%E5%85%BC%E5%AE%B9%E6%80%A7%E7%9F%A9%E9%98%B5"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 多 Agent 兼容性矩阵</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%B8%BB%E6%B5%81%E4%BB%93%E5%BA%93%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">三、主流仓库深度剖析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-awesome-openclaw-skills-%E2%80%94%E2%80%94-%E8%A7%84%E6%A8%A1%E6%9C%80%E5%A4%A7%E7%9A%84%E6%8A%80%E8%83%BD%E5%B8%82%E5%9C%BA"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 awesome-openclaw-skills —— 规模最大的技能市场</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-antigravity-awesome-skills-%E2%80%94%E2%80%94-%E8%B7%A8%E5%B9%B3%E5%8F%B0%E5%85%BC%E5%AE%B9%E6%80%A7%E6%A0%87%E6%9D%86"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 antigravity-awesome-skills —— 跨平台兼容性标杆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-claude-skills-%E2%80%94%E2%80%94-%E4%BC%81%E4%B8%9A%E7%BA%A7%E6%8A%80%E8%83%BD%E5%A5%97%E4%BB%B6"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 claude-skills —— 企业级技能套件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-awesome-claude-skills-%E2%80%94%E2%80%94-%E7%B2%BE%E9%80%89%E6%8A%80%E8%83%BD%E7%AD%96%E5%B1%95"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 awesome-claude-skills —— 精选技能策展</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-awesome-agent-skills-%E2%80%94%E2%80%94-%E4%B8%AD%E6%96%87%E7%A4%BE%E5%8C%BA%E5%85%A5%E5%8F%A3"><span class="toc-number">3.5.</span> <span class="toc-text">3.5 awesome-agent-skills —— 中文社区入口</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%8A%80%E6%9C%AF%E8%B6%8B%E5%8A%BF%E5%88%86%E6%9E%90"><span class="toc-number">4.</span> <span class="toc-text">四、技术趋势分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E6%A0%87%E5%87%86%E5%8C%96%E8%B6%8B%E5%8A%BF%EF%BC%9A%E4%BB%8E%E7%A2%8E%E7%89%87%E5%8C%96%E5%88%B0%E7%BB%9F%E4%B8%80"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 标准化趋势：从碎片化到统一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E6%8A%80%E8%83%BD%E7%BB%8F%E6%B5%8E%EF%BC%9A%E4%BB%8E%E5%85%8D%E8%B4%B9%E5%88%B0%E5%95%86%E4%B8%9A%E5%8C%96"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 技能经济：从免费到商业化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E6%8A%80%E6%9C%AF%E6%A0%88%E6%BC%94%E8%BF%9B%EF%BC%9A%E4%BB%8E%E9%9D%99%E6%80%81%E5%88%B0%E5%8A%A8%E6%80%81"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 技术栈演进：从静态到动态</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E5%BB%BA%E8%AE%AE"><span class="toc-number">5.</span> <span class="toc-text">五、工程实践建议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E4%BC%81%E4%B8%9A-Skills-%E5%BC%80%E5%8F%91-checklist"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 企业 Skills 开发 checklist</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-Skills-%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E6%A0%91"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 Skills 选型决策树</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E7%BB%93%E8%AE%BA%E4%B8%8E%E5%B1%95%E6%9C%9B"><span class="toc-number">6.</span> <span class="toc-text">六、结论与展望</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5%E6%B1%87%E6%80%BB"><span class="toc-number">7.</span> <span class="toc-text">附录：参考链接汇总</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/04/17/arxiv_papers_2026-04-17.html" title="Arxiv今日论文 | 2026-04-17"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-04-17"/></a><div class="content"><a class="title" href="/2026/04/17/arxiv_papers_2026-04-17.html" title="Arxiv今日论文 | 2026-04-17">Arxiv今日论文 | 2026-04-17</a><time datetime="2026-04-17T12:30:00.000Z" title="发表于 2026-04-17 12:30:00">2026-04-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/16/arxiv_papers_2026-04-16.html" title="Arxiv今日论文 | 2026-04-16"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-04-16"/></a><div class="content"><a class="title" href="/2026/04/16/arxiv_papers_2026-04-16.html" title="Arxiv今日论文 | 2026-04-16">Arxiv今日论文 | 2026-04-16</a><time datetime="2026-04-16T12:30:00.000Z" title="发表于 2026-04-16 12:30:00">2026-04-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/15/arxiv_papers_2026-04-15.html" title="Arxiv今日论文 | 2026-04-15"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-04-15"/></a><div class="content"><a class="title" href="/2026/04/15/arxiv_papers_2026-04-15.html" title="Arxiv今日论文 | 2026-04-15">Arxiv今日论文 | 2026-04-15</a><time datetime="2026-04-15T12:30:00.000Z" title="发表于 2026-04-15 12:30:00">2026-04-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/14/arxiv_papers_2026-04-14.html" title="Arxiv今日论文 | 2026-04-14"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-04-14"/></a><div class="content"><a class="title" href="/2026/04/14/arxiv_papers_2026-04-14.html" title="Arxiv今日论文 | 2026-04-14">Arxiv今日论文 | 2026-04-14</a><time datetime="2026-04-14T12:30:00.000Z" title="发表于 2026-04-14 12:30:00">2026-04-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/13/arxiv_papers_2026-04-13.html" title="Arxiv今日论文 | 2026-04-13"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-04-13"/></a><div class="content"><a class="title" href="/2026/04/13/arxiv_papers_2026-04-13.html" title="Arxiv今日论文 | 2026-04-13">Arxiv今日论文 | 2026-04-13</a><time datetime="2026-04-13T12:30:00.000Z" title="发表于 2026-04-13 12:30:00">2026-04-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/10/arxiv_papers_2026-04-10.html" title="Arxiv今日论文 | 2026-04-10"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-04-10"/></a><div class="content"><a class="title" href="/2026/04/10/arxiv_papers_2026-04-10.html" title="Arxiv今日论文 | 2026-04-10">Arxiv今日论文 | 2026-04-10</a><time datetime="2026-04-10T12:30:00.000Z" title="发表于 2026-04-10 12:30:00">2026-04-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/09/arxiv_papers_2026-04-09.html" title="Arxiv今日论文 | 2026-04-09"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-04-09"/></a><div class="content"><a class="title" href="/2026/04/09/arxiv_papers_2026-04-09.html" title="Arxiv今日论文 | 2026-04-09">Arxiv今日论文 | 2026-04-09</a><time datetime="2026-04-09T12:30:00.000Z" title="发表于 2026-04-09 12:30:00">2026-04-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/08/arxiv_papers_2026-04-08.html" title="Arxiv今日论文 | 2026-04-08"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-04-08"/></a><div class="content"><a class="title" href="/2026/04/08/arxiv_papers_2026-04-08.html" title="Arxiv今日论文 | 2026-04-08">Arxiv今日论文 | 2026-04-08</a><time datetime="2026-04-08T12:30:00.000Z" title="发表于 2026-04-08 12:30:00">2026-04-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/07/arxiv_papers_2026-04-07.html" title="Arxiv今日论文 | 2026-04-07"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-04-07"/></a><div class="content"><a class="title" href="/2026/04/07/arxiv_papers_2026-04-07.html" title="Arxiv今日论文 | 2026-04-07">Arxiv今日论文 | 2026-04-07</a><time datetime="2026-04-07T12:30:00.000Z" title="发表于 2026-04-07 12:30:00">2026-04-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/06/arxiv_papers_2026-04-06.html" title="Arxiv今日论文 | 2026-04-06"><img src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20210911210134.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arxiv今日论文 | 2026-04-06"/></a><div class="content"><a class="title" href="/2026/04/06/arxiv_papers_2026-04-06.html" title="Arxiv今日论文 | 2026-04-06">Arxiv今日论文 | 2026-04-06</a><time datetime="2026-04-06T12:30:00.000Z" title="发表于 2026-04-06 12:30:00">2026-04-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By Weitang Liu</div><div class="footer_custom_text"><p><a style="margin-inline:5px"target="_blank"href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"title="博客框架为Hexo"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"title="主题采用butterfly"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://www.jsdelivr.com/"><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&logo=jsDelivr"title="本站使用JsDelivr为静态资源提供CDN加速"alt="img"></a><a style="margin-inline:5px"target="_blank"href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"title="本站项目由Gtihub托管"alt="img"></a><a style="margin-inline:5px"target="_blank"href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"alt="img"title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"></a></br></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    let initData = {
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.lonepatient.top/',
+      region: ''
+    }
+
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    twikoo.init(initData)
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.lonepatient.top/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo@1.4.11/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/自然语言处理/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">📚 自然语言处理 (99)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/计算机视觉/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🎮 计算机视觉 (16)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/知识图谱/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🐱 知识图谱 (13)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="http://lonepatient.top/categories/深度学习/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">👩‍💻 深度学习 (139)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item" style="visibility: hidden"></div><a class="magnet_link_more"  href="http://lonepatient.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #f2f2f2;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: #b30070}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230219144729.jpeg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-18</span><a class="blog-slider__title" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">通向AGI之路：大型语言模型（LLM）技术精要</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2023/02/18/The_Road_to_AGI_Larg_Language_Model_Technical_Essentials.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/07/12/gaiic_2022_ner_top10.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20220712181905.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-07-12</span><a class="blog-slider__title" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">GAIIC2022商品标题识别二等奖获奖解决思路</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2022/07/12/gaiic_2022_ner_top10.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt=""><img width="48" height="48" src="https://lonepatient-1257945978.cos.ap-chengdu.myqcloud.com/images/20230807190424.png" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-01-20</span><a class="blog-slider__title" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">2025-03|高质量中文预训练模型集合</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2021/01/20/awesome-pretrained-chinese-nlp-models.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>
